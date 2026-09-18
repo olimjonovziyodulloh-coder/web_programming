@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+  :root {
+    --primary: #0f766e;
+    --accent: #14b8a6;
+    --bg: #f8f9fa;
+    --text: #212529;
+    --radius: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --primary: #14b8a6;
+      --accent: #5eead4;
+      --bg: #051a0a;
+      --text: #d4edda;
+    }
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px 20px;
+  }
+
+  h1 {
+    color: var(--primary);
+    margin-bottom: 30px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card {
+    border: 2px solid var(--accent);
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 24px rgba(15, 118, 110, 0.2);
+  }
+
+  .card[data-icon]::before {
+    content: attr(data-icon) '  ';
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+  <h1>My Skills</h1>
+  <div class="grid">
+    <div class="card" data-icon="🌐">HTML5 — Structure</div>
+    <div class="card" data-icon="🎨">CSS3 — Styling</div>
+    <div class="card" data-icon="⚡">JavaScript — Behaviour</div>
+    <div class="card" data-icon="📐">Flexbox — 1D Layout</div>
+    <div class="card" data-icon="🗂">Grid — 2D Layout</div>
+    <div class="card" data-icon="📱">Responsive — Any Screen</div>
+  </div>
+</body>
+</html>
