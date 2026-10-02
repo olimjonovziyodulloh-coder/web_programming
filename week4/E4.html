@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E4 — Live Search Filter</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:30px;color:#212529}
+h1{text-align:center} .exercise{max-width:520px;margin:30px auto;padding:24px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+h2{margin-top:0;color:#0f766e}.box{padding:18px;border:2px solid #0f766e;border-radius:10px;margin-top:15px}
+button{padding:10px 18px;border:0;border-radius:8px;background:#0f766e;color:white;cursor:pointer}
+input{padding:10px;border:1px solid #aaa;border-radius:8px;font-size:16px}
+#count{font-size:32px;font-weight:bold;text-align:center}.dark{background:#1a2340!important;color:white!important}
+.card{padding:24px;border-radius:16px;width:260px;background:#f0f4ff;border:2px solid #c8d4f0;text-align:center;margin:auto}
+.avatar{width:70px;height:70px;border-radius:50%;background:#1a56db;color:white;display:inline-flex;align-items:center;justify-content:center;font-size:32px}
+li{list-style:none;padding:10px;margin:6px 0;background:#f0f4ff;border-radius:8px;display:flex;justify-content:space-between}
+ul{padding:0}.del{background:#dc2626;padding:5px 10px}.student{padding:10px;margin:6px 0;background:#f0f4ff;border-radius:8px}
+mark{background:#f7df1e}
+</style>
+</head>
+<body>
+<h1>E4 — Live Search Filter</h1>
+<input id="search" placeholder="Search students...">
+<div id="students">
+  <div class="student" data-name="Kim Jisoo">Kim Jisoo — Web Programming</div>
+  <div class="student" data-name="Park Minjun">Park Minjun — Computer Science</div>
+  <div class="student" data-name="Lee Sooyeon">Lee Sooyeon — Software Engineering</div>
+  <div class="student" data-name="Choi Hyunwoo">Choi Hyunwoo — Artificial Intelligence</div>
+  <div class="student" data-name="Jung Yuna">Jung Yuna — Data Science</div>
+  <div class="student" data-name="Kang Seojun">Kang Seojun — Web Programming</div>
+</div><p id="none" style="display:none">No students found.</p>
+<script>
+const search=document.querySelector('#search');
+const students=document.querySelectorAll('.student');
+const none=document.querySelector('#none');
+students.forEach(s=>s.dataset.original=s.textContent);
+search.addEventListener('input',e=>{
+  const term=e.target.value.toLowerCase();let visible=0;
+  students.forEach(s=>{
+    const name=s.dataset.name;
+    if(name.toLowerCase().includes(term)){
+      s.style.display='';visible++;
+      s.textContent=s.dataset.original;
+    }else{s.style.display='none';}
+  });
+  none.style.display=visible?'none':'block';
+});
+</script>
+</body>
+</html>
