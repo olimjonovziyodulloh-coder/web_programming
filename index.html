@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f4ed">
+  <title>Web Programming | Homework Index</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f4ed;
+      --ink: #202723;
+      --muted: #68716b;
+      --line: #d7ddd3;
+      --green: #176c53;
+      --green-soft: #e1eee6;
+      --orange: #c76a42;
+      --white: #fffefa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--paper);
+      background-image: radial-gradient(#cbd2c7 0.7px, transparent 0.7px);
+      background-size: 18px 18px;
+      color: var(--ink);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(100% - 40px, 1080px);
+      margin: 0 auto;
+    }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 72px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .masthead span:last-child { color: var(--green); }
+
+    .intro {
+      position: relative;
+      padding: 64px 0 52px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--orange);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h1 {
+      max-width: 720px;
+      margin-bottom: 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.6rem, 7vw, 5.3rem);
+      font-weight: 400;
+      line-height: 0.99;
+    }
+
+    .intro-copy {
+      max-width: 540px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .overview {
+      display: flex;
+      gap: 28px;
+      margin-top: 30px;
+    }
+
+    .overview p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .overview strong {
+      display: block;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+      font-weight: 400;
+    }
+
+    .work {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 40px;
+      padding: 38px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .week-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .week-number {
+      display: grid;
+      width: 38px;
+      aspect-ratio: 1;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .week-label h2 {
+      margin: 2px 0 4px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.65rem;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+
+    .week-label p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .assignments {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .assignments li { border-bottom: 1px solid var(--line); }
+
+    .assignments a {
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 12px;
+      text-decoration: none;
+      transition: background-color 140ms ease, color 140ms ease;
+    }
+
+    .assignments a:hover,
+    .assignments a:focus-visible {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .assignments a:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: -2px;
+    }
+
+    .assignment-title { font-weight: 650; }
+
+    .assignment-file {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 0 34px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 680px) {
+      .page { width: min(100% - 28px, 520px); }
+      .intro { padding: 46px 0 38px; }
+      .work { grid-template-columns: 1fr; gap: 18px; padding: 28px 0; }
+      .assignments a { align-items: flex-start; }
+      .assignment-file { max-width: 44%; }
+      .footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <span>Web Programming</span>
+      <span>Homework index</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">Coursework · Weekly submissions</p>
+        <h1 id="page-title">A record of work in progress.</h1>
+        <p class="intro-copy">Browse the homework by week. Each title opens its submitted page.</p>
+        <div class="overview" aria-label="Submission overview">
+          <p><strong>04</strong>weeks</p>
+          <p><strong>24</strong>pages</p>
+        </div>
+      </section>
+
+      <section class="work" aria-labelledby="week-1-title">
+        <div class="week-label">
+          <span class="week-number" aria-hidden="true">01</span>
+          <div><h2 id="week-1-title">Week One</h2><p>HTML foundations</p></div>
+        </div>
+        <ul class="assignments">
+          <li><a href="week1/headings.html"><span class="assignment-title">Headings</span><span class="assignment-file">headings.html</span></a></li>
+          <li><a href="week1/images.html"><span class="assignment-title">Images</span><span class="assignment-file">images.html</span></a></li>
+          <li><a href="week1/Navigation.html"><span class="assignment-title">Navigation</span><span class="assignment-file">Navigation.html</span></a></li>
+          <li><a href="week1/profile_page.html"><span class="assignment-title">Profile page</span><span class="assignment-file">profile_page.html</span></a></li>
+          <li><a href="week1/week1.html"><span class="assignment-title">Week 1 exercise</span><span class="assignment-file">week1.html</span></a></li>
+        </ul>
+      </section>
+
+      <section class="work" aria-labelledby="week-2-title">
+        <div class="week-label">
+          <span class="week-number" aria-hidden="true">02</span>
+          <div><h2 id="week-2-title">Week Two</h2><p>Structure &amp; semantics</p></div>
+        </div>
+        <ul class="assignments">
+          <li><a href="week2/01_html_structure.html"><span class="assignment-title">HTML structure</span><span class="assignment-file">01_html_structure.html</span></a></li>
+          <li><a href="week2/exercises_basic.html"><span class="assignment-title">Basic exercises</span><span class="assignment-file">exercises_basic.html</span></a></li>
+          <li><a href="week2/exercises_interactive.html"><span class="assignment-title">Interactive exercises</span><span class="assignment-file">exercises_interactive.html</span></a></li>
+          <li><a href="week2/figures_and_metadata.html"><span class="assignment-title">Figures &amp; metadata</span><span class="assignment-file">figures_and_metadata.html</span></a></li>
+          <li><a href="week2/grouping_content.html"><span class="assignment-title">Grouping content</span><span class="assignment-file">grouping_content.html</span></a></li>
+          <li><a href="week2/interactive_and_aria.html"><span class="assignment-title">Interactive elements &amp; ARIA</span><span class="assignment-file">interactive_and_aria.html</span></a></li>
+          <li><a href="week2/semantic_portfolio_project.html"><span class="assignment-title">Semantic portfolio project</span><span class="assignment-file">semantic_portfolio_project.html</span></a></li>
+          <li><a href="week2/text_semantics.html"><span class="assignment-title">Text semantics</span><span class="assignment-file">text_semantics.html</span></a></li>
+        </ul>
+      </section>
+
+      <section class="work" aria-labelledby="week-3-title">
+        <div class="week-label">
+          <span class="week-number" aria-hidden="true">03</span>
+          <div><h2 id="week-3-title">Week Three</h2><p>CSS &amp; layout</p></div>
+        </div>
+        <ul class="assignments">
+          <li><a href="week3/E1_position_badge.html"><span class="assignment-title">Position badge</span><span class="assignment-file">E1_position_badge.html</span></a></li>
+          <li><a href="week3/E2_hover_card.html"><span class="assignment-title">Hover card</span><span class="assignment-file">E2_hover_card.html</span></a></li>
+          <li><a href="week3/E3_loading_spinner.html"><span class="assignment-title">Loading spinner</span><span class="assignment-file">E3_loading_spinner.html</span></a></li>
+          <li><a href="week3/E4_css_variables.html"><span class="assignment-title">CSS variables</span><span class="assignment-file">E4_css_variables.html</span></a></li>
+          <li><a href="week3/E5_fixed_navbar.html"><span class="assignment-title">Fixed navbar</span><span class="assignment-file">E5_fixed_navbar.html</span></a></li>
+          <li><a href="week3/E6_responsive_grid.html"><span class="assignment-title">Responsive grid</span><span class="assignment-file">E6_responsive_grid.html</span></a></li>
+          <li><a href="week3/E7_portfolio_complete.html"><span class="assignment-title">Complete portfolio</span><span class="assignment-file">E7_portfolio_complete.html</span></a></li>
+        </ul>
+      </section>
+
+      <section class="work" aria-labelledby="week-4-title">
+        <div class="week-label">
+          <span class="week-number" aria-hidden="true">04</span>
+          <div><h2 id="week-4-title">Week Four</h2><p>Exercises</p></div>
+        </div>
+        <ul class="assignments">
+          <li><a href="week4/E1.html"><span class="assignment-title">Exercise 1</span><span class="assignment-file">E1.html</span></a></li>
+          <li><a href="week4/E2.html"><span class="assignment-title">Exercise 2</span><span class="assignment-file">E2.html</span></a></li>
+          <li><a href="week4/E3.html"><span class="assignment-title">Exercise 3</span><span class="assignment-file">E3.html</span></a></li>
+          <li><a href="week4/E4.html"><span class="assignment-title">Exercise 4</span><span class="assignment-file">E4.html</span></a></li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Web Programming · Homework</span>
+      <a href="#page-title">Back to top ↑</a>
+    </footer>
+  </div>
+</body>
+</html>
