@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Joke Fetcher</title>
+</head>
+<body>
+    <h1>Random Joke Fetcher</h1>
+
+    <button onclick="loadJoke()">Load Joke</button>
+
+    <p id="loading"></p>
+    <p id="error"></p>
+
+    <div id="joke">
+        <h3>Setup</h3>
+        <p id="setup"></p>
+
+        <h3>Punchline</h3>
+        <p id="punchline"></p>
+
+        <button onclick="saveFavorite()">Save Favourite</button>
+    </div>
+
+    <h2>My Favourite Jokes</h2>
+    <ul id="favorites"></ul>
+
+    <script>
+        let currentJoke = null;
+
+        async function loadJoke() {
+            document.getElementById("loading").textContent = "Loading…";
+            document.getElementById("error").textContent = "";
+            document.getElementById("joke").style.display = "none";
+
+            try {
+                const response = await fetch(
+                    "https://official-joke-api.appspot.com/random_joke"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Request failed");
+                }
+
+                currentJoke = await response.json();
+
+                document.getElementById("setup").textContent =
+                    currentJoke.setup;
+
+                document.getElementById("punchline").textContent =
+                    currentJoke.punchline;
+
+                document.getElementById("joke").style.display = "block";
+            } catch (error) {
+                document.getElementById("error").textContent =
+                    "Sorry, we couldn't load a joke. Please try again!";
+            } finally {
+                document.getElementById("loading").textContent = "";
+            }
+        }
+
+        function saveFavorite() {
+            if (!currentJoke) return;
+
+            let favorites = JSON.parse(
+                localStorage.getItem("favoriteJokes") || "[]"
+            );
+
+            if (favorites.some(joke => joke.id === currentJoke.id)) {
+                alert("This joke is already saved!");
+                return;
+            }
+
+            favorites.push(currentJoke);
+
+            localStorage.setItem(
+                "favoriteJokes",
+                JSON.stringify(favorites)
+            );
+
+            showFavorites();
+        }
+
+        function showFavorites() {
+            const favorites = JSON.parse(
+                localStorage.getItem("favoriteJokes") || "[]"
+            );
+
+            const list = document.getElementById("favorites");
+            list.innerHTML = "";
+
+            favorites.forEach(joke => {
+                const item = document.createElement("li");
+                item.textContent = joke.setup + " — " + joke.punchline;
+                list.appendChild(item);
+            });
+        }
+
+        document.getElementById("joke").style.display = "none";
+        showFavorites();
+    </script>
+</body>
+</html>
