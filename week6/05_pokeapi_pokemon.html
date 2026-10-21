@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokéAPI - Pokémon</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; padding: 20px; background: #fff8e8; }
+    main { background: white; padding: 28px; border-radius: 12px; text-align: center; }
+    input, button { padding: 10px; }
+    button { cursor: pointer; background: #c94c4c; color: white; border: 0; border-radius: 6px; }
+    img { width: 180px; height: 180px; object-fit: contain; }
+    #pokemon { line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>PokéAPI - Pokémon</h1>
+    <p>Enter a Pokémon name, for example: pikachu.</p>
+    <input id="pokemonName" value="pikachu" aria-label="Pokémon name">
+    <button onclick="getPokemon()">Search</button>
+    <div id="pokemon">Pokémon details will appear here.</div>
+  </main>
+  <script>
+    async function getPokemon() {
+      const name = document.getElementById("pokemonName").value.trim().toLowerCase();
+      const output = document.getElementById("pokemon");
+      if (!name) {
+        output.textContent = "Please enter a Pokémon name.";
+        return;
+      }
+      output.textContent = "Loading...";
+      try {
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + encodeURIComponent(name));
+        if (!response.ok) throw new Error("Pokémon not found. Check the spelling.");
+        const data = await response.json();
+        output.innerHTML = "";
+        const image = document.createElement("img");
+        image.src = data.sprites.front_default;
+        image.alt = data.name;
+        const title = document.createElement("h2");
+        title.textContent = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+        const number = document.createElement("p");
+        number.textContent = "Pokédex number: " + data.id;
+        const types = document.createElement("p");
+        types.textContent = "Type: " + data.types.map(item => item.type.name).join(", ");
+        const height = document.createElement("p");
+        height.textContent = "Height: " + (data.height / 10) + " m";
+        output.append(image, title, number, types, height);
+      } catch (error) {
+        output.textContent = "Error: " + error.message;
+      }
+    }
+    document.getElementById("pokemonName").addEventListener("keydown", event => {
+      if (event.key === "Enter") getPokemon();
+    });
+  </script>
+</body>
+</html>

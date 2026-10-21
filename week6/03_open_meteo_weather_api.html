@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open-Meteo Weather API</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; padding: 20px; background: #eef6fb; color: #222; }
+    main { background: white; padding: 28px; border-radius: 12px; }
+    input, button { padding: 10px; margin: 5px 0; }
+    button { cursor: pointer; background: #176b87; color: white; border: 0; border-radius: 6px; }
+    #weather { margin-top: 20px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Open-Meteo Weather API</h1>
+    <p>Check the current weather for a sample location (Seoul).</p>
+    <button onclick="getWeather()">Get Seoul Weather</button>
+    <div id="weather">Weather information will appear here.</div>
+  </main>
+  <script>
+    async function getWeather() {
+      const output = document.getElementById("weather");
+      output.textContent = "Loading weather...";
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,relative_humidity_2m,wind_speed_10m";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Could not load weather.");
+        const data = await response.json();
+        const current = data.current;
+        output.innerHTML = "";
+        [
+          "Temperature: " + current.temperature_2m + " °C",
+          "Humidity: " + current.relative_humidity_2m + "%",
+          "Wind speed: " + current.wind_speed_10m + " km/h",
+          "Updated: " + current.time.replace("T", " ")
+        ].forEach(line => {
+          const p = document.createElement("p");
+          p.textContent = line;
+          output.appendChild(p);
+        });
+      } catch (error) {
+        output.textContent = "Error: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
