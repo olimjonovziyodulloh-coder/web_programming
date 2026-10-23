@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Programming - Course Exercises</title>
+
     <style>
         * {
             margin: 0;
@@ -83,8 +84,28 @@
             padding: 25px;
             color: #64748b;
         }
+
+        @media (max-width: 500px) {
+            header {
+                padding: 28px 15px;
+            }
+
+            main {
+                padding: 0 12px;
+                margin-top: 20px;
+            }
+
+            .week {
+                padding: 18px;
+            }
+
+            .exercise-list {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
 
 <header>
@@ -159,6 +180,13 @@
             <a href="week6/04_random_user_api.html">4. Random User API</a>
             <a href="week6/05_pokeapi_pokemon.html">5. PokéAPI - Pokémon</a>
             <a href="week6/06_rest_countries_api.html">6. REST Countries API</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2>Week 7 - Book Search</h2>
+        <div class="exercise-list">
+            <a href="week7/booksearch.html">Book Search App</a>
         </div>
     </section>
 
