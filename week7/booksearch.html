@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Finder</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f4; color: #333; }
+    h1 { color: #2563eb; text-align: center; }
+    .search-box { text-align: center; margin-bottom: 25px; }
+    input { padding: 10px; width: 60%; max-width: 350px; }
+    button { padding: 10px 15px; background: #2563eb; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    button:hover { background: #1d4ed8; }
+    .book { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; gap: 15px; align-items: flex-start; }
+    .book img { width: 100px; min-height: 120px; object-fit: cover; }
+    #status { text-align: center; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <h1>Book Finder</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Enter a book title..." aria-label="Book title">
+    <button onclick="searchBooks()">Search</button>
+  </div>
+  <p id="status">Search for your favorite book!</p>
+  <div id="results"></div>
+  <p><a href="../index.html">Back to Home</a></p>
+
+  <script>
+    async function searchBooks() {
+      const title = document.getElementById("searchInput").value.trim();
+      const status = document.getElementById("status");
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+
+      if (!title) {
+        status.textContent = "Please enter a book title.";
+        return;
+      }
+
+      status.textContent = "Loading books...";
+
+      try {
+        const url = "https://openlibrary.org/search.json?title=" +
+          encodeURIComponent(title) + "&limit=10";
+        const response = await fetch(url);
+
+        if (!response.ok) throw new Error("Failed to fetch books");
+
+        const data = await response.json();
+
+        if (!data.docs || data.docs.length === 0) {
+          status.textContent = "No books found. Try another title.";
+          return;
+        }
+
+        status.textContent = "Found " + data.docs.length + " books.";
+
+        data.docs.forEach(book => {
+          const card = document.createElement("div");
+          card.className = "book";
+
+          const image = document.createElement("img");
+          image.alt = book.title ? "Cover of " + book.title : "Book cover";
+
+          if (book.cover_i) {
+            image.src = "https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg";
+          } else {
+            image.src = "https://placehold.co/100x140?text=No+Cover";
+          }
+
+          const details = document.createElement("div");
+          const heading = document.createElement("h2");
+          heading.textContent = book.title || "Unknown title";
+
+          const author = document.createElement("p");
+          author.textContent = "Author: " + (book.author_name ? book.author_name.join(", ") : "Unknown");
+
+          const year = document.createElement("p");
+          year.textContent = "First published: " + (book.first_publish_year || "Unknown");
+
+          details.appendChild(heading);
+          details.appendChild(author);
+          details.appendChild(year);
+          card.appendChild(image);
+          card.appendChild(details);
+          results.appendChild(card);
+        });
+      } catch (error) {
+        status.textContent = "Something went wrong. Please try again.";
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") searchBooks();
+    });
+  </script>
+</body>
+</html>
