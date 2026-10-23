@@ -1,10 +1,495 @@
-web_programming/
-├── index.html
-├── week1/
-├── week2/
-├── week3/
-├── week4/
-├── week5/
-├── week6/
-└── week7/
-    └── booksearch.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101113">
+    <title>Web Programming | Course Archives</title>
+
+    <style>
+        :root {
+            --background: #101113;
+            --surface: #191a1e;
+            --surface-light: #202126;
+            --border: #34343a;
+            --red: #a93232;
+            --red-dark: #702323;
+            --gold: #c69a52;
+            --text: #e9e7e3;
+            --muted: #99999f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+
+        header {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    ellipse at 85% 20%,
+                    rgba(169, 50, 50, 0.14),
+                    transparent 38%
+                ),
+                linear-gradient(135deg, #191a1e, #111214 70%);
+            border-bottom: 1px solid #40302a;
+            padding: 52px 20px 42px;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            right: -100px;
+            top: -150px;
+            border: 1px solid rgba(198, 154, 82, 0.15);
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 22px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        h1 {
+            font-size: clamp(34px, 6vw, 54px);
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            font-weight: 800;
+            color: #f2f0ec;
+        }
+
+        h1 span {
+            color: var(--red);
+        }
+
+        .subtitle {
+            margin-top: 14px;
+            max-width: 560px;
+            color: #a6a4a1;
+            font-size: 15px;
+        }
+
+        .header-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .meta-item {
+            border: 1px solid #3a3633;
+            background: rgba(255, 255, 255, 0.025);
+            color: #c0bcb6;
+            border-radius: 5px;
+            padding: 7px 11px;
+            font-size: 11px;
+            letter-spacing: 0.7px;
+        }
+
+        .meta-item span {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+
+        /* Main content */
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 35px 20px 50px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: 19px;
+            letter-spacing: 0.5px;
+            color: #ece9e4;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .week {
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            margin-bottom: 18px;
+            padding: 23px;
+            transition: border-color 0.25s, background 0.25s;
+        }
+
+        .week:hover {
+            border-color: #594039;
+            background: #1b1b20;
+        }
+
+        .week::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--red-dark);
+            transition: background 0.25s;
+        }
+
+        .week:hover::before {
+            background: var(--gold);
+        }
+
+        .week h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e8e5df;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 17px;
+        }
+
+        .week-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 37px;
+            height: 31px;
+            border: 1px solid #55302d;
+            background: #2b1d1e;
+            border-radius: 5px;
+            color: #d8a09a;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .exercise-list {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+            gap: 10px;
+        }
+
+        .exercise-list a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            min-height: 47px;
+            padding: 12px 14px;
+            background: var(--surface-light);
+            color: #c9c7c4;
+            text-decoration: none;
+            font-size: 13px;
+            border: 1px solid #303137;
+            border-radius: 6px;
+            transition:
+                background 0.2s,
+                border-color 0.2s,
+                color 0.2s,
+                transform 0.2s;
+        }
+
+        .exercise-list a::after {
+            content: "↗";
+            color: #77757a;
+            font-size: 14px;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+
+        .exercise-list a:hover {
+            background: #292022;
+            color: #f0e5dc;
+            border-color: #77403a;
+            transform: translateY(-2px);
+        }
+
+        .exercise-list a:hover::after {
+            color: var(--gold);
+        }
+
+        /* Special Week 7 card */
+
+        .week7 {
+            border-color: #54312e;
+            background:
+                linear-gradient(
+                    115deg,
+                    rgba(112, 35, 35, 0.12),
+                    transparent 65%
+                ),
+                var(--surface);
+        }
+
+        .week7 .week-number {
+            border-color: #75443a;
+            color: #e0b878;
+            background: #33251f;
+        }
+
+        .week7 .exercise-list a {
+            border-color: #49312e;
+        }
+
+        .week7 .exercise-list a:hover {
+            border-color: var(--gold);
+        }
+
+        .new-label {
+            display: inline-block;
+            margin-left: auto;
+            padding: 3px 7px;
+            border: 1px solid #62482b;
+            border-radius: 4px;
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 26px 20px;
+            border-top: 1px solid #2c2c31;
+            background: #0d0e10;
+        }
+
+        footer p {
+            color: #77777e;
+            font-size: 12px;
+        }
+
+        footer span {
+            color: var(--gold);
+        }
+
+        .footer-subtitle {
+            margin-top: 6px;
+            color: #55555c;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+            header {
+                padding: 38px 18px 32px;
+            }
+
+            main {
+                padding: 25px 12px 35px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .week {
+                padding: 19px 15px;
+            }
+
+            .week h2 {
+                font-size: 15px;
+                gap: 9px;
+            }
+
+            .exercise-list {
+                grid-template-columns: 1fr;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="eyebrow">Personal Learning Archive</div>
+
+        <h1>WEB <span>PROGRAMMING</span></h1>
+
+        <p class="subtitle">
+            A collection of coding exercises, experiments, and projects
+            built throughout the course.
+        </p>
+
+        <div class="header-meta">
+            <div class="meta-item"><span>01</span> HTML</div>
+            <div class="meta-item"><span>02</span> CSS</div>
+            <div class="meta-item"><span>03</span> JAVASCRIPT</div>
+            <div class="meta-item"><span>04</span> API PROJECTS</div>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <div class="section-heading">
+        <h2>Course Modules</h2>
+        <p>WEEK 01 — WEEK 07 / EXERCISE INDEX</p>
+    </div>
+
+    <section class="week">
+        <h2><span class="week-number">01</span> Week 1 - HTML Basics</h2>
+        <div class="exercise-list">
+            <a href="week1/headings.html">Headings</a>
+            <a href="week1/images.html">Images</a>
+            <a href="week1/Navigation.html">Navigation</a>
+            <a href="week1/profile_page.html">Profile Page</a>
+            <a href="week1/week1.html">Week 1 Exercise</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">02</span> Week 2 - HTML Elements</h2>
+        <div class="exercise-list">
+            <a href="week2/01_html_structure.html">HTML Structure</a>
+            <a href="week2/exercises_basic.html">Basic Exercises</a>
+            <a href="week2/exercises_interactive.html">Interactive Exercises</a>
+            <a href="week2/figures_and_metadata.html">Figures and Metadata</a>
+            <a href="week2/grouping_content.html">Grouping Content</a>
+            <a href="week2/interactive_and_aria.html">Interactive and ARIA</a>
+            <a href="week2/semantic_portfolio_project.html">Semantic Portfolio Project</a>
+            <a href="week2/text_semantics.html">Text Semantics</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">03</span> Week 3 - CSS</h2>
+        <div class="exercise-list">
+            <a href="week3/E1_position_badge.html">Exercise 1 - Position Badge</a>
+            <a href="week3/E2_hover_card.html">Exercise 2 - Hover Card</a>
+            <a href="week3/E3_loading_spinner.html">Exercise 3 - Loading Spinner</a>
+            <a href="week3/E4_css_variables.html">Exercise 4 - CSS Variables</a>
+            <a href="week3/E5_fixed_navbar.html">Exercise 5 - Fixed Navbar</a>
+            <a href="week3/E6_responsive_grid.html">Exercise 6 - Responsive Grid</a>
+            <a href="week3/E7_portfolio_complete.html">Exercise 7 - Portfolio</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">04</span> Week 4 - JavaScript and DOM</h2>
+        <div class="exercise-list">
+            <a href="week4/E1.html">Exercise 1</a>
+            <a href="week4/E2.html">Exercise 2</a>
+            <a href="week4/E3.html">Exercise 3</a>
+            <a href="week4/E4.html">Exercise 4</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">05</span> Week 5 - JavaScript Basics</h2>
+        <div class="exercise-list">
+            <a href="week5/counter.html">Counter</a>
+            <a href="week5/js-basics.html">JavaScript Basics</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">06</span> Week 6 - API Exercises</h2>
+        <div class="exercise-list">
+            <a href="week6/01_random_joke_api.html">1. Random Joke Fetcher</a>
+            <a href="week6/02_jsonplaceholder_api.html">2. JSONPlaceholder API</a>
+            <a href="week6/03_open_meteo_weather_api.html">3. Open-Meteo Weather API</a>
+            <a href="week6/04_random_user_api.html">4. Random User API</a>
+            <a href="week6/05_pokeapi_pokemon.html">5. PokéAPI - Pokémon</a>
+            <a href="week6/06_rest_countries_api.html">6. REST Countries API</a>
+        </div>
+    </section>
+
+    <section class="week week7">
+        <h2>
+            <span class="week-number">07</span>
+            Week 7 - Book Search
+            <span class="new-label">PROJECT</span>
+        </h2>
+        <div class="exercise-list">
+            <a href="week7/booksearch.html">Book Search App</a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>Web Programming <span>•</span> Course Portfolio</p>
+    <div class="footer-subtitle">Learn · Build · Improve</div>
+</footer>
+
+</body>
+</html>
