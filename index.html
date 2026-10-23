@@ -1,40 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#101113">
+    <meta name="theme-color" content="#0e0d0f">
     <title>Web Programming | Course Archives</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --background: #101113;
-            --surface: #191a1e;
-            --surface-light: #202126;
-            --border: #34343a;
-            --red: #a93232;
-            --red-dark: #702323;
-            --gold: #c69a52;
-            --text: #e9e7e3;
-            --muted: #99999f;
+            --bg: #0e0d0f;
+            --panel: #161416;
+            --panel-hi: #1d1a1c;
+            --line: #2e2729;
+            --crimson: #9c2b2b;
+            --crimson-deep: #5e1c1f;
+            --gold: #b8924f;
+            --gold-soft: #8d7240;
+            --text: #e6e1db;
+            --muted: #8f8a86;
+            --reactor: #6fa8b8;
+            --blue: #2c4a86;
+            --blue-deep: #17284a;
+            --web: #8fa0c4;
+
+            /* Optional: put your own picture here, e.g.
+               --hero-image: url("assets/ironman.jpg");
+               It is shown very faintly behind the page. */
+            --hero-image: none;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: var(--background);
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+            background: var(--bg);
             color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Faint background layer: your own image + dark glows */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image:
+                radial-gradient(ellipse at 80% 0%, rgba(156, 43, 43, 0.16), transparent 50%),
+                radial-gradient(ellipse at 10% 100%, rgba(44, 74, 134, 0.20), transparent 50%),
+                var(--hero-image);
+            background-size: auto, auto, cover;
+            background-position: center, center, right center;
+            background-repeat: no-repeat;
+        }
+
+        /* Darkens the image so it never gets vivid */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(14, 13, 15, 0.82);
+            pointer-events: none;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
         }
 
         /* Header */
@@ -42,27 +81,8 @@
         header {
             position: relative;
             overflow: hidden;
-            background:
-                radial-gradient(
-                    ellipse at 85% 20%,
-                    rgba(169, 50, 50, 0.14),
-                    transparent 38%
-                ),
-                linear-gradient(135deg, #191a1e, #111214 70%);
-            border-bottom: 1px solid #40302a;
-            padding: 52px 20px 42px;
-        }
-
-        header::after {
-            content: "";
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            right: -100px;
-            top: -150px;
-            border: 1px solid rgba(198, 154, 82, 0.15);
-            transform: rotate(45deg);
-            pointer-events: none;
+            border-bottom: 1px solid var(--line);
+            padding: 72px 24px 56px;
         }
 
         .header-content {
@@ -72,154 +92,218 @@
             z-index: 1;
         }
 
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            color: var(--gold);
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .eyebrow::before {
-            content: "";
-            width: 22px;
-            height: 2px;
-            background: var(--gold);
-        }
-
         h1 {
-            font-size: clamp(34px, 6vw, 54px);
-            line-height: 1.12;
-            letter-spacing: -1.5px;
-            font-weight: 800;
-            color: #f2f0ec;
-        }
-
-        h1 span {
-            color: var(--red);
+            font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
+            font-size: clamp(40px, 8vw, 78px);
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #efe9e1;
         }
 
         .subtitle {
-            margin-top: 14px;
-            max-width: 560px;
-            color: #a6a4a1;
+            margin-top: 18px;
+            max-width: 480px;
+            color: var(--muted);
             font-size: 15px;
         }
 
-        .header-meta {
+        .student {
+            display: inline-block;
+            margin-top: 26px;
+            padding: 12px 18px 12px 16px;
+            border-left: 3px solid var(--gold);
+            background: linear-gradient(90deg, rgba(156, 43, 43, 0.18), transparent);
+        }
+
+        .student-name {
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #f0e6d6;
+            line-height: 1.2;
+        }
+
+        .student-id {
+            margin-top: 2px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .student-id strong {
+            color: var(--gold);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .topics {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 25px;
+            gap: 8px;
+            margin-top: 28px;
+            list-style: none;
         }
 
-        .meta-item {
-            border: 1px solid #3a3633;
-            background: rgba(255, 255, 255, 0.025);
-            color: #c0bcb6;
-            border-radius: 5px;
-            padding: 7px 11px;
-            font-size: 11px;
-            letter-spacing: 0.7px;
+        .topics li {
+            border: 1px solid var(--line);
+            border-left: 2px solid var(--crimson);
+            padding: 5px 12px;
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            color: #c7c0b8;
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        .meta-item span {
-            color: var(--gold);
-            margin-right: 5px;
+        /* Arc reactor: kept dim */
+        .reactor {
+            position: absolute;
+            top: 50%;
+            right: max(-120px, calc(50% - 640px));
+            width: 420px;
+            height: 420px;
+            transform: translateY(-50%);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* Main content */
+        .reactor .ring-slow {
+            transform-origin: 200px 200px;
+            animation: spin 120s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Spider-Man side: dim corner web + blue accents */
+        .web {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            opacity: 0.16;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .topics li:nth-child(even) { border-left-color: var(--blue); }
+
+        .week:nth-of-type(even)::before,
+        .week:nth-of-type(even)::after { border-color: var(--blue); }
+
+        .week:nth-of-type(even):hover::before,
+        .week:nth-of-type(even):hover::after { border-color: #5b7fc4; }
+
+        .week:nth-of-type(even) .week-number {
+            background: var(--blue-deep);
+            border-color: var(--blue);
+        }
+
+        .student { border-image: linear-gradient(var(--crimson), var(--blue)) 1; border-width: 0 0 0 3px; border-style: solid; }
+
+        @media (max-width: 600px) { .web { width: 200px; height: 200px; } }
+
+        /* Main */
 
         main {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 35px 20px 50px;
+            padding: 44px 24px 64px;
         }
 
         .section-heading {
             display: flex;
-            align-items: center;
+            align-items: baseline;
             justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 22px;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
         }
 
         .section-heading h2 {
-            font-size: 19px;
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 26px;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            color: #ece9e4;
         }
 
         .section-heading p {
             color: var(--muted);
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .week {
             position: relative;
-            overflow: hidden;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            margin-bottom: 18px;
-            padding: 23px;
-            transition: border-color 0.25s, background 0.25s;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            margin-bottom: 20px;
+            padding: 24px 26px 26px;
         }
 
-        .week:hover {
-            border-color: #594039;
-            background: #1b1b20;
+        /* HUD corner brackets */
+        .week::before,
+        .week::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--gold-soft);
+            pointer-events: none;
+            transition: border-color 0.2s;
         }
 
         .week::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--red-dark);
-            transition: background 0.25s;
+            top: -1px;
+            left: -1px;
+            border-right: 0;
+            border-bottom: 0;
         }
 
-        .week:hover::before {
-            background: var(--gold);
+        .week::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .week:hover::before,
+        .week:hover::after {
+            border-color: var(--gold);
         }
 
         .week h2 {
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #e8e5df;
-            font-size: 17px;
+            gap: 14px;
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 17px;
+            letter-spacing: 0.4px;
+            margin-bottom: 18px;
         }
 
         .week-number {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 37px;
-            height: 31px;
-            border: 1px solid #55302d;
-            background: #2b1d1e;
-            border-radius: 5px;
-            color: #d8a09a;
-            font-size: 11px;
-            letter-spacing: 0.5px;
+            min-width: 40px;
+            height: 34px;
+            background: var(--crimson-deep);
+            border: 1px solid var(--crimson);
+            color: #ecd9c6;
+            font-size: 16px;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
         }
 
         .exercise-list {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(220px, 1fr)
-            );
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 10px;
         }
 
@@ -228,61 +312,46 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            min-height: 47px;
+            min-height: 48px;
             padding: 12px 14px;
-            background: var(--surface-light);
-            color: #c9c7c4;
+            background: var(--panel-hi);
+            color: #c9c3bc;
             text-decoration: none;
-            font-size: 13px;
-            border: 1px solid #303137;
-            border-radius: 6px;
-            transition:
-                background 0.2s,
-                border-color 0.2s,
-                color 0.2s,
-                transform 0.2s;
+            font-size: 14px;
+            border: 1px solid #2a2426;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
 
         .exercise-list a::after {
-            content: "↗";
-            color: #77757a;
-            font-size: 14px;
+            content: "\2197";
+            color: #6c6666;
             flex-shrink: 0;
             transition: color 0.2s;
         }
 
         .exercise-list a:hover {
-            background: #292022;
-            color: #f0e5dc;
-            border-color: #77403a;
-            transform: translateY(-2px);
+            background: #251c1e;
+            color: #f1e6da;
+            border-color: var(--crimson);
         }
 
         .exercise-list a:hover::after {
             color: var(--gold);
         }
 
-        /* Special Week 7 card */
+        /* Week 7 project */
 
         .week7 {
-            border-color: #54312e;
+            border-color: #4a3a2a;
             background:
-                linear-gradient(
-                    115deg,
-                    rgba(112, 35, 35, 0.12),
-                    transparent 65%
-                ),
-                var(--surface);
+                linear-gradient(115deg, rgba(184, 146, 79, 0.07), transparent 60%),
+                var(--panel);
         }
 
         .week7 .week-number {
-            border-color: #75443a;
-            color: #e0b878;
-            background: #33251f;
-        }
-
-        .week7 .exercise-list a {
-            border-color: #49312e;
+            background: #3a2d1c;
+            border-color: var(--gold-soft);
+            color: #e6cfa3;
         }
 
         .week7 .exercise-list a:hover {
@@ -290,88 +359,64 @@
         }
 
         .new-label {
-            display: inline-block;
             margin-left: auto;
-            padding: 3px 7px;
-            border: 1px solid #62482b;
-            border-radius: 4px;
+            padding: 3px 9px;
+            border: 1px solid var(--gold-soft);
             color: var(--gold);
-            font-size: 9px;
-            letter-spacing: 1px;
-            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 0.8px;
         }
 
         /* Footer */
 
         footer {
             text-align: center;
-            padding: 26px 20px;
-            border-top: 1px solid #2c2c31;
-            background: #0d0e10;
+            padding: 28px 20px;
+            border-top: 1px solid var(--line);
+            background: rgba(10, 9, 10, 0.7);
         }
 
         footer p {
-            color: #77777e;
-            font-size: 12px;
+            color: var(--muted);
+            font-size: 13px;
         }
 
-        footer span {
-            color: var(--gold);
-        }
+        footer span { color: var(--gold); }
 
         .footer-subtitle {
-            margin-top: 6px;
-            color: #55555c;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            margin-top: 4px;
+            color: #5d5858;
+            font-size: 12px;
         }
 
         /* Mobile */
 
         @media (max-width: 600px) {
-            header {
-                padding: 38px 18px 32px;
-            }
+            header { padding: 48px 18px 40px; }
+            main { padding: 28px 14px 40px; }
 
-            main {
-                padding: 25px 12px 35px;
+            .reactor {
+                width: 280px;
+                height: 280px;
+                right: -90px;
+                opacity: 0.16;
             }
 
             .section-heading {
-                align-items: flex-start;
                 flex-direction: column;
-                gap: 3px;
+                align-items: flex-start;
+                gap: 2px;
             }
 
-            .week {
-                padding: 19px 15px;
-            }
-
-            .week h2 {
-                font-size: 15px;
-                gap: 9px;
-            }
-
-            .exercise-list {
-                grid-template-columns: 1fr;
-            }
-
-            .subtitle {
-                font-size: 14px;
-            }
+            .week { padding: 20px 16px 22px; }
+            .week h2 { font-size: 19px; gap: 10px; }
+            .exercise-list { grid-template-columns: 1fr; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                transition: none !important;
-            }
+            html { scroll-behavior: auto; }
+            .reactor .ring-slow { animation: none; }
+            *, *::before, *::after { transition: none !important; }
         }
     </style>
 </head>
@@ -379,30 +424,52 @@
 <body>
 
 <header>
-    <div class="header-content">
-        <div class="eyebrow">Personal Learning Archive</div>
+    <svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false"><g fill="none" stroke="var(--web)" stroke-width="1.2"><line x1="0" y1="0" x2="300" y2="0"/><line x1="0" y1="0" x2="290" y2="78"/><line x1="0" y1="0" x2="260" y2="150"/><line x1="0" y1="0" x2="212" y2="212"/><line x1="0" y1="0" x2="150" y2="260"/><line x1="0" y1="0" x2="78" y2="290"/><line x1="0" y1="0" x2="0" y2="300"/><path d="M55 0 Q47 6 53 14"/><path d="M53 14 Q44 18 48 27"/><path d="M48 27 Q38 29 39 39"/><path d="M39 39 Q29 38 28 48"/><path d="M28 48 Q18 44 14 53"/><path d="M14 53 Q6 47 0 55"/><path d="M110 0 Q94 12 106 28"/><path d="M106 28 Q87 36 95 55"/><path d="M95 55 Q75 58 78 78"/><path d="M78 78 Q58 75 55 95"/><path d="M55 95 Q36 87 28 106"/><path d="M28 106 Q12 94 0 110"/><path d="M165 0 Q141 19 159 43"/><path d="M159 43 Q131 54 143 82"/><path d="M143 82 Q113 86 117 117"/><path d="M117 117 Q86 113 83 143"/><path d="M83 143 Q54 131 43 159"/><path d="M43 159 Q19 141 0 165"/><path d="M220 0 Q188 25 213 57"/><path d="M213 57 Q175 72 191 110"/><path d="M191 110 Q150 115 156 156"/><path d="M156 156 Q115 150 110 191"/><path d="M110 191 Q72 175 57 213"/><path d="M57 213 Q25 188 0 220"/><path d="M275 0 Q234 31 266 71"/><path d="M266 71 Q218 91 238 137"/><path d="M238 137 Q188 144 194 194"/><path d="M194 194 Q144 188 138 238"/><path d="M138 238 Q91 218 71 266"/><path d="M71 266 Q31 234 0 275"/></g></svg>
 
-        <h1>WEB <span>PROGRAMMING</span></h1>
+    <svg class="reactor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="var(--reactor)" stroke-width="2">
+            <circle cx="200" cy="200" r="190" stroke-width="1"/>
+            <circle cx="200" cy="200" r="150"/>
+            <circle cx="200" cy="200" r="70"/>
+            <circle cx="200" cy="200" r="30" stroke-width="3"/>
+            <g class="ring-slow" stroke-width="14" stroke-dasharray="38 22">
+                <circle cx="200" cy="200" r="110"/>
+            </g>
+            <g stroke-width="1">
+                <line x1="200" y1="10" x2="200" y2="50"/>
+                <line x1="200" y1="350" x2="200" y2="390"/>
+                <line x1="10" y1="200" x2="50" y2="200"/>
+                <line x1="350" y1="200" x2="390" y2="200"/>
+            </g>
+        </g>
+    </svg>
+
+    <div class="header-content">
+        <h1>Web Programming</h1>
 
         <p class="subtitle">
-            A collection of coding exercises, experiments, and projects
-            built throughout the course.
+            Coding exercises, experiments, and projects built throughout the course.
         </p>
 
-        <div class="header-meta">
-            <div class="meta-item"><span>01</span> HTML</div>
-            <div class="meta-item"><span>02</span> CSS</div>
-            <div class="meta-item"><span>03</span> JAVASCRIPT</div>
-            <div class="meta-item"><span>04</span> API PROJECTS</div>
+        <div class="student">
+            <p class="student-name">Olimjonov Ziyodulloh</p>
+            <p class="student-id">Student ID <strong>202537557</strong></p>
         </div>
+
+        <ul class="topics">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>API projects</li>
+        </ul>
     </div>
 </header>
 
 <main>
 
     <div class="section-heading">
-        <h2>Course Modules</h2>
-        <p>WEEK 01 — WEEK 07 / EXERCISE INDEX</p>
+        <h2>Course modules</h2>
+        <p>Weeks 1 to 7</p>
     </div>
 
     <section class="week">
@@ -477,7 +544,7 @@
         <h2>
             <span class="week-number">07</span>
             Week 7 - Book Search
-            <span class="new-label">PROJECT</span>
+            <span class="new-label">Project</span>
         </h2>
         <div class="exercise-list">
             <a href="week7/booksearch.html">Book Search App</a>
@@ -487,8 +554,8 @@
 </main>
 
 <footer>
-    <p>Web Programming <span>•</span> Course Portfolio</p>
-    <div class="footer-subtitle">Learn · Build · Improve</div>
+    <p>Web Programming <span>&bull;</span> Course Portfolio <span>&bull;</span> Olimjonov Ziyodulloh <span>&bull;</span> ID 202537557</p>
+    <div class="footer-subtitle">Iron Man &amp; Spider-Man themed &bull; Learn, build, improve</div>
 </footer>
 
 </body>
