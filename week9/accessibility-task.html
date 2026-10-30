@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Week 9: Lighthouse accessibility audit report with before and after scores and three fixes.">
+    <meta name="theme-color" content="#0e0d0f">
+    <title>Accessibility Audit Report | Week 9</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0e0d0f;
+            --panel: #161416;
+            --panel-hi: #1d1a1c;
+            --line: #2e2729;
+            --crimson: #9c2b2b;
+            --crimson-deep: #5e1c1f;
+            --gold: #b8924f;
+            --gold-soft: #8d7240;
+            --blue: #2c4a86;
+            --blue-soft: #5b7fc4;
+            --text: #e6e1db;
+            --muted: #8f8a86;
+            --valid: #4c9a76;
+            --bad: #d98080;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(ellipse at 85% 0%, rgba(156, 43, 43, 0.16), transparent 50%),
+                radial-gradient(ellipse at 10% 100%, rgba(44, 74, 134, 0.20), transparent 50%),
+                var(--bg);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        a { color: var(--gold); }
+        a:hover { color: #d6b073; }
+
+        a:focus-visible, button:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 3px;
+        }
+
+        /* Skip link: hidden until it receives keyboard focus */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0.5rem;
+            z-index: 9999;
+            background: #1a2744;
+            color: #fff;
+            padding: 0.55rem 1rem;
+            text-decoration: none;
+            font-size: 14px;
+            border: 2px solid var(--gold);
+        }
+        .skip-link:focus { left: 0.5rem; }
+
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 40px 20px 64px;
+        }
+
+        nav.crumbs { margin-bottom: 28px; font-size: 14px; }
+        nav.crumbs a { color: var(--muted); text-decoration: none; }
+        nav.crumbs a:hover { color: var(--gold); }
+
+        h1 {
+            font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
+            font-size: clamp(34px, 7vw, 52px);
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #efe9e1;
+        }
+
+        .byline { margin-top: 12px; color: var(--muted); font-size: 14px; }
+        .byline strong { color: var(--gold); font-weight: 500; }
+
+        h2 {
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 40px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        h3 {
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 21px;
+            font-weight: 700;
+            margin: 26px 0 8px;
+            color: #f0e6d6;
+        }
+
+        p { margin-bottom: 14px; color: #cfc9c1; }
+
+        /* Score table */
+        .table-scroll { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            font-size: 14px;
+        }
+
+        caption {
+            text-align: left;
+            padding: 0 0 8px;
+            color: var(--muted);
+            font-size: 13px;
+            caption-side: top;
+        }
+
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+        th { background: var(--panel-hi); font-weight: 500; color: #f0e6d6; }
+        td.num { font-family: "Rajdhani", Arial, sans-serif; font-size: 18px; font-weight: 700; }
+        td.before { color: var(--bad); }
+        td.after { color: #6fc29b; }
+
+        /* Screenshots */
+        figure {
+            margin: 16px 0 24px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 14px;
+        }
+
+        figure img { display: block; width: 100%; height: auto; }
+
+        figcaption { margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+        /* Fix cards */
+        .fix {
+            position: relative;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 6px 24px 18px;
+            margin-bottom: 20px;
+        }
+
+        .fix::before, .fix::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--gold-soft);
+            pointer-events: none;
+        }
+        .fix::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+        .fix::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+        .fix:nth-of-type(even)::before, .fix:nth-of-type(even)::after { border-color: var(--blue); }
+
+        .label {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #0b0a0c;
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--crimson);
+            padding: 12px 14px;
+            margin: 6px 0 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #d6cfc5;
+        }
+
+        code { font-family: Consolas, "Courier New", monospace; }
+
+        .callout {
+            margin-top: 18px;
+            padding: 14px 18px;
+            border-left: 3px solid var(--blue-soft);
+            background: rgba(44, 74, 134, 0.14);
+            color: #cfc9c1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 26px 20px;
+            border-top: 1px solid var(--line);
+            background: rgba(10, 9, 10, 0.7);
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 520px) {
+            .wrap { padding: 28px 14px 48px; }
+            .fix { padding: 4px 16px 14px; }
+            th, td { padding: 9px 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<main id="main-content" class="wrap">
+
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">&larr; Back to course archive</a>
+    </nav>
+
+    <h1>Website Accessibility Audit Report</h1>
+    <p class="byline">Olimjonov Ziyodulloh &bull; Student ID <strong>202537557</strong> &bull; Week 9</p>
+
+    <h2>1. Introduction</h2>
+    <p>
+        I used Google Lighthouse (Accessibility category only) to audit my Web Programming course archive:
+        the home page and the four Week 8 pages. The first run scored between 92 and 98 out of 100.
+        After three fixes, every page scored 100 out of 100.
+    </p>
+
+    <div class="table-scroll">
+        <table>
+            <caption>Lighthouse accessibility scores, before and after the fixes</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Page</th>
+                    <th scope="col">Before</th>
+                    <th scope="col">After</th>
+                    <th scope="col">What Lighthouse reported</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">index.html</th>
+                    <td class="num before">92</td>
+                    <td class="num after">100</td>
+                    <td>Insufficient color contrast</td>
+                </tr>
+                <tr>
+                    <th scope="row">week8/ex_1.html</th>
+                    <td class="num before">97</td>
+                    <td class="num after">100</td>
+                    <td>No main landmark</td>
+                </tr>
+                <tr>
+                    <th scope="row">week8/ex_2.html</th>
+                    <td class="num before">97</td>
+                    <td class="num after">100</td>
+                    <td>No main landmark</td>
+                </tr>
+                <tr>
+                    <th scope="row">week8/ex_3.html</th>
+                    <td class="num before">98</td>
+                    <td class="num after">100</td>
+                    <td>No main landmark</td>
+                </tr>
+                <tr>
+                    <th scope="row">week8/task1.html</th>
+                    <td class="num before">97</td>
+                    <td class="num after">100</td>
+                    <td>No main landmark</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>2. Before the Improvements</h2>
+    <p>
+        Initial Lighthouse accessibility score for the home page: 92/100. I kept
+        <a href="before/index.html">a copy of the home page from before the fixes</a> so the audit can be repeated.
+    </p>
+
+    <figure>
+        <img src="screenshots/accessibility_before.png" alt="Screenshot showing the initial Lighthouse accessibility score of 92 out of 100 for the home page">
+        <figcaption>Lighthouse accessibility score before the fixes.</figcaption>
+    </figure>
+
+    <h2>3. After the Improvements</h2>
+    <p>Final Lighthouse accessibility score for the home page: 100/100.</p>
+
+    <figure>
+        <img src="screenshots/accessibility_after.png" alt="Screenshot showing the improved Lighthouse accessibility score of 100 out of 100 for the home page">
+        <figcaption>Lighthouse accessibility score after the fixes.</figcaption>
+    </figure>
+
+    <h2>4. Three Accessibility Improvements</h2>
+
+    <section class="fix" aria-labelledby="fix1">
+        <h3 id="fix1">Fix 1: Color Contrast</h3>
+        <p>
+            Lighthouse flagged the small tagline in the footer of the home page. Its dark gray text on a
+            near-black background had a contrast ratio of only 2.82:1, below the WCAG AA minimum of 4.5:1
+            for body text. I lightened the text color, which raised the ratio to 5.78:1.
+        </p>
+        <span class="label">CSS before</span>
+<pre><code>.footer-subtitle { color: #5d5858; }  /* 2.82:1 - fails AA */</code></pre>
+        <span class="label">CSS after</span>
+<pre><code>.footer-subtitle { color: #8f8a86; }  /* 5.78:1 - passes AA */</code></pre>
+    </section>
+
+    <section class="fix" aria-labelledby="fix2">
+        <h3 id="fix2">Fix 2: Main Landmark</h3>
+        <p>
+            The four Week 8 pages wrapped their content in a plain <code>&lt;div&gt;</code>, so screen reader
+            users had no &ldquo;main&rdquo; region to jump to. I changed the wrapper to a
+            <code>&lt;main&gt;</code> element. The home page already had one, so I only gave it an id.
+        </p>
+        <span class="label">HTML before</span>
+<pre><code>&lt;div class="wrap"&gt; ... &lt;/div&gt;</code></pre>
+        <span class="label">HTML after</span>
+<pre><code>&lt;main id="main-content" class="wrap"&gt; ... &lt;/main&gt;</code></pre>
+    </section>
+
+    <section class="fix" aria-labelledby="fix3">
+        <h3 id="fix3">Fix 3: Skip Link</h3>
+        <p>
+            I added a skip link as the first element on every page. It stays off-screen until a keyboard
+            user presses Tab, then appears in the top-left corner. Pressing Enter moves straight to the
+            main content, so keyboard users do not have to tab through the header first. This satisfies a
+            WCAG Level A requirement.
+        </p>
+        <span class="label">HTML</span>
+<pre><code>&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;</code></pre>
+        <span class="label">CSS</span>
+<pre><code>.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }</code></pre>
+    </section>
+
+    <h2>5. Conclusion</h2>
+    <p>
+        These three fixes make the site easier to use with a keyboard and a screen reader, and easier to
+        read for people with low vision. The Lighthouse accessibility score rose to 100 out of 100 on all
+        five pages I audited. As a bonus, adding a meta description to each page also raised the SEO score
+        from 90 to 100.
+    </p>
+
+    <p><a href="../index.html">Return to the course archive</a></p>
+
+</main>
+
+<footer>
+    <p>Web Programming &bull; Course Portfolio &bull; Olimjonov Ziyodulloh &bull; ID 202537557</p>
+</footer>
+
+</body>
+</html>
