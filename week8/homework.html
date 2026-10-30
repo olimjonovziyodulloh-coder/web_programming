@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e0d0f">
+    <title>Student Registration | Week 8</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0e0d0f;
+            --panel: #161416;
+            --panel-hi: #1d1a1c;
+            --line: #2e2729;
+            --crimson: #9c2b2b;
+            --crimson-deep: #5e1c1f;
+            --gold: #b8924f;
+            --gold-soft: #8d7240;
+            --blue: #2c4a86;
+            --blue-soft: #5b7fc4;
+            --text: #e6e1db;
+            --muted: #8f8a86;
+            --valid: #4c9a76;
+            --invalid: #c24a4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(ellipse at 85% 0%, rgba(156, 43, 43, 0.16), transparent 50%),
+                radial-gradient(ellipse at 10% 100%, rgba(44, 74, 134, 0.20), transparent 50%),
+                var(--bg);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        .wrap {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 40px 20px 64px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 28px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .back:hover { color: var(--gold); }
+
+        h1 {
+            font-family: "Rajdhani", "Arial Narrow", Arial, sans-serif;
+            font-size: clamp(34px, 7vw, 54px);
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #efe9e1;
+        }
+
+        .intro {
+            margin-top: 10px;
+            margin-bottom: 30px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        /* Fieldsets */
+
+        fieldset {
+            position: relative;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 26px 24px 8px;
+            margin-bottom: 22px;
+        }
+
+        fieldset::before,
+        fieldset::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--gold-soft);
+            pointer-events: none;
+        }
+
+        fieldset::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+        fieldset::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+        fieldset + fieldset::before,
+        fieldset + fieldset::after { border-color: var(--blue); }
+
+        legend {
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 0 10px;
+            margin-left: -6px;
+            color: #f0e6d6;
+        }
+
+        /* Fields */
+
+        .field { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #cfc9c1;
+        }
+
+        label.required::after {
+            content: " *";
+            color: var(--crimson);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 11px 13px;
+            background: var(--panel-hi);
+            color: var(--text);
+            border: 1px solid #3a3234;
+            border-radius: 0;
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        input::placeholder { color: #5f5a5a; }
+
+        input[type="date"] { color-scheme: dark; }
+
+        select { color-scheme: dark; }
+
+        input:focus,
+        select:focus {
+            border-color: var(--blue-soft);
+            background: #211d20;
+        }
+
+        /* Valid / invalid states: only after the user has typed something */
+        input[placeholder]:not(:placeholder-shown):valid {
+            border-color: var(--valid);
+            box-shadow: inset 3px 0 0 var(--valid);
+        }
+
+        input[placeholder]:not(:placeholder-shown):invalid {
+            border-color: var(--invalid);
+            box-shadow: inset 3px 0 0 var(--invalid);
+        }
+
+        option { color: var(--text); background: var(--panel-hi); }
+
+        .hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Hint turns into an error message while the field is invalid */
+        input[placeholder]:not(:placeholder-shown):invalid + .hint {
+            color: #d98080;
+        }
+
+        /* Range slider */
+
+        .range-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            accent-color: var(--crimson);
+            height: 28px;
+            cursor: pointer;
+        }
+
+        output {
+            min-width: 64px;
+            text-align: center;
+            padding: 5px 10px;
+            border: 1px solid var(--gold-soft);
+            color: var(--gold);
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Terms */
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 26px;
+            padding: 14px 16px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--crimson);
+        }
+
+        .terms input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--crimson);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .terms label {
+            margin: 0;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .terms:has(input:checked) { border-left-color: var(--valid); }
+
+        /* Buttons */
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: "Rajdhani", Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 12px 30px;
+            border: 1px solid var(--crimson);
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+        button[type="submit"] {
+            background: var(--crimson-deep);
+            color: #f3e4d3;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--crimson);
+        }
+
+        button[type="reset"] {
+            background: transparent;
+            color: var(--muted);
+            border-color: #3a3234;
+        }
+
+        button[type="reset"]:hover {
+            color: var(--text);
+            border-color: var(--blue-soft);
+        }
+
+        /* Success message */
+
+        .success {
+            display: none;
+            margin-top: 24px;
+            padding: 16px 18px;
+            background: rgba(76, 154, 118, 0.1);
+            border: 1px solid var(--valid);
+            border-left-width: 4px;
+            color: #c9e6d9;
+        }
+
+        .success.show { display: block; }
+
+        @media (max-width: 520px) {
+            .wrap { padding: 28px 14px 48px; }
+            fieldset { padding: 22px 16px 6px; }
+            button { width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+
+    <a class="back" href="../index.html">&larr; Back to course archive</a>
+
+    <h1>Student Registration</h1>
+    <p class="intro">Fill in the form below. Fields marked with * are required.</p>
+
+    <form id="regForm" method="post" action="/register">
+
+        <fieldset>
+            <legend>Personal Info</legend>
+
+            <div class="field">
+                <label for="fullname" class="required">Full Name</label>
+                <input type="text" id="fullname" name="fullname" placeholder="e.g. Olimjonov Ziyodulloh" required>
+            </div>
+
+            <div class="field">
+                <label for="studentid" class="required">Student ID</label>
+                <input type="text" id="studentid" name="studentid" placeholder="9 digits" pattern="\d{9}" inputmode="numeric" required>
+                <span class="hint">Exactly 9 digits.</span>
+            </div>
+
+            <div class="field">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob">
+            </div>
+
+            <div class="field">
+                <label for="major">Major</label>
+                <select id="major" name="major">
+                    <option value="">Select your major</option>
+                    <option value="cs">Computer Science</option>
+                    <option value="se">Software Engineering</option>
+                    <option value="ds">Data Science</option>
+                    <option value="ee">Electrical Engineering</option>
+                    <option value="bus">Business Administration</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Account Info</legend>
+
+            <div class="field">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="password" class="required">Password</label>
+                <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
+                <span class="hint">Minimum 8 characters.</span>
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" placeholder="010-1234-5678" pattern="\d{3}-\d{4}-\d{4}" inputmode="tel">
+                <span class="hint">Format: 010-1234-5678</span>
+            </div>
+
+            <div class="field">
+                <label for="experience">Years of coding experience</label>
+                <div class="range-row">
+                    <input type="range" id="experience" name="experience" min="0" max="10" value="0" step="1">
+                    <output id="experienceOut" for="experience">0 years</output>
+                </div>
+                <div class="scale" aria-hidden="true"><span>0</span><span>10</span></div>
+            </div>
+        </fieldset>
+
+        <div class="terms">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms">I agree to the terms</label>
+        </div>
+
+        <div class="actions">
+            <button type="submit">Register</button>
+            <button type="reset">Reset</button>
+        </div>
+
+        <div class="success" id="success" role="status">
+            Registration complete! Your details passed validation.
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("regForm");
+    const range = document.getElementById("experience");
+    const out = document.getElementById("experienceOut");
+    const success = document.getElementById("success");
+
+    function showYears() {
+        const n = Number(range.value);
+        out.textContent = n + (n === 1 ? " year" : " years");
+    }
+
+    range.addEventListener("input", showYears);
+    showYears();
+
+    // Browser validation runs first; this only fires when every field is valid.
+    // There is no server on a static site, so we show a message instead of leaving the page.
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        success.classList.add("show");
+        success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    form.addEventListener("reset", function () {
+        success.classList.remove("show");
+        setTimeout(showYears, 0);
+    });
+</script>
+
+</body>
+</html>
