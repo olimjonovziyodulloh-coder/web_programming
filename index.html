@@ -27,7 +27,7 @@
             --blue-deep: #17284a;
             --web: #8fa0c4;
 
-            /* Optional: put your own picture here, e.g.
+            /* Optional: put your own Iron Man picture here, e.g.
                --hero-image: url("assets/ironman.jpg");
                It is shown very faintly behind the page. */
             --hero-image: none;
@@ -46,7 +46,7 @@
             position: relative;
         }
 
-        /* Faint background layer: your own image + dark glows */
+        /* Faint background layer: your own image + dark red glow */
         body::before {
             content: "";
             position: fixed;
@@ -157,7 +157,7 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        /* Arc reactor: kept dim */
+        /* Arc reactor: the one memorable element, kept dim */
         .reactor {
             position: absolute;
             top: 50%;
@@ -385,7 +385,7 @@
 
         .footer-subtitle {
             margin-top: 4px;
-            color: #5d5858;
+            color: #8f8a86;
             font-size: 12px;
         }
 
@@ -418,10 +418,28 @@
             .reactor .ring-slow { animation: none; }
             *, *::before, *::after { transition: none !important; }
         }
+
+        /* Skip link: hidden until it receives keyboard focus */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0.5rem;
+            z-index: 9999;
+            background: #1a2744;
+            color: #fff;
+            padding: 0.55rem 1rem;
+            text-decoration: none;
+            font-size: 14px;
+            border: 2px solid var(--gold, #b8924f);
+        }
+        .skip-link:focus { left: 0.5rem; }
     </style>
 </head>
 
 <body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 
 <header>
     <svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false"><g fill="none" stroke="var(--web)" stroke-width="1.2"><line x1="0" y1="0" x2="300" y2="0"/><line x1="0" y1="0" x2="290" y2="78"/><line x1="0" y1="0" x2="260" y2="150"/><line x1="0" y1="0" x2="212" y2="212"/><line x1="0" y1="0" x2="150" y2="260"/><line x1="0" y1="0" x2="78" y2="290"/><line x1="0" y1="0" x2="0" y2="300"/><path d="M55 0 Q47 6 53 14"/><path d="M53 14 Q44 18 48 27"/><path d="M48 27 Q38 29 39 39"/><path d="M39 39 Q29 38 28 48"/><path d="M28 48 Q18 44 14 53"/><path d="M14 53 Q6 47 0 55"/><path d="M110 0 Q94 12 106 28"/><path d="M106 28 Q87 36 95 55"/><path d="M95 55 Q75 58 78 78"/><path d="M78 78 Q58 75 55 95"/><path d="M55 95 Q36 87 28 106"/><path d="M28 106 Q12 94 0 110"/><path d="M165 0 Q141 19 159 43"/><path d="M159 43 Q131 54 143 82"/><path d="M143 82 Q113 86 117 117"/><path d="M117 117 Q86 113 83 143"/><path d="M83 143 Q54 131 43 159"/><path d="M43 159 Q19 141 0 165"/><path d="M220 0 Q188 25 213 57"/><path d="M213 57 Q175 72 191 110"/><path d="M191 110 Q150 115 156 156"/><path d="M156 156 Q115 150 110 191"/><path d="M110 191 Q72 175 57 213"/><path d="M57 213 Q25 188 0 220"/><path d="M275 0 Q234 31 266 71"/><path d="M266 71 Q218 91 238 137"/><path d="M238 137 Q188 144 194 194"/><path d="M194 194 Q144 188 138 238"/><path d="M138 238 Q91 218 71 266"/><path d="M71 266 Q31 234 0 275"/></g></svg>
@@ -465,11 +483,11 @@
     </div>
 </header>
 
-<main>
+<main id="main-content">
 
     <div class="section-heading">
         <h2>Course modules</h2>
-        <p>Weeks 1 to 7</p>
+        <p>Weeks 1 to 8</p>
     </div>
 
     <section class="week">
@@ -548,6 +566,16 @@
         </h2>
         <div class="exercise-list">
             <a href="week7/booksearch.html">Book Search App</a>
+        </div>
+    </section>
+
+    <section class="week">
+        <h2><span class="week-number">08</span> Week 8 - HTML Forms &amp; Validation</h2>
+        <div class="exercise-list">
+            <a href="week8/ex_1.html">Exercise 1 - Login Form</a>
+            <a href="week8/ex_2.html">Exercise 2 - Validation Attributes</a>
+            <a href="week8/ex_3.html">Exercise 3 - CSS Valid/Invalid</a>
+            <a href="week8/homework.html">Homework - Student Registration</a>
         </div>
     </section>
 
