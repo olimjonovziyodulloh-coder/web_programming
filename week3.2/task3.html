@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Ziyodulloh Olimjonov">
+  <title>Week 3 Friday - Task 3 | Ziyodulloh Olimjonov</title>
+  <style>
+
+    * { box-sizing: border-box; }
+    :root { --primary: #2563eb; --dark: #172554; --surface: #eff6ff; --accent: #f59e0b; }
+    body { margin: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; background: #f1f5f9; }
+    header { background: var(--dark); color: white; padding: 24px; text-align: center; }
+    main { max-width: 1000px; margin: 24px auto; padding: 0 18px; }
+    section { background: white; margin: 20px 0; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px #00000012; }
+    h2 { color: var(--primary); margin-top: 0; }
+    .badge-card { position: relative; width: min(100%, 360px); padding: 35px 22px 22px; border: 1px solid #cbd5e1; border-radius: 12px; background: white; }
+    .badge { position: absolute; top: 12px; right: -8px; background: #dc2626; color: white; padding: 5px 14px; font-weight: bold; border-radius: 4px; }
+    .hover-card { width: min(100%, 360px); padding: 30px; background: var(--surface); border-radius: 12px; transition: transform .25s ease, box-shadow .25s ease; }
+    .hover-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px #00000020; }
+    .spinner { width: 48px; height: 48px; border: 5px solid #dbeafe; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .theme-card { background: var(--surface); border-left: 6px solid var(--primary); padding: 22px; border-radius: 10px; }
+    .theme-card button { background: var(--primary); color: white; border: 0; padding: 10px 18px; border-radius: 7px; cursor: pointer; }
+    .fixed-nav { position: sticky; top: 0; z-index: 5; display: flex; gap: 20px; flex-wrap: wrap; padding: 14px 18px; background: #0f172a; border-radius: 8px; }
+    .fixed-nav a, .fixed-nav strong { color: white; text-decoration: none; }
+    .scroll-block { min-height: 150px; padding: 24px; margin-top: 12px; border-radius: 8px; background: #e2e8f0; }
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+    .skill { padding: 20px; background: var(--surface); border-radius: 10px; border: 1px solid #bfdbfe; }
+    .advanced-nav { display: flex; justify-content: space-between; gap: 15px; padding-bottom: 14px; border-bottom: 1px solid #cbd5e1; }
+    .advanced-nav a { color: var(--primary); }
+    .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+    .course { position: relative; overflow: hidden; padding: 20px; background: var(--surface); border-radius: 12px; transition: transform .2s ease; }
+    .course:hover { transform: translateY(-5px); }
+    .course .label { color: #92400e; font-weight: bold; }
+    .course button { padding: 9px 14px; border: 0; border-radius: 6px; background: var(--primary); color: white; cursor: pointer; }
+    footer { text-align: center; color: #64748b; padding: 25px; }
+    @media (max-width: 600px) { header { padding: 18px 12px; } section { padding: 16px; } }
+  
+    main { max-width: 1000px; margin: 24px auto; padding: 0 18px; }
+    footer { text-align: center; color: #64748b; padding: 25px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Week 3 Friday - Task 3</h1>
+    <p>Web Programming · Gachon University</p>
+    <p>Student: Ziyodulloh Olimjonov</p>
+  </header>
+  <main>
+    <section id="task3">
+      <h2>Task 3 — Loading Spinner</h2>
+      <div class="spinner" role="img" aria-label="Loading animation"></div>
+      <p>A CSS keyframe animation rotates the border to create a loading spinner.</p>
+    </section>
+  </main>
+  <footer>© 2026 Ziyodulloh Olimjonov · Web Programming Course</footer>
+</body>
+</html>
