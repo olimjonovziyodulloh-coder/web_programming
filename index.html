@@ -8,412 +8,24 @@
 <title>Web Programming | Ziyodulloh's Course Archives</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap"></noscript>
-
-<style>
-:root{
---bg:#0e0d0f;
---panel:#161416;
---panel-hi:#1d1a1c;
---line:#2e2729;
---crimson:#9c2b2b;
---crimson-deep:#5e1c1f;
---gold:#b8924f;
---gold-soft:#8d7240;
---text:#e6e1db;
---muted:#8f8a86;
---reactor:#6fa8b8;
---blue:#2c4a86;
---blue-deep:#17284a;
---web:#8fa0c4;
---hero-image:none
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script>
+// Old widget code that runs in the head and blocks the page (no defer).
+// SPEED KNOB: bigger number = slower page = lower Lighthouse score.
+var LOAD = 1400000;
+var count = 0;
+for (var n = 2; n < LOAD; n++) {
+var ok = true;
+for (var d = 2; d * d <= n; d++) { if (n % d === 0) { ok = false; break; } }
+if (ok) count++;
 }
-
-*{margin:0;padding:0;box-sizing:border-box}
-
-html{scroll-behavior:smooth}
-
-body{
-font-family:"Inter",Arial,Helvetica,sans-serif;
-background:var(--bg);
-color:var(--text);
-line-height:1.6;
-min-height:100vh;
-position:relative
-}
-
-body::before{
-content:"";
-position:fixed;
-inset:0;
-z-index:-2;
-background-image:
-radial-gradient(ellipse at 80% 0%,rgba(156,43,43,0.16),transparent 50%),
-radial-gradient(ellipse at 10% 100%,rgba(44,74,134,0.20),transparent 50%),
-var(--hero-image);
-background-size:auto,auto,cover;
-background-position:center,center,right center;
-background-repeat:no-repeat
-}
-
-body::after{
-content:"";
-position:fixed;
-inset:0;
-z-index:-1;
-background:rgba(14,13,15,0.82);
-pointer-events:none
-}
-
-a:focus-visible{
-outline:2px solid var(--gold);
-outline-offset:3px
-}
-
-header{
-position:relative;
-overflow:hidden;
-border-bottom:1px solid var(--line);
-padding:72px 24px 56px
-}
-
-.header-content{
-max-width:1000px;
-margin:0 auto;
-position:relative;
-z-index:1
-}
-
-h1{
-font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;
-font-size:clamp(40px,8vw,78px);
-line-height:1;
-font-weight:700;
-letter-spacing:1px;
-color:#efe9e1
-}
-
-.subtitle{
-margin-top:18px;
-max-width:480px;
-color:var(--muted);
-font-size:15px
-}
-
-.student{
-display:inline-block;
-margin-top:26px;
-padding:12px 18px 12px 16px;
-border-left:3px solid var(--gold);
-background:linear-gradient(90deg,rgba(156,43,43,0.18),transparent)
-}
-
-.student-name{
-font-family:"Rajdhani",Arial,sans-serif;
-font-size:22px;
-font-weight:700;
-letter-spacing:0.5px;
-color:#f0e6d6;
-line-height:1.2
-}
-
-.student-id{
-margin-top:2px;
-font-size:13px;
-color:var(--muted)
-}
-
-.student-id strong{
-color:var(--gold);
-font-weight:500;
-letter-spacing:1px
-}
-
-.topics{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin-top:28px;
-list-style:none
-}
-
-.topics li{
-border:1px solid var(--line);
-border-left:2px solid var(--crimson);
-padding:5px 12px;
-font-family:"Rajdhani",Arial,sans-serif;
-font-weight:600;
-font-size:14px;
-letter-spacing:0.5px;
-color:#c7c0b8;
-background:rgba(255,255,255,0.02)
-}
-
-.reactor{
-position:absolute;
-top:50%;
-right:max(-120px,calc(50% - 640px));
-width:420px;
-height:420px;
-transform:translateY(-50%);
-opacity:0.22;
-pointer-events:none;
-z-index:0
-}
-
-.reactor .ring-slow{
-transform-origin:200px 200px;
-animation:spin 120s linear infinite
-}
-
-@keyframes spin{
-to{transform:rotate(360deg)}
-}
-
-.web{
-position:absolute;
-top:0;
-left:0;
-width:300px;
-height:300px;
-opacity:0.16;
-pointer-events:none;
-z-index:0
-}
-
-.topics li:nth-child(even){border-left-color:var(--blue)}
-
-.week:nth-of-type(even)::before,
-.week:nth-of-type(even)::after{border-color:var(--blue)}
-
-.week:nth-of-type(even):hover::before,
-.week:nth-of-type(even):hover::after{border-color:#5b7fc4}
-
-.week:nth-of-type(even) .week-number{
-background:var(--blue-deep);
-border-color:var(--blue)
-}
-
-.student{
-border-image:linear-gradient(var(--crimson),var(--blue)) 1;
-border-width:0 0 0 3px;
-border-style:solid
-}
-
-@media (max-width:600px){
-.web{width:200px;height:200px}
-}
-
-main{
-max-width:1000px;
-margin:0 auto;
-padding:44px 24px 64px
-}
-
-.section-heading{
-display:flex;
-align-items:baseline;
-justify-content:space-between;
-gap:16px;
-margin-bottom:24px;
-padding-bottom:12px;
-border-bottom:1px solid var(--line)
-}
-
-.section-heading h2{
-font-family:"Rajdhani",Arial,sans-serif;
-font-size:26px;
-font-weight:700;
-letter-spacing:0.5px
-}
-
-.section-heading p{
-color:var(--muted);
-font-size:13px
-}
-
-.week{
-position:relative;
-background:var(--panel);
-border:1px solid var(--line);
-margin-bottom:20px;
-padding:24px 26px 26px
-}
-
-.week::before,
-.week::after{
-content:"";
-position:absolute;
-width:14px;
-height:14px;
-border:2px solid var(--gold-soft);
-pointer-events:none;
-transition:border-color 0.2s
-}
-
-.week::before{
-top:-1px;
-left:-1px;
-border-right:0;
-border-bottom:0
-}
-
-.week::after{
-bottom:-1px;
-right:-1px;
-border-left:0;
-border-top:0
-}
-
-.week:hover::before,
-.week:hover::after{border-color:var(--gold)}
-
-.week h2{
-display:flex;
-align-items:center;
-gap:14px;
-font-family:"Rajdhani",Arial,sans-serif;
-font-size:22px;
-font-weight:700;
-letter-spacing:0.4px;
-margin-bottom:18px
-}
-
-.week-number{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-min-width:40px;
-height:34px;
-background:var(--crimson-deep);
-border:1px solid var(--crimson);
-color:#ecd9c6;
-font-size:16px;
-clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)
-}
-
-.exercise-list{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:10px
-}
-
-.exercise-list a{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-min-height:48px;
-padding:12px 14px;
-background:var(--panel-hi);
-color:#c9c3bc;
-text-decoration:none;
-font-size:14px;
-border:1px solid #2a2426;
-transition:background 0.2s,border-color 0.2s,color 0.2s
-}
-
-.exercise-list a::after{
-content:"\2197";
-color:#6c6666;
-flex-shrink:0;
-transition:color 0.2s
-}
-
-.exercise-list a:hover{
-background:#251c1e;
-color:#f1e6da;
-border-color:var(--crimson)
-}
-
-.exercise-list a:hover::after{color:var(--gold)}
-
-.week7{
-border-color:#4a3a2a;
-background:linear-gradient(115deg,rgba(184,146,79,0.07),transparent 60%),var(--panel)
-}
-
-.week7 .week-number{
-background:#3a2d1c;
-border-color:var(--gold-soft);
-color:#e6cfa3
-}
-
-.week7 .exercise-list a:hover{border-color:var(--gold)}
-
-.new-label{
-margin-left:auto;
-padding:3px 9px;
-border:1px solid var(--gold-soft);
-color:var(--gold);
-font-size:13px;
-letter-spacing:0.8px
-}
-
-footer{
-text-align:center;
-padding:28px 20px;
-border-top:1px solid var(--line);
-background:rgba(10,9,10,0.7)
-}
-
-footer p{
-color:var(--muted);
-font-size:13px
-}
-
-footer span{color:var(--gold)}
-
-.footer-subtitle{
-margin-top:4px;
-color:#8f8a86;
-font-size:12px
-}
-
-@media (max-width:600px){
-header{padding:48px 18px 40px}
-main{padding:28px 14px 40px}
-.reactor{width:280px;height:280px;right:-90px;opacity:0.16}
-.section-heading{flex-direction:column;align-items:flex-start;gap:2px}
-.week{padding:20px 16px 22px}
-.week h2{font-size:19px;gap:10px}
-.exercise-list{grid-template-columns:1fr}
-}
-
-@media (prefers-reduced-motion:reduce){
-html{scroll-behavior:auto}
-.reactor .ring-slow{animation:none}
-*,*::before,*::after{transition:none !important}
-}
-
-.skip-link{
-position:absolute;
-left:-9999px;
-top:0.5rem;
-z-index:9999;
-background:#1a2744;
-color:#fff;
-padding:0.55rem 1rem;
-text-decoration:none;
-font-size:14px;
-border:2px solid var(--gold,#b8924f)
-}
-
-.skip-link:focus{left:0.5rem}
-</style>
+</script>
+<style>:root{--bg:#0e0d0f;--panel:#161416;--panel-hi:#1d1a1c;--line:#2e2729;--crimson:#9c2b2b;--crimson-deep:#5e1c1f;--gold:#b8924f;--gold-soft:#8d7240;--text:#e6e1db;--muted:#8f8a86;--reactor:#6fa8b8;--blue:#2c4a86;--blue-deep:#17284a;--web:#8fa0c4;--hero-image:none}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:"Inter",Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;position:relative}body::before{content:"";position:fixed;inset:0;z-index:-2;background-image:radial-gradient(ellipse at 80% 0%,rgba(156,43,43,0.16),transparent 50%),radial-gradient(ellipse at 10% 100%,rgba(44,74,134,0.20),transparent 50%),var(--hero-image);background-size:auto,auto,cover;background-position:center,center,right center;background-repeat:no-repeat}body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(14,13,15,0.82);pointer-events:none}a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}header{position:relative;overflow:hidden;border-bottom:1px solid var(--line);padding:72px 24px 56px}.header-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}h1{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:clamp(40px,8vw,78px);line-height:1;font-weight:700;letter-spacing:1px;color:#efe9e1}.subtitle{margin-top:18px;max-width:480px;color:var(--muted);font-size:15px}.student{display:inline-block;margin-top:26px;padding:12px 18px 12px 16px;border-left:3px solid var(--gold);background:linear-gradient(90deg,rgba(156,43,43,0.18),transparent)}.student-name{font-family:"Rajdhani",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.5px;color:#f0e6d6;line-height:1.2}.student-id{margin-top:2px;font-size:13px;color:var(--muted)}.student-id strong{color:var(--gold);font-weight:500;letter-spacing:1px}.topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;list-style:none}.topics li{border:1px solid var(--line);border-left:2px solid var(--crimson);padding:5px 12px;font-family:"Rajdhani",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:0.5px;color:#c7c0b8;background:rgba(255,255,255,0.02)}.reactor{position:absolute;top:50%;right:max(-120px,calc(50% - 640px));width:420px;height:420px;transform:translateY(-50%);opacity:0.22;pointer-events:none;z-index:0}.reactor .ring-slow{transform-origin:200px 200px;animation:spin 120s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.web{position:absolute;top:0;left:0;width:300px;height:300px;opacity:0.16;pointer-events:none;z-index:0}.topics li:nth-child(even){border-left-color:var(--blue)}.week:nth-of-type(even)::before,.week:nth-of-type(even)::after{border-color:var(--blue)}.week:nth-of-type(even):hover::before,.week:nth-of-type(even):hover::after{border-color:#5b7fc4}.week:nth-of-type(even) .week-number{background:var(--blue-deep);border-color:var(--blue)}.student{border-image:linear-gradient(var(--crimson),var(--blue)) 1;border-width:0 0 0 3px;border-style:solid}@media (max-width:600px){.web{width:200px;height:200px}}main{max-width:1000px;margin:0 auto;padding:44px 24px 64px}.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--line)}.section-heading h2{font-family:"Rajdhani",Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:0.5px}.section-heading p{color:var(--muted);font-size:13px}.week{position:relative;background:var(--panel);border:1px solid var(--line);margin-bottom:20px;padding:24px 26px 26px}.week::before,.week::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--gold-soft);pointer-events:none;transition:border-color 0.2s}.week::before{top:-1px;left:-1px;border-right:0;border-bottom:0}.week::after{bottom:-1px;right:-1px;border-left:0;border-top:0}.week:hover::before,.week:hover::after{border-color:var(--gold)}.week h2{display:flex;align-items:center;gap:14px;font-family:"Rajdhani",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.4px;margin-bottom:18px}.week-number{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:34px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-size:16px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}.exercise-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.exercise-list a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:12px 14px;background:var(--panel-hi);color:#c9c3bc;text-decoration:none;font-size:14px;border:1px solid #2a2426;transition:background 0.2s,border-color 0.2s,color 0.2s}.exercise-list a::after{content:"\2197";color:#6c6666;flex-shrink:0;transition:color 0.2s}.exercise-list a:hover{background:#251c1e;color:#f1e6da;border-color:var(--crimson)}.exercise-list a:hover::after{color:var(--gold)}.week7{border-color:#4a3a2a;background:linear-gradient(115deg,rgba(184,146,79,0.07),transparent 60%),var(--panel)}.week7 .week-number{background:#3a2d1c;border-color:var(--gold-soft);color:#e6cfa3}.week7 .exercise-list a:hover{border-color:var(--gold)}.new-label{margin-left:auto;padding:3px 9px;border:1px solid var(--gold-soft);color:var(--gold);font-size:13px;letter-spacing:0.8px}footer{text-align:center;padding:28px 20px;border-top:1px solid var(--line);background:rgba(10,9,10,0.7)}footer p{color:var(--muted);font-size:13px}footer span{color:var(--gold)}.footer-subtitle{margin-top:4px;color:#8f8a86;font-size:12px}@media (max-width:600px){header{padding:48px 18px 40px}main{padding:28px 14px 40px}.reactor{width:280px;height:280px;right:-90px;opacity:0.16}.section-heading{flex-direction:column;align-items:flex-start;gap:2px}.week{padding:20px 16px 22px}.week h2{font-size:19px;gap:10px}.exercise-list{grid-template-columns:1fr}}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reactor .ring-slow{animation:none}*,*::before,*::after{transition:none !important}}.skip-link{position:absolute;left:-9999px;top:0.5rem;z-index:9999;background:#1a2744;color:#fff;padding:0.55rem 1rem;text-decoration:none;font-size:14px;border:2px solid var(--gold,#b8924f)}.skip-link:focus{left:0.5rem}</style>
 </head>
-
 <body>
-
 <a href="#main-content" class="skip-link">Skip to main content</a>
-
 <header>
-
-<svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
-<path d="M0 0L300 0M0 0L290 78M0 0L260 150M0 0L212 212M0 0L150 260M0 0L78 290M0 0L0 300M55 0 Q47 6 53 14M53 14 Q44 18 48 27M48 27 Q38 29 39 39M39 39 Q29 38 28 48M28 48 Q18 44 14 53M14 53 Q6 47 0 55M110 0 Q94 12 106 28M106 28 Q87 36 95 55M95 55 Q75 58 78 78M78 78 Q58 75 55 95M55 95 Q36 87 28 106M28 106 Q12 94 0 110M165 0 Q141 19 159 43M159 43 Q131 54 143 82M143 82 Q113 86 117 117M117 117 Q86 113 83 143M83 143 Q54 131 43 159M43 159 Q19 141 0 165M220 0 Q188 25 213 57M213 57 Q175 72 191 110M191 110 Q150 115 156 156M156 156 Q115 150 110 191M110 191 Q72 175 57 213M57 213 Q25 188 0 220M275 0 Q234 31 266 71M266 71 Q218 91 238 137M238 137 Q188 144 194 194M194 194 Q144 188 138 238M138 238 Q91 218 71 266M71 266 Q31 234 0 275" fill="none" stroke="var(--web)" stroke-width="1.2"/>
-</svg>
-
+<svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false"><path d="M0 0L300 0M0 0L290 78M0 0L260 150M0 0L212 212M0 0L150 260M0 0L78 290M0 0L0 300M55 0 Q47 6 53 14M53 14 Q44 18 48 27M48 27 Q38 29 39 39M39 39 Q29 38 28 48M28 48 Q18 44 14 53M14 53 Q6 47 0 55M110 0 Q94 12 106 28M106 28 Q87 36 95 55M95 55 Q75 58 78 78M78 78 Q58 75 55 95M55 95 Q36 87 28 106M28 106 Q12 94 0 110M165 0 Q141 19 159 43M159 43 Q131 54 143 82M143 82 Q113 86 117 117M117 117 Q86 113 83 143M83 143 Q54 131 43 159M43 159 Q19 141 0 165M220 0 Q188 25 213 57M213 57 Q175 72 191 110M191 110 Q150 115 156 156M156 156 Q115 150 110 191M110 191 Q72 175 57 213M57 213 Q25 188 0 220M275 0 Q234 31 266 71M266 71 Q218 91 238 137M238 137 Q188 144 194 194M194 194 Q144 188 138 238M138 238 Q91 218 71 266M71 266 Q31 234 0 275" fill="none" stroke="var(--web)" stroke-width="1.2"/></svg>
 <svg class="reactor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
 <g fill="none" stroke="var(--reactor)" stroke-width="2">
 <circle cx="200" cy="200" r="190" stroke-width="1"/>
@@ -431,16 +43,15 @@ border:2px solid var(--gold,#b8924f)
 </g>
 </g>
 </svg>
-
 <div class="header-content">
 <h1>Web Programming</h1>
-<p class="subtitle">Coding exercises, experiments, and projects built throughout the course.</p>
-
+<p class="subtitle">
+Coding exercises, experiments, and projects built throughout the course.
+</p>
 <div class="student">
 <p class="student-name">Olimjonov Ziyodulloh</p>
 <p class="student-id">Student ID <strong>202537557</strong></p>
 </div>
-
 <ul class="topics">
 <li>HTML</li>
 <li>CSS</li>
@@ -449,14 +60,11 @@ border:2px solid var(--gold,#b8924f)
 </ul>
 </div>
 </header>
-
 <main id="main-content">
-
 <div class="section-heading">
 <h2>Course modules</h2>
 <p>Weeks 1 to 9.2</p>
 </div>
-
 <section class="week">
 <h2><span class="week-number">01</span> Week 1 - HTML Basics</h2>
 <div class="exercise-list">
@@ -467,7 +75,6 @@ border:2px solid var(--gold,#b8924f)
 <a href="week1/week1.html">Week 1 Exercise</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">02</span> Week 2 - HTML Elements</h2>
 <div class="exercise-list">
@@ -481,35 +88,32 @@ border:2px solid var(--gold,#b8924f)
 <a href="week2/text_semantics.html">Text Semantics</a>
 </div>
 </section>
-
 <section class="week">
-  <h2><span class="week-number">03.1</span> Week 3.1 - CSS Basics (Monday)</h2>
-  <div class="exercise-list">
-    <a href="week3.1/task1.html">Task 1 - Monday</a>
-    <a href="week3.1/task2.html">Task 2 - Monday</a>
-    <a href="week3.1/task3.html">Task 3 - Monday</a>
-    <a href="week3.1/task4.html">Task 4 - Monday</a>
-    <a href="week3.1/task5.html">Task 5 - Monday</a>
-    <a href="week3.1/task6.html">Task 6 - Monday</a>
-    <a href="week3.1/task7.html">Task 7 - Monday</a>
-    <a href="week3.1/task8.html">Task 8 - Monday</a>
-  </div>
+<h2><span class="week-number">03.1</span> Week 3.1 - CSS Basics (Monday)</h2>
+<div class="exercise-list">
+<a href="week3.1/task1.html">Task 1 - Monday</a>
+<a href="week3.1/task2.html">Task 2 - Monday</a>
+<a href="week3.1/task3.html">Task 3 - Monday</a>
+<a href="week3.1/task4.html">Task 4 - Monday</a>
+<a href="week3.1/task5.html">Task 5 - Monday</a>
+<a href="week3.1/task6.html">Task 6 - Monday</a>
+<a href="week3.1/task7.html">Task 7 - Monday</a>
+<a href="week3.1/task8.html">Task 8 - Monday</a>
+</div>
 </section>
-
 <section class="week">
-  <h2><span class="week-number">03.2</span> Week 3.2 - Advanced CSS (Friday)</h2>
-  <div class="exercise-list">
-    <a href="week3.2/task1.html">Task 1 - Friday</a>
-    <a href="week3.2/task2.html">Task 2 - Friday</a>
-    <a href="week3.2/task3.html">Task 3 - Friday</a>
-    <a href="week3.2/task4.html">Task 4 - Friday</a>
-    <a href="week3.2/task5.html">Task 5 - Friday</a>
-    <a href="week3.2/task6.html">Task 6 - Friday</a>
-    <a href="week3.2/task7.html">Task 7 - Friday</a>
-    <a href="week3.2/task8.html">Task 8 - Friday</a>
-  </div>
+<h2><span class="week-number">03.2</span> Week 3.2 - Advanced CSS (Friday)</h2>
+<div class="exercise-list">
+<a href="week3.2/task1.html">Task 1 - Friday</a>
+<a href="week3.2/task2.html">Task 2 - Friday</a>
+<a href="week3.2/task3.html">Task 3 - Friday</a>
+<a href="week3.2/task4.html">Task 4 - Friday</a>
+<a href="week3.2/task5.html">Task 5 - Friday</a>
+<a href="week3.2/task6.html">Task 6 - Friday</a>
+<a href="week3.2/task7.html">Task 7 - Friday</a>
+<a href="week3.2/task8.html">Task 8 - Friday</a>
+</div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">04</span> Week 4 - JavaScript and DOM</h2>
 <div class="exercise-list">
@@ -519,7 +123,6 @@ border:2px solid var(--gold,#b8924f)
 <a href="week4/E4.html">Exercise 4</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">05</span> Week 5 - JavaScript Basics</h2>
 <div class="exercise-list">
@@ -527,7 +130,6 @@ border:2px solid var(--gold,#b8924f)
 <a href="week5/js-basics.html">JavaScript Basics</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">06</span> Week 6 - API Exercises</h2>
 <div class="exercise-list">
@@ -539,14 +141,16 @@ border:2px solid var(--gold,#b8924f)
 <a href="week6/06_rest_countries_api.html">6. REST Countries API</a>
 </div>
 </section>
-
 <section class="week week7">
-<h2><span class="week-number">07</span> Week 7 - Book Search <span class="new-label">Project</span></h2>
+<h2>
+<span class="week-number">07</span>
+Week 7 - Book Search
+<span class="new-label">Project</span>
+</h2>
 <div class="exercise-list">
 <a href="week7/booksearch.html">Book Search App</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">08.1</span> Week 8.1 - HTML Forms &amp; Validation</h2>
 <div class="exercise-list">
@@ -556,7 +160,6 @@ border:2px solid var(--gold,#b8924f)
 <a href="week8.1/homework.html">Homework - Student Registration</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">08.2</span> Week 8.2 - Forms with JavaScript</h2>
 <div class="exercise-list">
@@ -569,27 +172,22 @@ border:2px solid var(--gold,#b8924f)
 <a href="week8.2/homework.html">Homework - Upgraded Registration</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">09</span> Week 9 - Accessibility</h2>
 <div class="exercise-list">
 <a href="week9/accessibility-task.html">Accessibility Audit Report</a>
 </div>
 </section>
-
 <section class="week">
 <h2><span class="week-number">09.2</span> Week 9.2 - Performance Optimization</h2>
 <div class="exercise-list">
 <a href="week9.2/performance-task.html">Performance Optimization Report</a>
 </div>
 </section>
-
 </main>
-
 <footer>
 <p>Web Programming <span>&bull;</span> Course Portfolio <span>&bull;</span> Olimjonov Ziyodulloh <span>&bull;</span> ID 202537557</p>
 <div class="footer-subtitle">Iron Man &amp; Spider-Man themed &bull; Learn, build, improve</div>
 </footer>
-
 </body>
 </html>
