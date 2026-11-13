@@ -221,6 +221,12 @@ button:focus-visible {
   border-color: var(--accent);
 }
 
+html[data-theme="dark"] .skip-link,
+html[data-theme="dark"] .brand-mark,
+html[data-theme="dark"] .button:not(.secondary) {
+  color: #0b1020;
+}
+
 section {
   padding-block: 28px;
 }
