@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal portfolio of Olimjonov Ziyodulloh, student ID 202537557 — Web Programming coursework at Gachon University.">
+  <meta name="theme-color" content="#1d4ed8">
+  <title>Olimjonov Ziyodulloh — Portfolio</title>
+  <script>
+    (function () {
+      var saved = localStorage.getItem("portfolio-theme");
+      var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = saved || (dark ? "dark" : "light");
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">OZ</span>
+        <span>Olimjonov Ziyodulloh</span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" id="top">
+      <p class="eyebrow">Web Programming · K0126002</p>
+      <h1>Olimjonov<br>Ziyodulloh</h1>
+      <p class="lead">
+        Web programming student at Gachon University. I build accessible,
+        responsive pages with semantic HTML, modern CSS and plain JavaScript,
+        and I publish every project with GitHub Pages.
+      </p>
+      <ul class="hero-meta">
+        <li>Student ID 202537557</li>
+        <li>Gachon University</li>
+        <li>2026 Fall</li>
+      </ul>
+      <div class="hero-actions">
+        <a class="button" href="#projects">View projects</a>
+        <a class="button secondary" href="https://github.com/olimjonovziyodulloh-coder">GitHub profile</a>
+      </div>
+    </section>
+
+    <section class="wrap" id="projects">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <p>Coursework from Weeks 1–10</p>
+      </div>
+      <div class="project-grid">
+        <article class="project">
+          <h3>Book Search App</h3>
+          <p>
+            Search the Open Library catalogue by title. Uses the Fetch API,
+            renders results in the DOM and handles loading, empty and error states.
+          </p>
+          <ul class="tags">
+            <li>JavaScript</li>
+            <li>Fetch API</li>
+            <li>Open Library</li>
+          </ul>
+          <a href="../../week7/booksearch.html">Open the app</a>
+        </article>
+
+        <article class="project">
+          <h3>Accessibility Audit</h3>
+          <p>
+            A before-and-after audit of a page, fixing landmarks, headings,
+            contrast, focus styles and form labels.
+          </p>
+          <ul class="tags">
+            <li>WCAG</li>
+            <li>ARIA</li>
+            <li>Audit</li>
+          </ul>
+          <a href="../../week9/accessibility-task.html">Read the report</a>
+        </article>
+
+        <article class="project">
+          <h3>Performance Optimization</h3>
+          <p>
+            Measured a page with Lighthouse, then reduced image weight, deferred
+            scripts and removed render-blocking resources.
+          </p>
+          <ul class="tags">
+            <li>Lighthouse</li>
+            <li>Core Web Vitals</li>
+            <li>Images</li>
+          </ul>
+          <a href="../../week9.2/performance-task.html">Read the report</a>
+        </article>
+
+        <article class="project">
+          <h3>Course Archive</h3>
+          <p>
+            The full archive of weekly exercises, labs and projects from the
+            Web Programming course, deployed as a GitHub Pages site.
+          </p>
+          <ul class="tags">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>GitHub Pages</li>
+          </ul>
+          <a href="../../index.html">Browse the archive</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" id="about">
+      <div class="section-head">
+        <h2>About</h2>
+        <p>What I work with</p>
+      </div>
+      <div class="about-card">
+        <div>
+          <p>
+            I am learning front-end development one week at a time. My focus is
+            on writing clean, semantic markup, keeping layouts responsive without
+            frameworks, and making sure every page works with a keyboard and a
+            screen reader.
+          </p>
+          <p style="margin-top:12px">
+            This portfolio is a static site: no build step, no dependencies and
+            no server-side code. It is deployed directly from a Git branch with
+            GitHub Pages.
+          </p>
+        </div>
+        <ul class="skill-list">
+          <li>Semantic HTML5</li>
+          <li>Responsive CSS and Grid</li>
+          <li>Plain JavaScript and the DOM</li>
+          <li>REST APIs and Fetch</li>
+          <li>Accessibility and performance</li>
+          <li>Git, GitHub and GitHub Pages</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap" id="contact">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <p>Find my work online</p>
+      </div>
+      <div class="contact-card">
+        <h3>Let's connect</h3>
+        <p>
+          The best place to see my latest work is GitHub, where every commit for
+          this portfolio and my course projects is public.
+        </p>
+        <a class="button" href="https://github.com/olimjonovziyodulloh-coder">github.com/olimjonovziyodulloh-coder</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Olimjonov Ziyodulloh · Student ID 202537557</p>
+    <p>Built with semantic HTML, responsive CSS and a little JavaScript.</p>
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById("theme-toggle");
+
+      function render(theme) {
+        root.dataset.theme = theme;
+        var isDark = theme === "dark";
+        toggle.textContent = isDark ? "Light mode" : "Dark mode";
+        toggle.setAttribute("aria-pressed", String(isDark));
+      }
+
+      render(root.dataset.theme || "light");
+
+      toggle.addEventListener("click", function () {
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        render(next);
+        localStorage.setItem("portfolio-theme", next);
+      });
+    })();
+  </script>
+</body>
+</html>
