@@ -1,192 +1,435 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Personal portfolio of Olimjonov Ziyodulloh, student ID 202537557 — Web Programming coursework at Gachon University.">
-  <meta name="theme-color" content="#1d4ed8">
-  <title>Olimjonov Ziyodulloh — Portfolio</title>
+  <meta name="description" content="Olimjonov Ziyodulloh — web programming student at Gachon University. Portfolio of accessible, responsive web projects.">
+  <meta name="theme-color" content="#0e0d0f">
+  <title>Olimjonov Ziyodulloh | Developer Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap"></noscript>
+
   <script>
     (function () {
-      var saved = localStorage.getItem("portfolio-theme");
-      var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.theme = saved || (dark ? "dark" : "light");
+      try {
+        var saved = localStorage.getItem("portfolio-theme");
+        document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+      } catch (error) {
+        document.documentElement.dataset.theme = "dark";
+      }
     })();
   </script>
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="#top">
-        <span class="brand-mark" aria-hidden="true">OZ</span>
-        <span>Olimjonov Ziyodulloh</span>
-      </a>
-      <nav class="site-nav" aria-label="Main">
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
-      </nav>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#home">OZ<span>.</span></a>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#about">ABOUT</a>
+        <a href="#skills">TOOLKIT</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#contact">CONTACT</a>
+        <a class="nav-cta" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+      </div>
+
+      <div class="nav-right">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="true">Light mode</button>
+        <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      </div>
     </div>
-  </header>
+  </nav>
 
   <main id="main">
-    <section class="hero wrap" id="top">
-      <p class="eyebrow">Web Programming · K0126002</p>
-      <h1>Olimjonov<br>Ziyodulloh</h1>
-      <p class="lead">
-        Web programming student at Gachon University. I build accessible,
-        responsive pages with semantic HTML, modern CSS and plain JavaScript,
-        and I publish every project with GitHub Pages.
-      </p>
-      <ul class="hero-meta">
-        <li>Student ID 202537557</li>
-        <li>Gachon University</li>
-        <li>2026 Fall</li>
-      </ul>
-      <div class="hero-actions">
-        <a class="button" href="#projects">View projects</a>
-        <a class="button secondary" href="https://github.com/olimjonovziyodulloh-coder">GitHub profile</a>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div class="hero-info">
+          <p class="eyebrow">Web Programming Student · Gachon University</p>
+          <h1>Olimjonov <span class="highlight">Ziyodulloh.</span></h1>
+          <p class="hero-copy">
+            I build responsive, accessible websites with semantic HTML, modern
+            CSS and plain JavaScript. This portfolio collects the projects and
+            reports I have shipped during the Web Programming course.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
+            <a class="btn btn-secondary" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GitHub profile <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-meta">
+            <span><i class="dot" aria-hidden="true"></i> Open to learning &amp; opportunities</span>
+            <span>Student ID 202537557</span>
+            <span>Based in South Korea</span>
+          </div>
+        </div>
+
+        <div class="portrait-shell">
+          <div class="portrait-frame">
+            <!-- Replace assets/profile.jpg with your own photo (4:5 portrait works best). -->
+            <img src="assets/profile.jpg" alt="Portrait of Olimjonov Ziyodulloh" width="800" height="1000">
+          </div>
+          <div class="portrait-note">BUILDING · LEARNING · IMPROVING</div>
+          <div class="portrait-index">DEVELOPER PORTFOLIO / 2026</div>
+        </div>
       </div>
     </section>
 
-    <section class="wrap" id="projects">
-      <div class="section-head">
-        <h2>Projects</h2>
-        <p>Coursework from Weeks 1–10</p>
+    <div class="ticker">
+      <div class="wrap ticker-inner">
+        <span>Web development</span>
+        <span>Accessibility</span>
+        <span>Performance</span>
+        <span>Git &amp; GitHub Pages</span>
       </div>
-      <div class="project-grid">
-        <article class="project">
-          <h3>Book Search App</h3>
-          <p>
-            Search the Open Library catalogue by title. Uses the Fetch API,
-            renders results in the DOM and handles loading, empty and error states.
-          </p>
-          <ul class="tags">
-            <li>JavaScript</li>
-            <li>Fetch API</li>
-            <li>Open Library</li>
-          </ul>
-          <a href="../../week7/booksearch.html">Open the app</a>
-        </article>
+    </div>
 
-        <article class="project">
-          <h3>Accessibility Audit</h3>
-          <p>
-            A before-and-after audit of a page, fixing landmarks, headings,
-            contrast, focus styles and form labels.
-          </p>
-          <ul class="tags">
-            <li>WCAG</li>
-            <li>ARIA</li>
-            <li>Audit</li>
-          </ul>
-          <a href="../../week9/accessibility-task.html">Read the report</a>
-        </article>
-
-        <article class="project">
-          <h3>Performance Optimization</h3>
-          <p>
-            Measured a page with Lighthouse, then reduced image weight, deferred
-            scripts and removed render-blocking resources.
-          </p>
-          <ul class="tags">
-            <li>Lighthouse</li>
-            <li>Core Web Vitals</li>
-            <li>Images</li>
-          </ul>
-          <a href="../../week9.2/performance-task.html">Read the report</a>
-        </article>
-
-        <article class="project">
-          <h3>Course Archive</h3>
-          <p>
-            The full archive of weekly exercises, labs and projects from the
-            Web Programming course, deployed as a GitHub Pages site.
-          </p>
-          <ul class="tags">
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>GitHub Pages</li>
-          </ul>
-          <a href="../../index.html">Browse the archive</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="wrap" id="about">
-      <div class="section-head">
-        <h2>About</h2>
-        <p>What I work with</p>
-      </div>
-      <div class="about-card">
-        <div>
-          <p>
-            I am learning front-end development one week at a time. My focus is
-            on writing clean, semantic markup, keeping layouts responsive without
-            frameworks, and making sure every page works with a keyboard and a
-            screen reader.
-          </p>
-          <p style="margin-top:12px">
-            This portfolio is a static site: no build step, no dependencies and
-            no server-side code. It is deployed directly from a Git branch with
-            GitHub Pages.
+    <section class="content-section" id="about">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">01 / About</p>
+            <h2 class="section-title">A little about<br>what I do.</h2>
+          </div>
+          <p class="section-desc">
+            Curious by nature. Building a strong front-end foundation one week
+            at a time, with clean code and real projects.
           </p>
         </div>
-        <ul class="skill-list">
-          <li>Semantic HTML5</li>
-          <li>Responsive CSS and Grid</li>
-          <li>Plain JavaScript and the DOM</li>
-          <li>REST APIs and Fetch</li>
-          <li>Accessibility and performance</li>
-          <li>Git, GitHub and GitHub Pages</li>
-        </ul>
+
+        <div class="about-grid reveal">
+          <div class="about-text">
+            <p>
+              I'm <strong>Olimjonov Ziyodulloh</strong>, a Web Programming
+              student at <strong>Gachon University</strong> in South Korea.
+            </p>
+            <p>
+              My focus is <strong>front-end development</strong>: semantic
+              markup, responsive layouts, the DOM, and calling REST APIs from
+              the browser. I care about pages that work for everyone, including
+              keyboard and screen-reader users.
+            </p>
+            <p>
+              I also practise <strong>performance optimization</strong> and use
+              Lighthouse to measure the result, because a fast page is part of
+              a good user experience.
+            </p>
+          </div>
+
+          <div class="facts">
+            <div class="fact">
+              <small>Education</small>
+              <strong>Web Programming</strong>
+            </div>
+            <div class="fact">
+              <small>University</small>
+              <strong>Gachon University</strong>
+            </div>
+            <div class="fact">
+              <small>Main focus</small>
+              <strong>Front-end &amp; Accessibility</strong>
+            </div>
+            <div class="fact">
+              <small>Student ID</small>
+              <strong>202537557</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="wrap" id="contact">
-      <div class="section-head">
-        <h2>Contact</h2>
-        <p>Find my work online</p>
+    <section class="content-section" id="skills">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">02 / Toolkit</p>
+            <h2 class="section-title">Technologies &amp;<br>tools.</h2>
+          </div>
+          <p class="section-desc">
+            A growing toolkit from the course: from document structure to
+            client-side APIs, accessibility and deployment.
+          </p>
+        </div>
+
+        <div class="skills-grid reveal">
+          <article class="skill">
+            <span class="num">01 / MARKUP</span>
+            <h3>Semantic HTML</h3>
+            <p>Landmarks, forms, metadata</p>
+          </article>
+          <article class="skill">
+            <span class="num">02 / STYLING</span>
+            <h3>Responsive CSS</h3>
+            <p>Grid, flexbox, variables</p>
+          </article>
+          <article class="skill">
+            <span class="num">03 / SCRIPTING</span>
+            <h3>JavaScript</h3>
+            <p>DOM, events, validation</p>
+          </article>
+          <article class="skill">
+            <span class="num">04 / DATA</span>
+            <h3>REST APIs</h3>
+            <p>Fetch, JSON, error states</p>
+          </article>
+          <article class="skill">
+            <span class="num">05 / QUALITY</span>
+            <h3>Accessibility</h3>
+            <p>WCAG, ARIA, focus order</p>
+          </article>
+          <article class="skill">
+            <span class="num">06 / SPEED</span>
+            <h3>Performance</h3>
+            <p>Lighthouse, image weight</p>
+          </article>
+          <article class="skill">
+            <span class="num">07 / VERSIONING</span>
+            <h3>Git</h3>
+            <p>Branches, commits, merges</p>
+          </article>
+          <article class="skill">
+            <span class="num">08 / DEPLOYMENT</span>
+            <h3>GitHub Pages</h3>
+            <p>Static hosting, custom 404</p>
+          </article>
+        </div>
       </div>
-      <div class="contact-card">
-        <h3>Let's connect</h3>
-        <p>
-          The best place to see my latest work is GitHub, where every commit for
-          this portfolio and my course projects is public.
-        </p>
-        <a class="button" href="https://github.com/olimjonovziyodulloh-coder">github.com/olimjonovziyodulloh-coder</a>
+    </section>
+
+    <section class="content-section" id="projects">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">03 / Selected work</p>
+            <h2 class="section-title">Projects &amp;<br>experiments.</h2>
+          </div>
+          <p class="section-desc">
+            Work from the course archive. Each project is live on GitHub Pages
+            and the source is public.
+          </p>
+        </div>
+
+        <div class="projects reveal">
+          <article class="project">
+            <div class="project-visual">
+              <span class="visual-mark" aria-hidden="true">01</span>
+              <span class="visual-label">Book Search App · JavaScript</span>
+            </div>
+            <div class="project-body">
+              <div class="project-top">
+                <h3>Book Search</h3>
+                <span class="status">Live</span>
+              </div>
+              <p>
+                Search the Open Library catalogue by title or author. Handles
+                loading, empty and error states, with lazy-loaded covers.
+              </p>
+              <div class="tags">
+                <span>JavaScript</span><span>Fetch API</span><span>Open Library</span>
+              </div>
+              <a class="project-link" href="../book-search/">Open the app ↗</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual blue">
+              <span class="visual-mark" aria-hidden="true">02</span>
+              <span class="visual-label">Accessibility Audit · Report</span>
+            </div>
+            <div class="project-body">
+              <div class="project-top">
+                <h3>Accessibility Audit</h3>
+                <span class="status">Report</span>
+              </div>
+              <p>
+                A before-and-after audit that fixed landmarks, heading order,
+                contrast, focus styles and form labels.
+              </p>
+              <div class="tags">
+                <span>WCAG</span><span>ARIA</span><span>Audit</span>
+              </div>
+              <a class="project-link" href="../../week9/accessibility-task.html">Read the report ↗</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual gold">
+              <span class="visual-mark" aria-hidden="true">03</span>
+              <span class="visual-label">Performance · Lighthouse</span>
+            </div>
+            <div class="project-body">
+              <div class="project-top">
+                <h3>Performance Optimization</h3>
+                <span class="status">Report</span>
+              </div>
+              <p>
+                Measured a page with Lighthouse, then cut image weight, deferred
+                scripts and removed render-blocking resources.
+              </p>
+              <div class="tags">
+                <span>Lighthouse</span><span>Web Vitals</span><span>Images</span>
+              </div>
+              <a class="project-link" href="../../week9.2/performance-task.html">Read the report ↗</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual">
+              <span class="visual-mark" aria-hidden="true">04</span>
+              <span class="visual-label">Course archive · GitHub Pages</span>
+            </div>
+            <div class="project-body">
+              <div class="project-top">
+                <h3>Web Programming Archive</h3>
+                <span class="status">Live</span>
+              </div>
+              <p>
+                Every weekly exercise, report and project from the course,
+                collected on one static site.
+              </p>
+              <div class="tags">
+                <span>HTML</span><span>CSS</span><span>GitHub Pages</span>
+              </div>
+              <a class="project-link" href="../../index.html">Browse the archive ↗</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="learning">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">04 / Growth</p>
+            <h2 class="section-title">Always in<br>progress.</h2>
+          </div>
+          <p class="section-desc">
+            The goal is not to know everything. It is to keep learning, build
+            with purpose, and improve with every project.
+          </p>
+        </div>
+
+        <div class="learning-box reveal">
+          <div>
+            <p class="section-kicker">Current direction</p>
+            <h3>From static pages to complete web apps.</h3>
+            <p>
+              Strengthening the front-end fundamentals while practising the
+              workflow professional teams use: version control, code review and
+              automated deployment.
+            </p>
+          </div>
+          <div class="learning-list">
+            <div class="learning-item">Semantic, accessible markup</div>
+            <div class="learning-item">Responsive layouts without frameworks</div>
+            <div class="learning-item">Working with REST APIs</div>
+            <div class="learning-item">Performance measurement</div>
+            <div class="learning-item">Git branching and merging</div>
+            <div class="learning-item">Shipping with GitHub Pages</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="contact">
+      <div class="wrap">
+        <div class="contact-panel reveal">
+          <div>
+            <p class="section-kicker">05 / Get in touch</p>
+            <h2>Have an idea or an opportunity?</h2>
+            <p>
+              I'm always interested in learning, collaborating and connecting
+              with people who build great things on the web.
+            </p>
+          </div>
+          <a class="contact-btn" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">Find me on GitHub ↗</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p>&copy; 2026 Olimjonov Ziyodulloh · Student ID 202537557</p>
-    <p>Built with semantic HTML, responsive CSS and a little JavaScript.</p>
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Olimjonov Ziyodulloh</span>
+      <div class="footer-links">
+        <a href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+        <a href="../../index.html">ARCHIVE ↗</a>
+        <a href="../task1.html">WEEK 10 TASKS ↗</a>
+      </div>
+    </div>
   </footer>
 
   <script>
     (function () {
       var root = document.documentElement;
       var toggle = document.getElementById("theme-toggle");
+      var menu = document.getElementById("menu-btn");
+      var links = document.getElementById("nav-links");
 
-      function render(theme) {
+      function renderTheme(theme) {
         root.dataset.theme = theme;
         var isDark = theme === "dark";
         toggle.textContent = isDark ? "Light mode" : "Dark mode";
         toggle.setAttribute("aria-pressed", String(isDark));
       }
 
-      render(root.dataset.theme || "light");
+      renderTheme(root.dataset.theme === "light" ? "light" : "dark");
 
       toggle.addEventListener("click", function () {
         var next = root.dataset.theme === "dark" ? "light" : "dark";
-        render(next);
-        localStorage.setItem("portfolio-theme", next);
+        renderTheme(next);
+        try {
+          localStorage.setItem("portfolio-theme", next);
+        } catch (error) {
+          /* storage can be unavailable in private mode */
+        }
       });
+
+      menu.addEventListener("click", function () {
+        var open = links.classList.toggle("open");
+        menu.setAttribute("aria-expanded", String(open));
+      });
+
+      links.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          links.classList.remove("open");
+          menu.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          links.classList.remove("open");
+          menu.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll(".reveal").forEach(function (element) {
+          observer.observe(element);
+        });
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (element) {
+          element.classList.add("visible");
+        });
+      }
     })();
   </script>
 </body>
