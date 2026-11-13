@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>404 — Page not found</title>
+  <style>
+    :root {
+      --bg: #0e0d0f;
+      --panel: #161416;
+      --line: #2e2729;
+      --crimson: #9c2b2b;
+      --gold: #b8924f;
+      --text: #e6e1db;
+      --muted: #8f8a86;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px 20px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(ellipse at 80% 0%, rgba(156, 43, 43, 0.18), transparent 55%),
+        radial-gradient(ellipse at 10% 100%, rgba(44, 74, 134, 0.22), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      width: min(620px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: clamp(28px, 6vw, 52px);
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .code {
+      font-size: clamp(4rem, 16vw, 7rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -4px;
+      color: var(--crimson);
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-size: 1.4rem;
+      letter-spacing: 0.4px;
+    }
+
+    p {
+      margin-top: 10px;
+      color: var(--muted);
+    }
+
+    .actions {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 11px 18px;
+      border-radius: 9px;
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: #17120a;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    a.ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    a:hover { filter: brightness(1.08); }
+
+    a:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 3px;
+    }
+
+    footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <!-- GitHub Pages serves this file at the missing URL, so links use the
+       project-site root instead of relative paths. -->
+  <main>
+    <p class="code">404</p>
+    <h1>Oops — that page does not exist</h1>
+    <p>
+      The link may be broken, or the page may have moved. The course archive
+      is still here.
+    </p>
+    <div class="actions">
+      <a href="/web_programming/">Back to Home</a>
+      <a class="ghost" href="/web_programming/week10/task1.html">Week 10 tasks</a>
+    </div>
+    <footer>Web Programming · Olimjonov Ziyodulloh · 202537557</footer>
+  </main>
+</body>
+</html>
