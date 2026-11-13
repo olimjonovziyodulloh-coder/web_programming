@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Week 10 tasks: Git, GitHub Pages and deployment homework by Olimjonov Ziyodulloh.">
+  <meta name="description" content="Week 10 tasks: Git, GitHub Pages and deployment homework by Olimjonov Ziyodulloh, with repositories, commits and screenshots as evidence.">
   <title>Week 10: Git, GitHub and Deployment</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -67,7 +67,7 @@
       letter-spacing: -1px;
     }
     .subtitle {
-      max-width: 560px;
+      max-width: 590px;
       margin-top: 14px;
       color: #cbd5e1;
       font-size: 15px;
@@ -171,6 +171,11 @@
       font-size: 14px;
       clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
     }
+    .module-intro {
+      margin: -4px 0 16px;
+      color: #475569;
+      font-size: .92rem;
+    }
 
     .link-grid {
       display: grid;
@@ -185,7 +190,6 @@
       padding: 15px 16px;
       background: #f8fafc;
       border: 1px solid #dbe3ee;
-      text-decoration: none;
       transition: border-color .2s, background .2s;
     }
     .link-card:hover { background: #fff; border-color: #1a56db; }
@@ -201,15 +205,93 @@
     }
     .link-card .card-title:hover { color: #1a56db; }
     .link-card .card-title::after { content: "\2197"; color: #94a3b8; }
-    .link-card:hover .card-title::after { color: #1a56db; }
     .link-card p { color: #475569; font-size: .85rem; }
     .link-card .card-links {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 4px;
+      margin-top: auto;
+      padding-top: 8px;
       font-size: .82rem;
       font-weight: 600;
+    }
+
+    .exercise {
+      border: 1px solid #dbe3ee;
+      background: #f8fafc;
+      padding: 16px 18px 18px;
+      margin-top: 12px;
+    }
+    .exercise-head {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .exercise-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      padding: 3px 8px;
+      background: #1e293b;
+      color: #f8fafc;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .exercise-head h3 { font-size: 1rem; }
+    .exercise-repo {
+      margin-left: auto;
+      color: #64748b;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .74rem;
+      background: #eef2f7;
+      border: 1px solid #dbe3ee;
+      padding: 2px 8px;
+    }
+    .exercise p { color: #475569; font-size: .9rem; }
+    .exercise p + p { margin-top: 8px; }
+
+    pre {
+      margin: 10px 0;
+      padding: 14px 16px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 6px;
+      overflow-x: auto;
+      font: .78rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+      tab-size: 4;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+    .result { border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 12px; }
+    .result a { font-weight: 600; }
+
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    figure {
+      max-width: 720px;
+      border: 1px solid #dbe3ee;
+      background: #fff;
+      padding: 8px;
+    }
+    figure a { display: block; }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid #e2e8f0;
+    }
+    figcaption {
+      margin-top: 7px;
+      color: #64748b;
+      font-size: .78rem;
     }
 
     table { width: 100%; border-collapse: collapse; background: #fff; }
@@ -253,6 +335,9 @@
     @media (max-width: 620px) {
       .section-heading { flex-direction: column; align-items: flex-start; gap: 2px; }
       .module { padding: 18px 16px 20px; }
+      .exercise { padding: 14px 13px 16px; }
+      .exercise-repo { margin-left: 0; }
+      pre { font-size: .72rem; padding: 12px; }
       table { font-size: .85rem; }
     }
   </style>
@@ -270,8 +355,9 @@
       <p class="kicker">Web Programming · K0126002</p>
       <h1>Week 10 Tasks</h1>
       <p class="subtitle">
-        Git, GitHub Pages and deployment — everything from the Week 9 lectures,
-        collected in one place and live on GitHub Pages.
+        Git, GitHub Pages and deployment from the Week 9 sessions. Every
+        repository, commit and live site below is public and linked, so each
+        step can be checked independently.
       </p>
 
       <div class="student">
@@ -290,45 +376,46 @@
 
   <main id="main">
     <div class="section-heading">
-      <h2>Week 10 modules</h2>
+      <h2>Week 10 deliverables</h2>
       <p>Homework + Monday and Friday practice</p>
     </div>
 
     <p class="note">
-      All deliverables are published from one public repository:
-      <a href="https://github.com/olimjonovziyodulloh-coder/web_programming">olimjonovziyodulloh-coder/web_programming</a>.
+      The homework is split into three public repositories, plus one repository
+      for the Git exercises. Each item links to the live site, the source and
+      the commit history.
     </p>
 
     <section class="module">
       <h2><span class="module-number">01</span> Homework</h2>
       <div class="link-grid">
         <article class="link-card">
-          <a class="card-title" href="portfolio/">Personal portfolio</a>
-          <p>Semantic HTML, responsive CSS, a light/dark theme toggle, keyboard focus styles and descriptive labels.</p>
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Personal portfolio</a>
+          <p>My name, portrait, bio, skills and project links. Responsive, semantic HTML with a light/dark theme toggle and visible keyboard focus.</p>
           <div class="card-links">
-            <a href="portfolio/">Live site ↗</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/blob/main/week10/portfolio/index.html">Source</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/commits/main/week10/portfolio">Commits</a>
+            <a href="https://olimjonovziyodulloh-coder.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Live site ↗</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio" target="_blank" rel="noopener noreferrer">Repository</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio/commits/main/" target="_blank" rel="noopener noreferrer">4 commits</a>
           </div>
         </article>
 
         <article class="link-card">
-          <a class="card-title" href="../webpro-w9/">webpro-w9</a>
-          <p>A page with my name and the date, published with Pages, plus the Friday 404 exercises.</p>
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/webpro-w9/" target="_blank" rel="noopener noreferrer">webpro-w9</a>
+          <p>A page with my name and the date, published with Pages. It also holds the custom <code>404.html</code> from the Friday exercises.</p>
           <div class="card-links">
-            <a href="../webpro-w9/">Live site ↗</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/blob/main/webpro-w9/index.html">Source</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/commits/main/webpro-w9">Commits</a>
+            <a href="https://olimjonovziyodulloh-coder.github.io/webpro-w9/" target="_blank" rel="noopener noreferrer">Live site ↗</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/webpro-w9" target="_blank" rel="noopener noreferrer">Repository</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/webpro-w9/commits/main/" target="_blank" rel="noopener noreferrer">2 commits</a>
           </div>
         </article>
 
         <article class="link-card">
-          <a class="card-title" href="book-search/">Book Search app</a>
-          <p>The Open Library app deployed with <code>index.html</code> in the root, relative paths and no debug logging.</p>
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/webpro-book-search/" target="_blank" rel="noopener noreferrer">webpro-book-search</a>
+          <p>The Open Library Book Search app deployed with <code>index.html</code> in the repository root, relative paths and no debug logging.</p>
           <div class="card-links">
-            <a href="book-search/">Live site ↗</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/blob/main/week10/book-search/index.html">Source</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/commits/main/week10/book-search">Commits</a>
+            <a href="https://olimjonovziyodulloh-coder.github.io/webpro-book-search/" target="_blank" rel="noopener noreferrer">Live site ↗</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/webpro-book-search" target="_blank" rel="noopener noreferrer">Repository</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/webpro-book-search/commits/main/" target="_blank" rel="noopener noreferrer">2 commits</a>
           </div>
         </article>
       </div>
@@ -336,56 +423,243 @@
 
     <section class="module">
       <h2><span class="module-number">02</span> Monday practice: Git</h2>
-      <table>
-        <thead>
-          <tr><th>Exercise</th><th>Commands</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>E1 First repository</td>
-            <td><code>git init</code>, <code>git add index.html</code>, <code>git commit -m "Initial commit"</code></td>
-          </tr>
-          <tr>
-            <td>E2 Branch and merge</td>
-            <td><code>git checkout -b feature-style</code>, commit <code>style.css</code>, <code>git checkout main</code>, <code>git merge feature-style</code></td>
-          </tr>
-          <tr>
-            <td>E3 Push</td>
-            <td><code>git remote add origin ...</code>, <code>git push -u origin main</code></td>
-          </tr>
-        </tbody>
-      </table>
-      <p style="margin-top:10px;font-size:.9rem;color:#475569">
-        The <code>feature-style</code> branch and its merge commit are visible in the
-        <a href="https://github.com/olimjonovziyodulloh-coder/web_programming/commits/main">commit history</a>.
+      <p class="module-intro">
+        The three exercises from the Monday study guide, done in order in one
+        repository called <code>git-exercise</code>, followed by a merged
+        feature branch.
       </p>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E1</span>
+          <h3>Create your first repository</h3>
+          <span class="exercise-repo">git-exercise</span>
+        </header>
+        <p><strong>Goal:</strong> initialise a repository, create a file and make the first commit.</p>
+        <pre><code>$ mkdir git-exercise &amp;&amp; cd git-exercise
+$ git init
+Initialized empty Git repository in .../git-exercise/.git/
+$ echo "&lt;h1&gt;Hello Git&lt;/h1&gt;" &gt; index.html
+$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+        index.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ git add index.html
+$ git commit -m "Initial commit: add index.html"
+[main (root-commit) 2bd71ff] Initial commit: add index.html
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html
+$ git log --oneline
+2bd71ff Initial commit: add index.html</code></pre>
+        <p class="result">
+          <strong>Result:</strong> the file appeared as untracked, then became
+          commit <code>2bd71ff</code>.
+          <a href="https://github.com/olimjonovziyodulloh-coder/git-exercise/commit/2bd71ff" target="_blank" rel="noopener noreferrer">See the commit ↗</a>
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E2</span>
+          <h3>Create a branch and merge it</h3>
+          <span class="exercise-repo">git-exercise</span>
+        </header>
+        <p><strong>Goal:</strong> make a feature branch, add a change, and merge it back into <code>main</code>.</p>
+        <pre><code>$ echo "body { font-family: sans-serif; }" &gt; style.css
+$ git checkout -b feature-style
+Switched to a new branch 'feature-style'
+$ git add style.css &amp;&amp; git commit -m "Add basic stylesheet"
+[feature-style 23fd2e8] Add basic stylesheet
+ 1 file changed, 1 insertion(+)
+ create mode 100644 style.css
+$ git checkout main
+Switched to branch 'main'
+$ ls
+index.html
+$ git merge feature-style
+Updating 2bd71ff..23fd2e8
+Fast-forward
+ style.css | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 style.css
+$ ls
+index.html  style.css</code></pre>
+        <p class="result">
+          <strong>Result:</strong> <code>style.css</code> disappeared when I
+          switched back to <code>main</code> and returned after the fast-forward
+          merge (commit <code>23fd2e8</code>).
+          <a href="https://github.com/olimjonovziyodulloh-coder/git-exercise/commit/23fd2e8" target="_blank" rel="noopener noreferrer">See the commit ↗</a>
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E3</span>
+          <h3>Push the repository to GitHub</h3>
+          <span class="exercise-repo">git-exercise</span>
+        </header>
+        <p><strong>Goal:</strong> create an empty repository on GitHub and push the local commits to it.</p>
+        <pre><code>$ git remote add origin https://github.com/olimjonovziyodulloh-coder/git-exercise.git
+$ git remote -v
+origin  https://github.com/olimjonovziyodulloh-coder/git-exercise.git (fetch)
+origin  https://github.com/olimjonovziyodulloh-coder/git-exercise.git (push)
+$ git push -u origin main
+To https://github.com/olimjonovziyodulloh-coder/git-exercise.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.</code></pre>
+        <p class="result">
+          <strong>Result:</strong> both commits are on GitHub.
+          <a href="https://github.com/olimjonovziyodulloh-coder/git-exercise" target="_blank" rel="noopener noreferrer">Open the repository ↗</a>
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">Extra</span>
+          <h3>Merge a second feature branch</h3>
+          <span class="exercise-repo">git-exercise</span>
+        </header>
+        <p><strong>Goal:</strong> practise the branch-and-merge part of the collaboration workflow from the slides.</p>
+        <pre><code>$ git checkout -b add-readme
+Switched to a new branch 'add-readme'
+$ git add README.md &amp;&amp; git commit -m "Add README describing the exercise"
+[add-readme cf7e59c] Add README describing the exercise
+ 1 file changed, 21 insertions(+)
+ create mode 100644 README.md
+$ git checkout main
+Switched to branch 'main'
+$ git merge --no-ff add-readme
+Merge made by the 'ort' strategy.
+ README.md | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 README.md
+$ git log --oneline --graph --all
+*   2f30e3d Merge branch 'add-readme'
+|\
+| * cf7e59c Add README describing the exercise
+|/
+* 23fd2e8 Add basic stylesheet
+* 2bd71ff Initial commit: add index.html</code></pre>
+        <p class="result">
+          <strong>Result:</strong> the branch was pushed and merged with an
+          explicit merge commit, <code>2f30e3d</code>.
+          <a href="https://github.com/olimjonovziyodulloh-coder/git-exercise/commit/2f30e3d" target="_blank" rel="noopener noreferrer">See the merge commit ↗</a>
+        </p>
+      </article>
     </section>
 
     <section class="module">
       <h2><span class="module-number">03</span> Friday practice: GitHub Pages</h2>
-      <table>
-        <thead>
-          <tr><th>Exercise</th><th>Result</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>E1 Enable Pages</td>
-            <td>Settings, Pages, branch <code>main</code>, folder <code>/(root)</code>; the site went live in about a minute.</td>
-          </tr>
-          <tr>
-            <td>E2 Default 404</td>
-            <td>GitHub's default page is plain and gives no way back, so it is a poor user experience.</td>
-          </tr>
-          <tr>
-            <td>E3 Custom 404</td>
-            <td>Added <code>404.html</code> with a friendly message and a "Back to Home" link, then pushed it.</td>
-          </tr>
-        </tbody>
-      </table>
-      <p style="margin-top:10px;font-size:.9rem;color:#475569">
-        This course site also has its own styled 404 page:
-        <a href="../this-page-does-not-exist.html">test a missing page</a>.
+      <p class="module-intro">
+        The three exercises from the Friday study guide, done in the
+        <code>webpro-w9</code> repository.
       </p>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E1</span>
+          <h3>Enable GitHub Pages for webpro-w9</h3>
+          <span class="exercise-repo">webpro-w9</span>
+        </header>
+        <p><strong>Goal:</strong> turn on Pages for the repository and confirm the site is live.</p>
+        <pre><code>$ git init
+Initialized empty Git repository in .../webpro-w9/.git/
+$ git add index.html &amp;&amp; git commit -m "Add index.html with my name and date"
+[main (root-commit) 9ff94b1] Add index.html with my name and date
+ 1 file changed, 162 insertions(+)
+ create mode 100644 index.html
+$ git remote add origin https://github.com/olimjonovziyodulloh-coder/webpro-w9.git
+$ git push -u origin main
+To https://github.com/olimjonovziyodulloh-coder/webpro-w9.git
+ * [new branch]      main -&gt; main
+branch 'main' set up to track 'origin/main'.
+
+Settings -&gt; Pages -&gt; Deploy from a branch -&gt; main -&gt; / (root) -&gt; Save</code></pre>
+        <p class="result">
+          <strong>Result:</strong> the site is live at
+          <a href="https://olimjonovziyodulloh-coder.github.io/webpro-w9/" target="_blank" rel="noopener noreferrer">olimjonovziyodulloh-coder.github.io/webpro-w9/</a>
+          (commit <code>9ff94b1</code>).
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E2</span>
+          <h3>Find and understand a 404 page</h3>
+          <span class="exercise-repo">webpro-w9</span>
+        </header>
+        <p><strong>Goal:</strong> see what a visitor gets for a missing URL, and decide whether it is a good experience.</p>
+        <div class="shots">
+          <figure>
+            <a href="img/404-default.jpg">
+              <img src="img/404-default.jpg" width="1200" height="1110" decoding="async" alt="GitHub Pages default 404 page reading File not found for a missing page in webpro-w9">
+            </a>
+            <figcaption>GitHub's default 404 at <code>/webpro-w9/this-does-not-exist.html</code> (before)</figcaption>
+          </figure>
+        </div>
+        <p style="margin-top:12px">
+          <strong>Is this a good user experience?</strong> No. It does not
+          mention my site, gives the visitor no way back to my pages, and looks
+          like an error from GitHub rather than from me. I would explain the
+          problem in plain language and offer a link home, in the same style as
+          the rest of the site.
+        </p>
+        <p class="result">
+          <strong>Result:</strong> the missing URL returned GitHub's generic
+          <em>Page not found</em> screen because the repository had no
+          <code>404.html</code> yet.
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">E3</span>
+          <h3>Create a custom 404 page</h3>
+          <span class="exercise-repo">webpro-w9</span>
+        </header>
+        <p><strong>Goal:</strong> add my own <code>404.html</code>, deploy it, and confirm GitHub Pages serves it for missing pages.</p>
+        <pre><code>$ ls
+index.html
+$ git add 404.html
+$ git commit -m "Add custom 404 page"
+[main cdd81fa] Add custom 404 page
+ 2 files changed, 119 insertions(+)
+ create mode 100644 404.html
+$ git push
+To https://github.com/olimjonovziyodulloh-coder/webpro-w9.git
+   9ff94b1..cdd81fa  main -&gt; main</code></pre>
+        <div class="shots">
+          <figure>
+            <a href="img/404-custom.jpg">
+              <img src="img/404-custom.jpg" width="1200" height="1110" decoding="async" alt="Custom 404 page of webpro-w9 with a 404 badge, the message Oops that page does not exist, and a Back to Home button">
+            </a>
+            <figcaption>The custom 404 now served for the same missing URL (after)</figcaption>
+          </figure>
+        </div>
+        <p class="result">
+          <strong>Result:</strong> the same URL now shows my own page, with
+          <em>Back to Home</em> and <em>Course archive</em> links.
+          <a href="https://github.com/olimjonovziyodulloh-coder/webpro-w9/commit/cdd81fa" target="_blank" rel="noopener noreferrer">See the commit ↗</a>
+        </p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">Site</span>
+          <h3>This course archive has a custom 404 too</h3>
+          <span class="exercise-repo">web_programming</span>
+        </header>
+        <p>The archive uses the same idea in its own design. Try a page that does not exist:</p>
+        <p style="margin-top:10px">
+          <a href="../this-page-does-not-exist.html">Open a missing page ↗</a>
+        </p>
+      </article>
     </section>
 
     <section class="module">
@@ -394,9 +668,9 @@
         <li>All file paths are relative.</li>
         <li>File names are lowercase (GitHub's servers are case-sensitive).</li>
         <li>No debug <code>console.log()</code> calls left.</li>
-        <li>No API keys, passwords or tokens in the public repo.</li>
-        <li><code>index.html</code> is in the repo root.</li>
-        <li>Tested the live URL in a private window.</li>
+        <li>No API keys, passwords or tokens in any public repository.</li>
+        <li><code>index.html</code> is in each repository root.</li>
+        <li>Every live URL tested in a private window.</li>
       </ul>
     </section>
 
@@ -404,8 +678,8 @@
       <h2><span class="module-number">05</span> Study materials</h2>
       <div class="materials">
         <a href="https://muxiddin19.github.io/WebPro/week9/Git.pdf">Git lecture notes</a>
-        <a href="https://muxiddin19.github.io/WebPro/week9/WebPro_Week9_Fri_StudyGuide.html">Deployment study guide</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGzFMBr3-27CR__abZXnx6uGAscCrxLHPUqVLDSLntW8fIoA/viewform">Week 9 quiz</a>
+        <a href="https://muxiddin19.github.io/WebPro/week9/WebPro_Week9_Mon_StudyGuide.html">Monday Git study guide</a>
+        <a href="https://muxiddin19.github.io/WebPro/week9/WebPro_Week9_Fri_StudyGuide.html">Friday deployment study guide</a>
       </div>
     </section>
   </main>
