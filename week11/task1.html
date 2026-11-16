@@ -88,6 +88,10 @@
     figure a{display:block}
     figure img{display:block;width:100%;height:auto;border:1px solid #2a2426}
     figcaption{margin-top:7px;color:var(--muted);font-size:0.78rem;word-break:break-all}
+    .code-chip{margin-top:12px;display:inline-flex;align-items:center;padding:9px 18px;background:#0b0a0c;border:1px solid var(--gold-soft);border-left:3px solid var(--gold);box-shadow:inset 0 0 0 1px rgba(184,146,79,0.08)}
+    .code-chip strong{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:clamp(19px,4.5vw,26px);font-weight:700;letter-spacing:3px;line-height:1.25;color:var(--gold-light)}
+    .exercise p.chip-note{margin-top:10px;color:#a8a29b;font-size:0.84rem;max-width:620px}
+    .exercise p.chip-note strong{color:#d8d2ca;font-weight:600}
     code{background:#241c1e;color:#e6e1db;padding:1px 5px;border-radius:3px;font-size:0.88em}
     ul.check{list-style:none;display:grid;gap:6px;color:#d8d2ca}
     ul.check li::before{content:"\2713\00a0";color:var(--gold);font-weight:700}
@@ -447,6 +451,28 @@ export default App;</code></pre>
           <li><code>FilterBar</code> filters by technology; filter state is managed with <code>useState</code> in <code>App</code>.</li>
           <li>Vite + React project with <code>base: '/portfolio-gallery/'</code>, deployed to GitHub Pages.</li>
         </ul>
+      </article>
+    </section>
+
+    <section class="module">
+      <h2><span class="module-number">03</span> Lecture verification</h2>
+      <p class="module-intro">Proof that I attended the Week 11 in-class session — K0126_002 Web Programming.</p>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">Proof</span>
+          <h3>Lecture code</h3>
+          <span class="exercise-repo">K0126_002</span>
+        </header>
+        <p>The Visual Lecture player hands out a personal code once its quick checks are finished. Mine reads:</p>
+        <p class="code-chip"><strong>????-BBB-4361</strong></p>
+        <p class="chip-note">Quick checks completed: <strong>3 / 3</strong>. The first block stays masked because the Student ID and Name fields at the top of the player were empty when the code was issued.</p>
+        <figure>
+          <a href="img/lecture-code.jpg">
+            <img src="img/lecture-code.jpg" width="2000" height="1250" alt="Week 11 Visual Lecture page with the code dialog open, showing the code ????-BBB-4361 and a quiz score of 3/3 correct">
+          </a>
+          <figcaption>Code dialog from the Week 11 lecture player · 16 November 2026</figcaption>
+        </figure>
       </article>
     </section>
   </main>
