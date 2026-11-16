@@ -80,7 +80,6 @@
     .exercise-repo{margin-left:auto;color:#c7c0b8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.74rem;background:#241c1e;border:1px solid var(--line);padding:2px 8px}
     .exercise p{color:#a8a29b;font-size:0.9rem}
     .exercise p + p{margin-top:8px}
-    .src-link{white-space:nowrap}
     pre{margin:10px 0;padding:14px 16px;background:#09080a;border:1px solid var(--line);color:#ddd6cc;border-radius:4px;overflow-x:auto;font:0.78rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}
     pre code{background:none;color:inherit;padding:0;font-size:inherit}
     .result{border-top:1px dashed var(--line);padding-top:10px;margin-top:12px}
@@ -144,8 +143,8 @@
       <h1>Week 11 Tasks</h1>
       <p class="subtitle">
         React components and props from the Week 11 class: a Student Directory
-        (Task 11-A), a Portfolio Gallery, and a lab that covers the tasks from every
-        class source. Source code, commit history and live deployments are linked
+        (Task 11-A), a Portfolio Gallery, and a React Lab with eight class
+        exercises. Source code, commit history and live deployments are linked
         below.
       </p>
 
@@ -517,55 +516,94 @@ export default App;</code></pre>
     </section>
 
     <section class="module">
-      <h2><span class="module-number">04</span> Class sources</h2>
-      <p class="module-intro">Each Week 11 source carries its own task. All of them are built in one React app.</p>
+      <h2><span class="module-number">04</span> React Lab — eight class exercises</h2>
+      <p class="module-intro">
+        Eight small exercises from the Week 11 class, each one a component in its
+        own file. All of them run in one React app.
+      </p>
 
       <div class="link-grid">
         <article class="link-card">
           <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/react-lab/" target="_blank" rel="noopener noreferrer">React Lab</a>
-          <p>Working components for the visual lecture, study guide, video lecture and slides tasks.</p>
+          <p>Eight exercises on one page: components, props, children, lists and conditional rendering.</p>
           <div class="card-links">
             <a href="https://olimjonovziyodulloh-coder.github.io/react-lab/" target="_blank" rel="noopener noreferrer">Open app ↗</a>
             <a href="https://github.com/olimjonovziyodulloh-coder/react-lab" target="_blank" rel="noopener noreferrer">Repository</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/react-lab/commits/main/" target="_blank" rel="noopener noreferrer">8 commits</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/react-lab/commits/main/" target="_blank" rel="noopener noreferrer">12 commits</a>
           </div>
         </article>
       </div>
 
       <article class="exercise">
         <header class="exercise-head">
-          <span class="exercise-tag">S1</span>
-          <h3>Visual lecture — lab challenge</h3>
-          <span class="exercise-repo">StudentCard</span>
+          <span class="exercise-tag">01</span>
+          <h3>Your first component</h3>
+          <span class="exercise-repo">Greeting.jsx</span>
         </header>
-        <p>Fill in the blanks for a card that renders name, ID and major. Built with my own ID, 202537557. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Mon_VisualLecture2.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+        <p>One function returning <code>&lt;p&gt;Hello, World!&lt;/p&gt;</code>, used three times in <code>App</code>.</p>
       </article>
 
       <article class="exercise">
         <header class="exercise-head">
-          <span class="exercise-tag">S2</span>
-          <h3>Study guide — three practice exercises</h3>
-          <span class="exercise-repo">ProfileCard · NotificationList · Card</span>
+          <span class="exercise-tag">02</span>
+          <h3>StudentCard</h3>
+          <span class="exercise-repo">StudentCard.jsx</span>
         </header>
-        <p>A default <code>avatarUrl</code> prop, conditional icons per notification type, and a wrapper component that renders <code>props.children</code>. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Fri_StudyGuide.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+        <p>Props <code>name</code>, <code>id</code> and <code>major</code>; rendered with my own student ID 202537557.</p>
       </article>
 
       <article class="exercise">
         <header class="exercise-head">
-          <span class="exercise-tag">S3</span>
-          <h3>Video lecture — course catalog</h3>
-          <span class="exercise-repo">CourseCard · CourseCatalog</span>
+          <span class="exercise-tag">03</span>
+          <h3>ProfileCard with a default prop</h3>
+          <span class="exercise-repo">ProfileCard.jsx</span>
         </header>
-        <p><code>CourseCard</code> takes title, instructor, credits and required; the badge is a red “Required” or a grey “Elective”, chosen by conditional rendering. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Fri_VideoLecture.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+        <p><code>avatarUrl</code> is optional — when it is not passed, the component falls back to a default avatar.</p>
       </article>
 
       <article class="exercise">
         <header class="exercise-head">
-          <span class="exercise-tag">S4</span>
-          <h3>Friday slides — ProductCard</h3>
-          <span class="exercise-repo">ProductCard · ProductGrid</span>
+          <span class="exercise-tag">04</span>
+          <h3>Notification list</h3>
+          <span class="exercise-repo">NotificationList.jsx</span>
         </header>
-        <p><code>name</code>, <code>price</code> in KRW, <code>rating</code> out of 5 with stars and <code>inStock</code> for the stock label — both bonuses included. <a href="https://github.com/muxiddin19/WebPro/blob/main/week10/WebPro_Week11_Fri_ReactProps_v1.pdf" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+        <p>An array mapped to list items, each with a <code>key</code> and an icon chosen by conditional rendering.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">05</span>
+          <h3>Layout with props.children</h3>
+          <span class="exercise-repo">Card.jsx</span>
+        </header>
+        <p>One wrapper component renders two completely different pieces of content through <code>props.children</code>.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">06</span>
+          <h3>ProductCard</h3>
+          <span class="exercise-repo">ProductCard.jsx · ProductGrid.jsx</span>
+        </header>
+        <p><code>name</code>, <code>price</code> in KRW, <code>rating</code> out of 5 with stars, and <code>inStock</code> for the In Stock / Out of Stock label.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">07</span>
+          <h3>Rendering a list with keys</h3>
+          <span class="exercise-repo">StudentList.jsx</span>
+        </header>
+        <p>Students mapped to list items, each keyed by its <code>id</code> rather than its position in the array.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">08</span>
+          <h3>Conditional rendering</h3>
+          <span class="exercise-repo">ConditionalDemo.jsx</span>
+        </header>
+        <p>A component that returns <code>null</code>, an <code>&amp;&amp;</code> block and a ternary, with <code>useState</code> driving a log in / log out button.</p>
       </article>
     </section>
   </main>
