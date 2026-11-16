@@ -84,6 +84,10 @@
     pre code{background:none;color:inherit;padding:0;font-size:inherit}
     .result{border-top:1px dashed var(--line);padding-top:10px;margin-top:12px}
     .result a{font-weight:600}
+    figure{max-width:760px;margin-top:12px;border:1px solid var(--line);background:#121011;padding:8px}
+    figure a{display:block}
+    figure img{display:block;width:100%;height:auto;border:1px solid #2a2426}
+    figcaption{margin-top:7px;color:var(--muted);font-size:0.78rem;word-break:break-all}
     code{background:#241c1e;color:#e6e1db;padding:1px 5px;border-radius:3px;font-size:0.88em}
     ul.check{list-style:none;display:grid;gap:6px;color:#d8d2ca}
     ul.check li::before{content:"\2713\00a0";color:var(--gold);font-weight:700}
@@ -276,8 +280,23 @@ export default App</code></pre>
           <li>Exactly 3 cards in <code>App.jsx</code> with real names.</li>
           <li>Custom CSS (borders, padding, rounded corners, background, hover effect) — no frameworks.</li>
           <li>Vite config with <code>base: '/task11/'</code> and gh-pages deployment.</li>
-          <li>4 meaningful commits and a live GitHub Pages URL.</li>
+          <li>5 meaningful commits and a live GitHub Pages URL.</li>
         </ul>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">Shot</span>
+          <h3>The running app</h3>
+          <span class="exercise-repo">live site</span>
+        </header>
+        <p>Screenshot of the deployed Student Directory, with my student ID in the first card.</p>
+        <figure>
+          <a href="img/task11-live.jpg">
+            <img src="img/task11-live.jpg" width="1280" height="700" alt="Student Directory page showing three profile cards; the first card is Olimjonov Ziyodulloh with student ID 202537557, Computer Engineering, year 2, GPA 3.8">
+          </a>
+          <figcaption>https://olimjonovziyodulloh-coder.github.io/task11/</figcaption>
+        </figure>
       </article>
     </section>
 
