@@ -80,6 +80,7 @@
     .exercise-repo{margin-left:auto;color:#c7c0b8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.74rem;background:#241c1e;border:1px solid var(--line);padding:2px 8px}
     .exercise p{color:#a8a29b;font-size:0.9rem}
     .exercise p + p{margin-top:8px}
+    .src-link{white-space:nowrap}
     pre{margin:10px 0;padding:14px 16px;background:#09080a;border:1px solid var(--line);color:#ddd6cc;border-radius:4px;overflow-x:auto;font:0.78rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}
     pre code{background:none;color:inherit;padding:0;font-size:inherit}
     .result{border-top:1px dashed var(--line);padding-top:10px;margin-top:12px}
@@ -142,9 +143,10 @@
       <p class="kicker">Web Programming · K0126002</p>
       <h1>Week 11 Tasks</h1>
       <p class="subtitle">
-        React components and props from the Week 11 Friday class: a Student Directory
-        (Task 11-A) and a Portfolio Gallery. Source code, commit history and live
-        deployments are linked below.
+        React components and props from the Week 11 class: a Student Directory
+        (Task 11-A), a Portfolio Gallery, and a lab that covers the tasks from all
+        three class sources. Source code, commit history and live deployments are
+        linked below.
       </p>
 
       <div class="student">
@@ -157,6 +159,7 @@
         <li>Components</li>
         <li>Props</li>
         <li>useState</li>
+        <li>useMemo</li>
         <li>Filtering</li>
       </ul>
     </div>
@@ -165,7 +168,7 @@
   <main id="main">
     <div class="section-heading">
       <h2>Week 11 deliverables</h2>
-      <p>Task 11-A and Portfolio Gallery homework</p>
+      <p>Task 11-A, Portfolio Gallery and React Lab</p>
     </div>
 
     <p class="note">
@@ -310,24 +313,25 @@ export default App</code></pre>
       <p class="module-intro">
         A React gallery of six real projects. <code>ProjectCard</code> displays
         title, description, tech stack, GitHub link and demo link;
-        <code>ProjectList</code> renders the cards from an array; and
-        <code>FilterBar</code> filters by technology using <code>useState</code>.
+        <code>ProjectList</code> renders the cards from an array;
+        <code>FilterBar</code> filters by technology; a search box narrows the list
+        by text; and a detail dialog opens any project on demand.
       </p>
 
       <div class="link-grid">
         <article class="link-card">
           <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/portfolio-gallery/" target="_blank" rel="noopener noreferrer">Live app</a>
-          <p>Six project cards with working technology filter buttons built from the project data.</p>
+          <p>Six project cards with technology filters, text search and a detail dialog.</p>
           <div class="card-links">
             <a href="https://olimjonovziyodulloh-coder.github.io/portfolio-gallery/" target="_blank" rel="noopener noreferrer">Open app ↗</a>
           </div>
         </article>
         <article class="link-card">
           <a class="card-title" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery" target="_blank" rel="noopener noreferrer">Repository</a>
-          <p>Components, project data array, filter state and themed styles in a Vite + React project.</p>
+          <p>Components, project data array, filter and search state, and themed styles in a Vite + React project.</p>
           <div class="card-links">
             <a href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery" target="_blank" rel="noopener noreferrer">Source</a>
-            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commits/main/" target="_blank" rel="noopener noreferrer">7 commits</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commits/main/" target="_blank" rel="noopener noreferrer">10 commits</a>
           </div>
         </article>
       </div>
@@ -338,18 +342,25 @@ export default App</code></pre>
           <h3>ProjectCard component</h3>
           <span class="exercise-repo">src/components/ProjectCard.jsx</span>
         </header>
-        <p>Shows one project's title, description, tech stack, GitHub link and demo link.</p>
-<pre><code>function ProjectCard({ title, description, tech, github, demo }) {
+        <p>Shows one project's title, description, tech stack, GitHub link, demo link and a Details button.</p>
+<pre><code>function ProjectCard({ project, onOpen }) {
+  const { title, description, tech, github, demo } = project;
+
   return (
     &lt;article className="project-card"&gt;
       &lt;h3 className="project-title"&gt;{title}&lt;/h3&gt;
       &lt;p className="project-desc"&gt;{description}&lt;/p&gt;
       &lt;ul className="tech-list" aria-label="Tech stack"&gt;
-        {tech.map((t) =&gt; &lt;li key={t} className="tech-tag"&gt;{t}&lt;/li&gt;)}
+        {tech.map((item) =&gt; (
+          &lt;li key={item} className="tech-tag"&gt;{item}&lt;/li&gt;
+        ))}
       &lt;/ul&gt;
       &lt;div className="project-links"&gt;
         &lt;a href={github} target="_blank" rel="noopener noreferrer"&gt;GitHub ↗&lt;/a&gt;
-        &lt;a href={demo} target="_blank" rel="noopener noreferrer"&gt;Live demo ↗&lt;/a&gt;
+        {demo &amp;&amp; &lt;a href={demo} target="_blank" rel="noopener noreferrer"&gt;Live demo ↗&lt;/a&gt;}
+        &lt;button type="button" className="details-btn" onClick={() =&gt; onOpen(project)}&gt;
+          Details
+        &lt;/button&gt;
       &lt;/div&gt;
     &lt;/article&gt;
   );
@@ -364,25 +375,25 @@ export default ProjectCard;</code></pre>
           <h3>ProjectList — 6 cards from an array</h3>
           <span class="exercise-repo">src/components/ProjectList.jsx</span>
         </header>
-        <p>Maps the projects array to cards, each with a stable key.</p>
+        <p>Maps the projects array to cards, each with a stable key, and shows a reset button when nothing matches.</p>
 <pre><code>import ProjectCard from './ProjectCard';
 
-function ProjectList({ projects }) {
+function ProjectList({ projects, onOpen, onReset }) {
   if (projects.length === 0) {
-    return &lt;p className="empty"&gt;No projects match this filter.&lt;/p&gt;;
+    return (
+      &lt;div className="empty"&gt;
+        &lt;p&gt;No project matches this search and filter.&lt;/p&gt;
+        &lt;button type="button" className="reset-btn" onClick={onReset}&gt;
+          Clear search and filter
+        &lt;/button&gt;
+      &lt;/div&gt;
+    );
   }
 
   return (
     &lt;div className="project-grid"&gt;
       {projects.map((project) =&gt; (
-        &lt;ProjectCard
-          key={project.id}
-          title={project.title}
-          description={project.description}
-          tech={project.tech}
-          github={project.github}
-          demo={project.demo}
-        /&gt;
+        &lt;ProjectCard key={project.id} project={project} onOpen={onOpen} /&gt;
       ))}
     &lt;/div&gt;
   );
@@ -394,28 +405,54 @@ export default ProjectList;</code></pre>
       <article class="exercise">
         <header class="exercise-head">
           <span class="exercise-tag">C</span>
-          <h3>FilterBar and state in App</h3>
-          <span class="exercise-repo">src/App.jsx · src/components/FilterBar.jsx</span>
+          <h3>Filter, search and dialog state</h3>
+          <span class="exercise-repo">src/App.jsx</span>
         </header>
-        <p>The active technology lives in <code>App</code> with <code>useState</code>; <code>FilterBar</code> triggers changes and <code>ProjectList</code> receives the filtered array.</p>
-<pre><code>import { useState } from 'react';
+        <p>Filter, search text and the selected project all live in <code>App</code>. <code>useMemo</code> derives the visible list, <code>useEffect</code> remembers the filter, and the dialog renders only when a project is selected.</p>
+<pre><code>import { useEffect, useMemo, useState } from 'react';
 import projects from './data/projects';
+import SearchBar from './components/SearchBar';
 import FilterBar from './components/FilterBar';
 import ProjectList from './components/ProjectList';
+import ProjectModal from './components/ProjectModal';
 
 function App() {
   const [active, setActive] = useState('All');
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState(null);
 
-  const technologies = ['All', ...new Set(projects.flatMap((p) =&gt; p.tech))];
+  const technologies = useMemo(
+    () =&gt; ['All', ...new Set(projects.flatMap((p) =&gt; p.tech))],
+    []
+  );
 
-  const visible = active === 'All'
-    ? projects
-    : projects.filter((p) =&gt; p.tech.includes(active));
+  const visible = useMemo(() =&gt; {
+    const term = query.trim().toLowerCase();
+    return projects.filter((p) =&gt; {
+      const byTech = active === 'All' || p.tech.includes(active);
+      const byText = term === '' ||
+        p.title.toLowerCase().includes(term) ||
+        p.description.toLowerCase().includes(term);
+      return byTech &amp;&amp; byText;
+    });
+  }, [active, query]);
+
+  useEffect(() =&gt; {
+    localStorage.setItem('gallery-tech', active);
+  }, [active]);
 
   return (
     &lt;&gt;
+      &lt;SearchBar value={query} onChange={setQuery} /&gt;
       &lt;FilterBar technologies={technologies} active={active} onChange={setActive} /&gt;
-      &lt;ProjectList projects={visible} /&gt;
+      &lt;ProjectList
+        projects={visible}
+        onOpen={setSelected}
+        onReset={() =&gt; { setActive('All'); setQuery(''); }}
+      /&gt;
+      {selected &amp;&amp; (
+        &lt;ProjectModal project={selected} onClose={() =&gt; setSelected(null)} /&gt;
+      )}
     &lt;/&gt;
   );
 }
@@ -430,6 +467,9 @@ export default App;</code></pre>
           <span class="exercise-repo">portfolio-gallery · main</span>
         </header>
         <ul class="commit-list">
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/524bb8c" target="_blank" rel="noopener noreferrer">524bb8c</a> <span class="commit-msg">Document the gallery features</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/f309f16" target="_blank" rel="noopener noreferrer">f309f16</a> <span class="commit-msg">Style search, dialog and empty state</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/8f31929" target="_blank" rel="noopener noreferrer">8f31929</a> <span class="commit-msg">Add search, detail dialog and filter persistence</span></li>
           <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/2c44c58" target="_blank" rel="noopener noreferrer">2c44c58</a> <span class="commit-msg">Add README with component overview</span></li>
           <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/9942241" target="_blank" rel="noopener noreferrer">9942241</a> <span class="commit-msg">Style the gallery in the archive theme</span></li>
           <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/54183e9" target="_blank" rel="noopener noreferrer">54183e9</a> <span class="commit-msg">Add FilterBar and filter projects by technology</span></li>
@@ -449,6 +489,7 @@ export default App;</code></pre>
           <li><code>ProjectCard</code> shows title, description, tech stack, GitHub link and demo link.</li>
           <li><code>ProjectList</code> renders 6 <code>ProjectCard</code>s from a projects array (my real public repos).</li>
           <li><code>FilterBar</code> filters by technology; filter state is managed with <code>useState</code> in <code>App</code>.</li>
+          <li>Text search with <code>useMemo</code>, a detail dialog and a saved filter in <code>localStorage</code>.</li>
           <li>Vite + React project with <code>base: '/portfolio-gallery/'</code>, deployed to GitHub Pages.</li>
         </ul>
       </article>
@@ -472,6 +513,50 @@ export default App;</code></pre>
           </a>
           <figcaption>Week 11 lecture · 16 November 2026</figcaption>
         </figure>
+      </article>
+    </section>
+
+    <section class="module">
+      <h2><span class="module-number">04</span> Class sources</h2>
+      <p class="module-intro">Each Week 11 source carries its own task. All three are built in one React app.</p>
+
+      <div class="link-grid">
+        <article class="link-card">
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/react-lab/" target="_blank" rel="noopener noreferrer">React Lab</a>
+          <p>Working components for the visual lecture, study guide and video lecture tasks.</p>
+          <div class="card-links">
+            <a href="https://olimjonovziyodulloh-coder.github.io/react-lab/" target="_blank" rel="noopener noreferrer">Open app ↗</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/react-lab" target="_blank" rel="noopener noreferrer">Repository</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/react-lab/commits/main/" target="_blank" rel="noopener noreferrer">6 commits</a>
+          </div>
+        </article>
+      </div>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">S1</span>
+          <h3>Visual lecture — lab challenge</h3>
+          <span class="exercise-repo">StudentCard</span>
+        </header>
+        <p>Fill in the blanks for a card that renders name, ID and major. Built with my own ID, 202537557. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Mon_VisualLecture2.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">S2</span>
+          <h3>Study guide — three practice exercises</h3>
+          <span class="exercise-repo">ProfileCard · NotificationList · Card</span>
+        </header>
+        <p>A default <code>avatarUrl</code> prop, conditional icons per notification type, and a wrapper component that renders <code>props.children</code>. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Fri_StudyGuide.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">S3</span>
+          <h3>Video lecture — course catalog</h3>
+          <span class="exercise-repo">CourseCard · CourseCatalog</span>
+        </header>
+        <p><code>CourseCard</code> takes title, instructor, credits and required; the badge is a red “Required” or a grey “Elective”, chosen by conditional rendering. <a href="https://muxiddin19.github.io/WebPro/week10/WebPro_Week11_Fri_VideoLecture.html" target="_blank" rel="noopener noreferrer" class="src-link">Source ↗</a></p>
       </article>
     </section>
   </main>
