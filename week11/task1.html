@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0d0f">
+  <meta name="description" content="Week 11 tasks: React components and props — Student Directory (Task 11-A) and Portfolio Gallery by Olimjonov Ziyodulloh.">
+  <title>Week 11: React Components &amp; Props</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap"></noscript>
+
+  <style>
+    :root{
+      --bg:#0e0d0f; --panel:#161416; --panel-hi:#1d1a1c; --line:#2e2729;
+      --crimson:#9c2b2b; --crimson-deep:#5e1c1f;
+      --gold:#b8924f; --gold-soft:#8d7240; --gold-light:#d9b877;
+      --text:#e6e1db; --muted:#8f8a86;
+      --reactor:#6fa8b8; --blue:#2c4a86; --blue-deep:#17284a; --web:#8fa0c4;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:"Inter",Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;position:relative}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse at 80% 0%,rgba(156,43,43,0.16),transparent 50%),radial-gradient(ellipse at 10% 100%,rgba(44,74,134,0.20),transparent 50%)}
+    a{color:var(--gold)} a:hover{color:var(--gold-light)}
+    a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .skip-link{position:absolute;left:-9999px;top:0.5rem;z-index:9999;background:#1a2744;color:#fff;padding:0.55rem 1rem;text-decoration:none;font-size:14px;border:2px solid var(--gold)}
+    .skip-link:focus{left:0.5rem}
+    body > header{position:relative;overflow:hidden;border-bottom:1px solid var(--line);padding:22px 24px 56px}
+    .header-top{max-width:1000px;margin:0 auto 40px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:13px;color:var(--muted);position:relative;z-index:1}
+    .header-top strong{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:0.6px;color:#c7c0b8}
+    .header-top a{color:#c7c0b8} .header-top a:hover{color:var(--gold)}
+    .web{position:absolute;top:0;left:0;width:300px;height:300px;opacity:0.16;pointer-events:none;z-index:0}
+    .reactor{position:absolute;top:50%;right:max(-120px,calc(50% - 640px));width:420px;height:420px;transform:translateY(-50%);opacity:0.22;pointer-events:none;z-index:0}
+    .reactor .ring-slow{transform-origin:200px 200px;animation:spin 120s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .header-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+    .kicker{color:var(--gold);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:2px;text-transform:uppercase}
+    h1{margin-top:10px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:clamp(40px,8vw,78px);line-height:1;font-weight:700;letter-spacing:1px;color:#efe9e1}
+    .subtitle{margin-top:18px;max-width:620px;color:var(--muted);font-size:15px}
+    .student{display:inline-block;margin-top:26px;padding:12px 18px 12px 16px;border-style:solid;border-width:0 0 0 3px;border-image:linear-gradient(var(--crimson),var(--blue)) 1;background:linear-gradient(90deg,rgba(156,43,43,0.18),transparent)}
+    .student-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.5px;color:#f0e6d6;line-height:1.2}
+    .student-id{margin-top:2px;font-size:13px;color:var(--muted)}
+    .student-id strong{color:var(--gold);font-weight:500;letter-spacing:1px}
+    .topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;list-style:none}
+    .topics li{border:1px solid var(--line);border-left:2px solid var(--crimson);padding:5px 12px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:0.5px;color:#c7c0b8;background:rgba(255,255,255,0.02)}
+    .topics li:nth-child(even){border-left-color:var(--blue)}
+    main{max-width:1000px;margin:0 auto;padding:44px 24px 64px}
+    .section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .section-heading h2{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:0.5px}
+    .section-heading p{color:var(--muted);font-size:13px}
+    .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:20px;color:#c7c0b8;font-size:0.94rem}
+    .module{position:relative;background:var(--panel);border:1px solid var(--line);margin-bottom:20px;padding:24px 26px 26px}
+    .module::before,.module::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--gold-soft);pointer-events:none;transition:border-color 0.2s}
+    .module::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+    .module::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+    .module:hover::before,.module:hover::after{border-color:var(--gold)}
+    .module h2{display:flex;align-items:center;gap:14px;margin-bottom:18px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.4px}
+    .module-number{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:34px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-size:16px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+    section.module:nth-of-type(even)::before,section.module:nth-of-type(even)::after{border-color:var(--blue)}
+    section.module:nth-of-type(even):hover::before,section.module:nth-of-type(even):hover::after{border-color:#5b7fc4}
+    section.module:nth-of-type(even) .module-number{background:var(--blue-deep);border-color:var(--blue)}
+    .module-intro{margin:-4px 0 16px;color:#a8a29b;font-size:0.92rem}
+    .link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .link-card{display:flex;flex-direction:column;gap:6px;min-height:100%;padding:16px;background:var(--panel-hi);border:1px solid #2a2426;transition:background 0.2s,border-color 0.2s}
+    .link-card:hover{background:#251c1e;border-color:var(--crimson)}
+    .link-card .card-title{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#f1e6da;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:700;font-size:18px;letter-spacing:0.3px;text-decoration:none}
+    .link-card .card-title:hover{color:var(--gold)}
+    .link-card .card-title::after{content:"\2197";color:#6c6666}
+    .link-card p{color:#a8a29b;font-size:0.86rem}
+    .link-card .card-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:auto;padding-top:8px;font-size:0.82rem;font-weight:600}
+    .exercise{border:1px solid #2a2426;border-left:2px solid var(--crimson);background:#121011;padding:16px 18px 18px;margin-top:12px}
+    .exercise:nth-of-type(even){border-left-color:var(--blue)}
+    .exercise-head{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+    .exercise-tag{display:inline-flex;align-items:center;justify-content:center;min-width:40px;padding:3px 8px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em}
+    .exercise:nth-of-type(even) .exercise-tag{background:var(--blue-deep);border-color:var(--blue)}
+    .exercise-head h3{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:18px;letter-spacing:0.3px;color:#f0e6d6}
+    .exercise-repo{margin-left:auto;color:#c7c0b8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.74rem;background:#241c1e;border:1px solid var(--line);padding:2px 8px}
+    .exercise p{color:#a8a29b;font-size:0.9rem}
+    .exercise p + p{margin-top:8px}
+    pre{margin:10px 0;padding:14px 16px;background:#09080a;border:1px solid var(--line);color:#ddd6cc;border-radius:4px;overflow-x:auto;font:0.78rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}
+    pre code{background:none;color:inherit;padding:0;font-size:inherit}
+    .result{border-top:1px dashed var(--line);padding-top:10px;margin-top:12px}
+    .result a{font-weight:600}
+    code{background:#241c1e;color:#e6e1db;padding:1px 5px;border-radius:3px;font-size:0.88em}
+    ul.check{list-style:none;display:grid;gap:6px;color:#d8d2ca}
+    ul.check li::before{content:"\2713\00a0";color:var(--gold);font-weight:700}
+    .commit-list{list-style:none;display:grid;gap:8px;margin-top:10px}
+    .commit-list li{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;padding:8px 10px;background:#121011;border:1px solid #2a2426}
+    .commit-hash{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.78rem;color:var(--gold);background:#241c1e;border:1px solid var(--line);padding:1px 7px}
+    .commit-msg{color:#d8d2ca;font-size:0.9rem}
+    footer{text-align:center;padding:28px 20px;border-top:1px solid var(--line);background:rgba(10,9,10,0.7)}
+    footer p{color:var(--muted);font-size:13px}
+    @media (max-width:600px){
+      body > header{padding:18px 18px 40px}
+      .header-top{margin-bottom:28px;flex-direction:column;align-items:flex-start;gap:4px}
+      .web{width:200px;height:200px} .reactor{width:280px;height:280px;right:-90px;opacity:0.16}
+      main{padding:28px 14px 40px} .section-heading{flex-direction:column;align-items:flex-start;gap:2px}
+      .module{padding:20px 16px 22px} .exercise{padding:14px 13px 16px} .exercise-repo{margin-left:0}
+      pre{font-size:0.72rem;padding:12px}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reactor .ring-slow{animation:none}*,*::before,*::after{transition:none !important}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header>
+    <svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+      <path d="M0 0L300 0M0 0L290 78M0 0L260 150M0 0L212 212M0 0L150 260M0 0L78 290M0 0L0 300M55 0 Q47 6 53 14M53 14 Q44 18 48 27M48 27 Q38 29 39 39M39 39 Q29 38 28 48M28 48 Q18 44 14 53M14 53 Q6 47 0 55M110 0 Q94 12 106 28M106 28 Q87 36 95 55M95 55 Q75 58 78 78M78 78 Q58 75 55 95M55 95 Q36 87 28 106M28 106 Q12 94 0 110M165 0 Q141 19 159 43M159 43 Q131 54 143 82M143 82 Q113 86 117 117M117 117 Q86 113 83 143M83 143 Q54 131 43 159M43 159 Q19 141 0 165M220 0 Q188 25 213 57M213 57 Q175 72 191 110M191 110 Q150 115 156 156M156 156 Q115 150 110 191M110 191 Q72 175 57 213M57 213 Q25 188 0 220M275 0 Q234 31 266 71M266 71 Q218 91 238 137M238 137 Q188 144 194 194M194 194 Q144 188 138 238M138 238 Q91 218 71 266M71 266 Q31 234 0 275" fill="none" stroke="var(--web)" stroke-width="1.2"/>
+    </svg>
+    <svg class="reactor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="var(--reactor)" stroke-width="2">
+        <circle cx="200" cy="200" r="190" stroke-width="1"/>
+        <circle cx="200" cy="200" r="150"/>
+        <circle cx="200" cy="200" r="70"/>
+        <circle cx="200" cy="200" r="30" stroke-width="3"/>
+        <g class="ring-slow" stroke-width="14" stroke-dasharray="38 22"><circle cx="200" cy="200" r="110"/></g>
+        <g stroke-width="1">
+          <line x1="200" y1="10" x2="200" y2="50"/><line x1="200" y1="350" x2="200" y2="390"/>
+          <line x1="10" y1="200" x2="50" y2="200"/><line x1="350" y1="200" x2="390" y2="200"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="header-top">
+      <strong>Olimjonov Ziyodulloh</strong>
+      <span>Week 11 · <a href="../index.html">Course archive</a></span>
+    </div>
+
+    <div class="header-content">
+      <p class="kicker">Web Programming · K0126002</p>
+      <h1>Week 11 Tasks</h1>
+      <p class="subtitle">
+        React components and props from the Week 11 Friday class: a Student Directory
+        (Task 11-A) and a Portfolio Gallery. Source code, commit history and live
+        deployments are linked below.
+      </p>
+
+      <div class="student">
+        <p class="student-name">Olimjonov Ziyodulloh</p>
+        <p class="student-id">Student ID <strong>202537557</strong></p>
+      </div>
+
+      <ul class="topics">
+        <li>React</li>
+        <li>Components</li>
+        <li>Props</li>
+        <li>useState</li>
+        <li>Filtering</li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="section-heading">
+      <h2>Week 11 deliverables</h2>
+      <p>Task 11-A and Portfolio Gallery homework</p>
+    </div>
+
+    <p class="note">
+      Each app is a Vite + React project in its own repository with a commit
+      history and a GitHub Pages deployment. The live links open the running apps.
+    </p>
+
+    <section class="module">
+      <h2><span class="module-number">01</span> Task 11-A — Student Directory</h2>
+      <p class="module-intro">
+        A reusable <code>StudentProfileCard</code> component with five props
+        (<code>name</code>, <code>studentId</code>, <code>major</code>,
+        <code>year</code>, <code>gpa</code>), rendered three times in
+        <code>App.jsx</code> with custom CSS styling.
+      </p>
+
+      <div class="link-grid">
+        <article class="link-card">
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/task11/" target="_blank" rel="noopener noreferrer">Live app</a>
+          <p>Student Directory running on GitHub Pages — shows my student ID (202537557) and two classmates.</p>
+          <div class="card-links">
+            <a href="https://olimjonovziyodulloh-coder.github.io/task11/" target="_blank" rel="noopener noreferrer">Open app ↗</a>
+          </div>
+        </article>
+        <article class="link-card">
+          <a class="card-title" href="https://github.com/olimjonovziyodulloh-coder/task11" target="_blank" rel="noopener noreferrer">Repository</a>
+          <p>Vite + React source, <code>StudentProfileCard.jsx</code>, <code>App.jsx</code>, custom styles and deployment config.</p>
+          <div class="card-links">
+            <a href="https://github.com/olimjonovziyodulloh-coder/task11" target="_blank" rel="noopener noreferrer">Source</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/task11/commits/main/" target="_blank" rel="noopener noreferrer">4 commits</a>
+          </div>
+        </article>
+      </div>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">A</span>
+          <h3>StudentProfileCard component</h3>
+          <span class="exercise-repo">src/StudentProfileCard.jsx</span>
+        </header>
+        <p>Accepts all five required props and renders them in the card layout.</p>
+<pre><code>// src/StudentProfileCard.jsx
+function StudentProfileCard({ name, studentId, major, year, gpa }) {
+  return (
+    &lt;div className="profile-card"&gt;
+      &lt;div className="card-header"&gt;
+        &lt;h2 className="student-name"&gt;{name}&lt;/h2&gt;
+        &lt;span className="student-id"&gt;ID: {studentId}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div className="card-body"&gt;
+        &lt;p&gt;&lt;strong&gt;Major:&lt;/strong&gt; {major}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Year:&lt;/strong&gt; {year}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;GPA:&lt;/strong&gt; {gpa}&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default StudentProfileCard;</code></pre>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">B</span>
+          <h3>Three cards in App.jsx</h3>
+          <span class="exercise-repo">src/App.jsx</span>
+        </header>
+        <p>My card includes my real student ID; the other two use real classmate names.</p>
+<pre><code>import StudentProfileCard from './StudentProfileCard'
+
+function App() {
+  return (
+    &lt;div className="app"&gt;
+      &lt;h1&gt;Student Directory&lt;/h1&gt;
+      &lt;StudentProfileCard
+        name="Olimjonov Ziyodulloh"
+        studentId="202537557"
+        major="Computer Engineering"
+        year={2}
+        gpa={3.8}
+      /&gt;
+      &lt;StudentProfileCard name="Sudip Sah" studentId="202637610"
+        major="Computer Engineering" year={1} gpa={3.7} /&gt;
+      &lt;StudentProfileCard name="Bahriddin Abdusalomov" studentId="202537225"
+        major="Computer Engineering" year={2} gpa={3.6} /&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default App</code></pre>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">C</span>
+          <h3>Commit history</h3>
+          <span class="exercise-repo">task11 · main</span>
+        </header>
+        <ul class="commit-list">
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/task11/commit/2ca807b" target="_blank" rel="noopener noreferrer">2ca807b</a> <span class="commit-msg">Add README and deployment notes</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/task11/commit/19fa8f4" target="_blank" rel="noopener noreferrer">19fa8f4</a> <span class="commit-msg">Add student cards and custom styles</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/task11/commit/3bc1b45" target="_blank" rel="noopener noreferrer">3bc1b45</a> <span class="commit-msg">Add StudentProfileCard component</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/task11/commit/5ea6fdd" target="_blank" rel="noopener noreferrer">5ea6fdd</a> <span class="commit-msg">Initialize Vite React project</span></li>
+        </ul>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">✓</span>
+          <h3>Requirements checklist</h3>
+        </header>
+        <ul class="check">
+          <li><code>src/StudentProfileCard.jsx</code> with 5 props: <code>name</code>, <code>studentId</code>, <code>major</code>, <code>year</code>, <code>gpa</code>.</li>
+          <li>My real student ID (<strong>202537557</strong>) shown in the rendered output.</li>
+          <li>Exactly 3 cards in <code>App.jsx</code> with real names.</li>
+          <li>Custom CSS (borders, padding, rounded corners, background, hover effect) — no frameworks.</li>
+          <li>Vite config with <code>base: '/task11/'</code> and gh-pages deployment.</li>
+          <li>4 meaningful commits and a live GitHub Pages URL.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="module">
+      <h2><span class="module-number">02</span> Portfolio Gallery</h2>
+      <p class="module-intro">
+        A React gallery of six real projects. <code>ProjectCard</code> displays
+        title, description, tech stack, GitHub link and demo link;
+        <code>ProjectList</code> renders the cards from an array; and
+        <code>FilterBar</code> filters by technology using <code>useState</code>.
+      </p>
+
+      <div class="link-grid">
+        <article class="link-card">
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/portfolio-gallery/" target="_blank" rel="noopener noreferrer">Live app</a>
+          <p>Six project cards with working technology filter buttons built from the project data.</p>
+          <div class="card-links">
+            <a href="https://olimjonovziyodulloh-coder.github.io/portfolio-gallery/" target="_blank" rel="noopener noreferrer">Open app ↗</a>
+          </div>
+        </article>
+        <article class="link-card">
+          <a class="card-title" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery" target="_blank" rel="noopener noreferrer">Repository</a>
+          <p>Components, project data array, filter state and themed styles in a Vite + React project.</p>
+          <div class="card-links">
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery" target="_blank" rel="noopener noreferrer">Source</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commits/main/" target="_blank" rel="noopener noreferrer">7 commits</a>
+          </div>
+        </article>
+      </div>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">A</span>
+          <h3>ProjectCard component</h3>
+          <span class="exercise-repo">src/components/ProjectCard.jsx</span>
+        </header>
+        <p>Shows one project's title, description, tech stack, GitHub link and demo link.</p>
+<pre><code>function ProjectCard({ title, description, tech, github, demo }) {
+  return (
+    &lt;article className="project-card"&gt;
+      &lt;h3 className="project-title"&gt;{title}&lt;/h3&gt;
+      &lt;p className="project-desc"&gt;{description}&lt;/p&gt;
+      &lt;ul className="tech-list" aria-label="Tech stack"&gt;
+        {tech.map((t) =&gt; &lt;li key={t} className="tech-tag"&gt;{t}&lt;/li&gt;)}
+      &lt;/ul&gt;
+      &lt;div className="project-links"&gt;
+        &lt;a href={github} target="_blank" rel="noopener noreferrer"&gt;GitHub ↗&lt;/a&gt;
+        &lt;a href={demo} target="_blank" rel="noopener noreferrer"&gt;Live demo ↗&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/article&gt;
+  );
+}
+
+export default ProjectCard;</code></pre>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">B</span>
+          <h3>ProjectList — 6 cards from an array</h3>
+          <span class="exercise-repo">src/components/ProjectList.jsx</span>
+        </header>
+        <p>Maps the projects array to cards, each with a stable key.</p>
+<pre><code>import ProjectCard from './ProjectCard';
+
+function ProjectList({ projects }) {
+  if (projects.length === 0) {
+    return &lt;p className="empty"&gt;No projects match this filter.&lt;/p&gt;;
+  }
+
+  return (
+    &lt;div className="project-grid"&gt;
+      {projects.map((project) =&gt; (
+        &lt;ProjectCard
+          key={project.id}
+          title={project.title}
+          description={project.description}
+          tech={project.tech}
+          github={project.github}
+          demo={project.demo}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+export default ProjectList;</code></pre>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">C</span>
+          <h3>FilterBar and state in App</h3>
+          <span class="exercise-repo">src/App.jsx · src/components/FilterBar.jsx</span>
+        </header>
+        <p>The active technology lives in <code>App</code> with <code>useState</code>; <code>FilterBar</code> triggers changes and <code>ProjectList</code> receives the filtered array.</p>
+<pre><code>import { useState } from 'react';
+import projects from './data/projects';
+import FilterBar from './components/FilterBar';
+import ProjectList from './components/ProjectList';
+
+function App() {
+  const [active, setActive] = useState('All');
+
+  const technologies = ['All', ...new Set(projects.flatMap((p) =&gt; p.tech))];
+
+  const visible = active === 'All'
+    ? projects
+    : projects.filter((p) =&gt; p.tech.includes(active));
+
+  return (
+    &lt;&gt;
+      &lt;FilterBar technologies={technologies} active={active} onChange={setActive} /&gt;
+      &lt;ProjectList projects={visible} /&gt;
+    &lt;/&gt;
+  );
+}
+
+export default App;</code></pre>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">D</span>
+          <h3>Commit history</h3>
+          <span class="exercise-repo">portfolio-gallery · main</span>
+        </header>
+        <ul class="commit-list">
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/2c44c58" target="_blank" rel="noopener noreferrer">2c44c58</a> <span class="commit-msg">Add README with component overview</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/9942241" target="_blank" rel="noopener noreferrer">9942241</a> <span class="commit-msg">Style the gallery in the archive theme</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/54183e9" target="_blank" rel="noopener noreferrer">54183e9</a> <span class="commit-msg">Add FilterBar and filter projects by technology</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/b225972" target="_blank" rel="noopener noreferrer">b225972</a> <span class="commit-msg">Add ProjectList to render project cards</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/c65bea6" target="_blank" rel="noopener noreferrer">c65bea6</a> <span class="commit-msg">Add ProjectCard component</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/ba26b0d" target="_blank" rel="noopener noreferrer">ba26b0d</a> <span class="commit-msg">Add project data for six real repositories</span></li>
+          <li><a class="commit-hash" href="https://github.com/olimjonovziyodulloh-coder/portfolio-gallery/commit/31322d5" target="_blank" rel="noopener noreferrer">31322d5</a> <span class="commit-msg">Initialize React project with Vite</span></li>
+        </ul>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">✓</span>
+          <h3>Requirements checklist</h3>
+        </header>
+        <ul class="check">
+          <li><code>ProjectCard</code> shows title, description, tech stack, GitHub link and demo link.</li>
+          <li><code>ProjectList</code> renders 6 <code>ProjectCard</code>s from a projects array (my real public repos).</li>
+          <li><code>FilterBar</code> filters by technology; filter state is managed with <code>useState</code> in <code>App</code>.</li>
+          <li>Vite + React project with <code>base: '/portfolio-gallery/'</code>, deployed to GitHub Pages.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Olimjonov Ziyodulloh · Student ID 202537557 · Web Programming course</p>
+  </footer>
+</body>
+</html>
