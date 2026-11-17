@@ -143,9 +143,9 @@
       <h1>Week 11 Tasks</h1>
       <p class="subtitle">
         React components and props from the Week 11 class: a Student Directory
-        (Task 11-A), a Portfolio Gallery, and a React Lab with eight class
-        exercises. Source code, commit history and live deployments are linked
-        below.
+        (Task 11-A), a Portfolio Gallery, a React Lab with eight class exercises,
+        and React components on my portfolio. Source code, commit history and
+        live deployments are linked below.
       </p>
 
       <div class="student">
@@ -604,6 +604,52 @@ export default App;</code></pre>
           <span class="exercise-repo">ConditionalDemo.jsx</span>
         </header>
         <p>A component that returns <code>null</code>, an <code>&amp;&amp;</code> block and a ternary, with <code>useState</code> driving a log in / log out button.</p>
+      </article>
+    </section>
+    <section class="module">
+      <h2><span class="module-number">05</span> Portfolio — React added</h2>
+      <p class="module-intro">
+        The projects grid and the theme switch on my portfolio are now React
+        components, so the site keeps the React work after the course ends.
+      </p>
+
+      <div class="link-grid">
+        <article class="link-card">
+          <a class="card-title" href="https://olimjonovziyodulloh-coder.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Live portfolio</a>
+          <p>Seven projects with search, technology filters and a detail dialog, plus a React theme switch.</p>
+          <div class="card-links">
+            <a href="https://olimjonovziyodulloh-coder.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Open site ↗</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio" target="_blank" rel="noopener noreferrer">Repository</a>
+            <a href="https://github.com/olimjonovziyodulloh-coder/portfolio/commits/main/" target="_blank" rel="noopener noreferrer">8 commits</a>
+          </div>
+        </article>
+      </div>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">A</span>
+          <h3>ProjectsApp — search, filter, dialog</h3>
+          <span class="exercise-repo">app.js</span>
+        </header>
+        <p>Seven projects from one array. <code>useState</code> holds the search text, the active technology and the selected project; <code>useMemo</code> derives the visible list; <code>useEffect</code> saves the filter; the dialog is a <code>createPortal</code> that closes on Escape or backdrop click and returns focus.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">B</span>
+          <h3>ThemeToggle — state and storage</h3>
+          <span class="exercise-repo">app.js</span>
+        </header>
+        <p><code>useState</code> plus <code>useEffect</code> write <code>data-theme</code> and <code>localStorage</code>, and the button exposes <code>aria-pressed</code> for the dark state.</p>
+      </article>
+
+      <article class="exercise">
+        <header class="exercise-head">
+          <span class="exercise-tag">C</span>
+          <h3>Static page, no build step</h3>
+          <span class="exercise-repo">index.html</span>
+        </header>
+        <p>React 18 (UMD) loads with <code>defer</code>, so GitHub Pages still serves plain files. Without JavaScript the grid falls back to a <code>noscript</code> list of direct links.</p>
       </article>
     </section>
   </main>
