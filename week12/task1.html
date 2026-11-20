@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0e0d0f">
-  <meta name="description" content="Week 12 homework: an interactive React shopping cart — six-product catalogue, cart state, derived totals, quantity controls and a composite ShoppingCart component.">
-  <title>Week 12: Interactive Shopping Cart</title>
+  <meta name="description" content="Week 12: React state and useState exercises plus the interactive shopping cart homework — catalogue, cart state, derived totals, quantity controls and a composite ShoppingCart component.">
+  <title>Week 12: React State &amp; Shopping Cart</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,7 +124,28 @@
     }
     @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reactor .ring-slow{animation:none}*,*::before,*::after{transition:none !important}}
 
-    /* Week 12 — interactive shopping cart */
+    /* Week 12 — lecture demos */
+    .counter-bug{display:grid;gap:8px}
+    .bug-count{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:34px;font-weight:700;line-height:1;letter-spacing:0.5px;color:var(--gold-light)}
+    .bug-note{font-size:0.82rem;color:#a8a29b}
+    .bug-note strong{color:#d8d2ca;font-weight:600}
+    .bug-log{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+    .bug-log li{padding:2px 8px;background:#241c1e;border:1px solid var(--line);color:#d8d2ca;font-size:0.78rem}
+    .todo-list{list-style:none;display:grid;gap:6px;margin-top:10px}
+    .todo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;background:var(--panel-hi);border:1px solid #2a2426}
+    .todo-check{display:flex;align-items:center;gap:10px;font-size:0.9rem;color:#d8d2ca;cursor:pointer}
+    .todo-check input{width:16px;height:16px;accent-color:#b8924f;cursor:pointer}
+    .search-demo{display:grid;gap:12px}
+    .result-count{font-size:0.82rem;color:#a8a29b}
+    .fruit-list{list-style:none;display:grid;gap:5px;max-height:170px;overflow:auto}
+    .fruit-list li{padding:6px 10px;background:var(--panel-hi);border:1px solid #2a2426;font-size:0.88rem;color:#d8d2ca}
+    .history-block{display:grid;gap:6px}
+    .history{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+    .history li{min-width:28px;padding:3px 8px;text-align:center;background:#241c1e;border:1px solid var(--line);color:#d8d2ca;font-size:0.8rem}
+    .history li:last-child{border-color:var(--gold-soft);color:var(--gold-light)}
+    .exercise-card--wide{grid-column:1/-1}
+
+    /* Week 12 — shopping cart homework */
     .shop{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:36px}
     .catalog{display:grid;gap:14px;min-width:0}
     .catalog-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -179,6 +200,7 @@
       .product-body{padding:10px}
       .catalog-head h3{font-size:21px}
       .cart-head h3{font-size:21px}
+      .bug-count{font-size:28px}
     }
     @media (max-width:380px){
       .product-grid{grid-template-columns:1fr}
@@ -215,9 +237,9 @@
       <p class="kicker">Web Programming · K0126002</p>
       <h1>Week 12 Tasks</h1>
       <p class="subtitle">
-        One shopping cart, built in five parts: a six-product catalogue, cart
-        state, totals derived from that state, quantity controls and a composite
-        component that owns it all. The cart on this page is live.
+        Seven React state exercises from Monday's lecture — a plain variable,
+        useState, objects, arrays, lifted state and a counter with history —
+        plus the shopping cart homework, live on this page.
       </p>
 
       <div class="student">
@@ -227,33 +249,268 @@
 
       <ul class="topics">
         <li>useState</li>
-        <li>Array state</li>
+        <li>Functional updates</li>
+        <li>Objects &amp; arrays</li>
+        <li>Lifting state</li>
         <li>Derived totals</li>
-        <li>Events</li>
-        <li>Component composition</li>
-        <li>Accessibility</li>
+        <li>Homework</li>
       </ul>
     </div>
   </header>
 
   <main id="main">
     <div class="section-heading">
-      <h2>Live shopping cart</h2>
-      <p>React state &amp; derived totals</p>
+      <h2>Lecture demos</h2>
+      <p>React state &amp; useState</p>
     </div>
 
     <p class="note">
-      Six products, one cart array. Quantities and the subtotal are calculated
-      from that array, so the numbers always match the items in the cart.
+      Six exercises from Monday's lecture, each running on this page. Open
+      <strong>View React code</strong> under a demo to read the component behind it.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="lecture-01">
+        <header class="exercise-head">
+          <span class="exercise-tag">01</span>
+          <h3>The problem: a plain variable</h3>
+        </header>
+        <p class="exercise-desc">A local variable is re-created on every render, so React never shows the change. Clicking logs 1, 2, 3 while the count on screen stays at 0.</p>
+        <div class="demo" data-demo="counter-bug">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>function CounterBug() {
+  const logRef = useRef(null);
+  let count = 0; // lives in this render only
+
+  function handleClick() {
+    count = count + 1;
+    const item = document.createElement(&#x27;li&#x27;);
+    item.textContent = count;
+    logRef.current.appendChild(item); // no setState, no re-render
+  }
+
+  return (
+    &lt;&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={handleClick}&gt;+1&lt;/button&gt;
+      &lt;ul ref={logRef}&gt;&lt;/ul&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="lecture-02">
+        <header class="exercise-head">
+          <span class="exercise-tag">02</span>
+          <h3>useState and functional updates</h3>
+        </header>
+        <p class="exercise-desc">useState returns the current value and a setter. Using prev =&gt; prev + 1 means every quick click reads the latest count instead of a stale snapshot.</p>
+        <div class="demo" data-demo="counter-state">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [count, setCount] = useState(0);
+
+&lt;button onClick={() =&gt; setCount((prev) =&gt; prev - 1)}&gt;−1&lt;/button&gt;
+&lt;output aria-live=&quot;polite&quot;&gt;{count}&lt;/output&gt;
+&lt;button onClick={() =&gt; setCount((prev) =&gt; prev + 1)}&gt;+1&lt;/button&gt;
+&lt;button onClick={() =&gt; setCount(0)}&gt;Reset&lt;/button&gt;</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="lecture-03">
+        <header class="exercise-head">
+          <span class="exercise-tag">03</span>
+          <h3>Multiple useState calls</h3>
+        </header>
+        <p class="exercise-desc">Each independent field gets its own state variable and setter, so typing an email never touches the name or the age.</p>
+        <div class="demo" data-demo="user-form">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [name, setName] = useState(&#x27;&#x27;);
+const [email, setEmail] = useState(&#x27;&#x27;);
+const [age, setAge] = useState(&#x27;&#x27;);
+const [submitted, setSubmitted] = useState(false);
+
+function handleSubmit(event) {
+  event.preventDefault();
+  setSubmitted(true);
+}
+
+if (submitted) {
+  return &lt;p&gt;Thanks, {name}! Email: {email}, age {age}&lt;/p&gt;;
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="lecture-04">
+        <header class="exercise-head">
+          <span class="exercise-tag">04</span>
+          <h3>State with objects</h3>
+        </header>
+        <p class="exercise-desc">One object holds the profile, updated with the spread operator. A new object is the signal React needs to re-render.</p>
+        <div class="demo" data-demo="profile-form">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [user, setUser] = useState({ name: &#x27;&#x27;, email: &#x27;&#x27;, bio: &#x27;&#x27; });
+
+function handleChange(field, value) {
+  setUser((prev) =&gt; ({ ...prev, [field]: value }));
+}
+
+&lt;input
+  value={user.name}
+  onChange={(event) =&gt; handleChange(&#x27;name&#x27;, event.target.value)}
+/&gt;</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="lecture-05">
+        <header class="exercise-head">
+          <span class="exercise-tag">05</span>
+          <h3>State with arrays</h3>
+        </header>
+        <p class="exercise-desc">Add with spread, remove with filter, toggle with map — three patterns that each return a new array instead of mutating the old one.</p>
+        <div class="demo" data-demo="todo-list">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [todos, setTodos] = useState([]);
+
+const addTodo = () =&gt; {
+  if (!input.trim()) return;
+  setTodos((prev) =&gt; [
+    ...prev,
+    { id: Date.now(), text: input.trim(), done: false },
+  ]);
+  setInput(&#x27;&#x27;);
+};
+
+const removeTodo = (id) =&gt;
+  setTodos((prev) =&gt; prev.filter((todo) =&gt; todo.id !== id));
+
+const toggleTodo = (id) =&gt;
+  setTodos((prev) =&gt;
+    prev.map((todo) =&gt;
+      todo.id === id ? { ...todo, done: !todo.done } : todo
+    )
+  );</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="lecture-06">
+        <header class="exercise-head">
+          <span class="exercise-tag">06</span>
+          <h3>Lifting state up</h3>
+        </header>
+        <p class="exercise-desc">The search page owns the query. The input asks it to change through a callback, and the result list reads the query back as a prop.</p>
+        <div class="demo" data-demo="search-page">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>function SearchPage() {
+  const [query, setQuery] = useState(&#x27;&#x27;);
+
+  return (
+    &lt;&gt;
+      &lt;SearchBar onSearch={setQuery} /&gt;
+      &lt;ResultList query={query} /&gt;
+    &lt;/&gt;
+  );
+}
+
+function SearchBar({ onSearch }) {
+  const [input, setInput] = useState(&#x27;&#x27;);
+
+  return (
+    &lt;input
+      value={input}
+      onChange={(event) =&gt; {
+        setInput(event.target.value);
+        onSearch(event.target.value);
+      }}
+    /&gt;
+  );
+}</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Code challenge — counter with history</h2>
+      <p>count + history</p>
+    </div>
+
+    <div class="exercise-grid">
+      <article class="exercise-card exercise-card--wide" id="challenge">
+        <header class="exercise-head">
+          <span class="exercise-tag">07</span>
+          <h3>Counter with history</h3>
+        </header>
+        <p class="exercise-desc">The lecture challenge: +1, −1, Reset and Undo, plus the last five values. One state object holds the count and the history, so each update replaces both together.</p>
+        <div class="demo" data-demo="counter-history">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [state, setState] = useState({ count: 0, history: [0] });
+
+function change(delta) {
+  setState((prev) =&gt; {
+    const count = prev.count + delta;
+    return { count, history: [...prev.history, count].slice(-5) };
+  });
+}
+
+function reset() {
+  setState((prev) =&gt; ({
+    count: 0,
+    history: [...prev.history, 0].slice(-5),
+  }));
+}
+
+function undo() {
+  setState((prev) =&gt; {
+    if (prev.history.length &lt; 2) return prev;
+    const history = prev.history.slice(0, -1);
+    return { count: history[history.length - 1], history };
+  });
+}</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Homework — interactive shopping cart</h2>
+      <p>Five tasks</p>
+    </div>
+
+    <p class="note">
+      The brief: at least five products with a name, price and image; add and
+      remove backed by an array of cart items; a cart sidebar whose total is
+      computed from state; quantity controls per item; and one
+      <code>ShoppingCart</code> component that combines the list and the cart.
+      The shop below is that homework, running live.
     </p>
 
     <div id="shop-root" data-demo="shop">
       <noscript><p class="demo-fallback">This shop needs JavaScript. The component code is under the five tasks below.</p></noscript>
     </div>
 
-    <div class="section-heading section-heading-spaced">
-      <h2>Five tasks</h2>
-      <p>How the cart is built</p>
+    <div class="section-heading">
+      <h2>How the cart is built</h2>
+      <p>Task by task</p>
     </div>
 
     <div class="exercise-grid">
@@ -266,14 +523,14 @@
         <details class="code-disclosure">
           <summary>View React code</summary>
           <pre><code>const products = [
-  { id: 1, name: 'Field Tote', price: 26, category: 'Accessories', image: toteIcon },
-  { id: 2, name: 'Studio Headphones', price: 89, category: 'Audio', image: headphonesIcon },
+  { id: 1, name: &#x27;Field Tote&#x27;, price: 26, category: &#x27;Accessories&#x27;, image: toteIcon },
+  { id: 2, name: &#x27;Studio Headphones&#x27;, price: 89, category: &#x27;Audio&#x27;, image: headphonesIcon },
   // four more products...
 ];
 
 function ProductList({ products, onAdd }) {
   return (
-    &lt;div className="product-grid"&gt;
+    &lt;div className=&quot;product-grid&quot;&gt;
       {products.map((product) =&gt; (
         &lt;ProductCard key={product.id} product={product} onAdd={onAdd} /&gt;
       ))}
@@ -335,8 +592,8 @@ function removeFromCart(id) {
   );
 
   return (
-    &lt;aside className="cart"&gt;
-      &lt;h3&gt;Cart &lt;span aria-live="polite"&gt;{count}&lt;/span&gt;&lt;/h3&gt;
+    &lt;aside className=&quot;cart&quot;&gt;
+      &lt;h3&gt;Cart &lt;span aria-live=&quot;polite&quot;&gt;{count}&lt;/span&gt;&lt;/h3&gt;
       &lt;p&gt;Subtotal &lt;strong&gt;{formatPrice(subtotal)}&lt;/strong&gt;&lt;/p&gt;
     &lt;/aside&gt;
   );
@@ -372,7 +629,7 @@ function changeQuantity(id, amount) {
 &gt;
   −
 &lt;/button&gt;
-&lt;output aria-live="polite"&gt;{item.quantity}&lt;/output&gt;
+&lt;output aria-live=&quot;polite&quot;&gt;{item.quantity}&lt;/output&gt;
 &lt;button
   disabled={item.quantity &gt;= MAX_QTY}
   onClick={() =&gt; changeQuantity(item.id, 1)}
@@ -396,7 +653,7 @@ function changeQuantity(id, amount) {
   const [lastOrder, setLastOrder] = useState(null);
 
   return (
-    &lt;div className="shop"&gt;
+    &lt;div className=&quot;shop&quot;&gt;
       &lt;ProductList products={products} onAdd={addToCart} /&gt;
       &lt;CartSidebar
         items={cart}
@@ -410,7 +667,7 @@ function changeQuantity(id, amount) {
   );
 }
 
-createRoot(document.getElementById('shop-root')).render(&lt;ShoppingCart /&gt;);</code></pre>
+createRoot(document.getElementById(&#x27;shop-root&#x27;)).render(&lt;ShoppingCart /&gt;);</code></pre>
         </details>
       </article>
     </div>

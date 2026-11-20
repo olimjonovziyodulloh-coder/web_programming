@@ -1,20 +1,594 @@
 (function () {
   "use strict";
 
-  var root = document.getElementById("shop-root");
-  if (!root) {
-    return;
-  }
-
   if (!window.React || !window.ReactDOM) {
-    root.innerHTML =
-      '<p class="demo-fallback">This shop needs JavaScript to run. The component code is below.</p>';
+    Array.prototype.forEach.call(
+      document.querySelectorAll("[data-demo]"),
+      function (node) {
+        node.innerHTML =
+          '<p class="demo-fallback">This demo needs JavaScript. The component code is below.</p>';
+      }
+    );
     return;
   }
 
   var h = React.createElement;
   var useState = React.useState;
   var useMemo = React.useMemo;
+  var useRef = React.useRef;
+
+  function mount(name, Component) {
+    var node = document.querySelector('[data-demo="' + name + '"]');
+    if (node) {
+      ReactDOM.createRoot(node).render(h(Component));
+    }
+  }
+
+  /* 01 — a plain variable never tells React to re-render */
+  function CounterBug() {
+    var logRef = useRef(null);
+    var count = 0; // lives in this render only
+
+    function handleClick() {
+      count = count + 1;
+      if (logRef.current) {
+        var item = document.createElement("li");
+        item.textContent = count;
+        logRef.current.appendChild(item);
+      }
+    }
+
+    return h(
+      "div",
+      { className: "counter-bug" },
+      h("p", { className: "bug-count" }, "Count: ", count),
+      h(
+        "div",
+        { className: "btn-row" },
+        h(
+          "button",
+          { type: "button", className: "btn btn-primary", onClick: handleClick },
+          "+1 (plain variable)"
+        )
+      ),
+      h(
+        "p",
+        { className: "bug-note" },
+        "The log grows on every click, but without a setter React never re-renders \u2014 the count above stays at 0."
+      ),
+      h("ul", {
+        className: "bug-log",
+        ref: logRef,
+        "aria-label": "Values logged by the click handler"
+      })
+    );
+  }
+
+  /* 02 — useState with functional updates */
+  function CounterState() {
+    var countState = useState(0);
+    var count = countState[0];
+    var setCount = countState[1];
+
+    return h(
+      "div",
+      { className: "counter" },
+      h("output", { className: "counter-value", "aria-live": "polite" }, count),
+      h(
+        "div",
+        { className: "btn-row" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            onClick: function () {
+              setCount(function (prev) {
+                return prev - 1;
+              });
+            }
+          },
+          "\u22121"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn btn-primary",
+            onClick: function () {
+              setCount(function (prev) {
+                return prev + 1;
+              });
+            }
+          },
+          "+1"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn-text",
+            onClick: function () {
+              setCount(0);
+            }
+          },
+          "Reset"
+        )
+      ),
+      h(
+        "p",
+        { className: "bug-note" },
+        "Functional updates read the latest value, so quick clicks all count."
+      )
+    );
+  }
+
+  /* 03 — one useState per independent field */
+  function UserForm() {
+    var nameState = useState("");
+    var name = nameState[0];
+    var setName = nameState[1];
+
+    var emailState = useState("");
+    var email = emailState[0];
+    var setEmail = emailState[1];
+
+    var ageState = useState("");
+    var age = ageState[0];
+    var setAge = ageState[1];
+
+    var submittedState = useState(false);
+    var submitted = submittedState[0];
+    var setSubmitted = submittedState[1];
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      setSubmitted(true);
+    }
+
+    if (submitted) {
+      return h(
+        "div",
+        { className: "field-stack" },
+        h(
+          "p",
+          { className: "form-message", role: "status" },
+          "Thanks, ",
+          h("strong", null, name.trim() || "friend"),
+          "! Email: ",
+          email.trim() || "\u2014",
+          age.trim() ? ", age " + age.trim() : "",
+          "."
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            onClick: function () {
+              setSubmitted(false);
+            }
+          },
+          "Edit details"
+        )
+      );
+    }
+
+    return h(
+      "form",
+      { className: "field-stack", onSubmit: handleSubmit },
+      h("label", { className: "field-label", htmlFor: "user-name" }, "Name"),
+      h("input", {
+        className: "field-input",
+        id: "user-name",
+        type: "text",
+        placeholder: "Kim",
+        value: name,
+        onChange: function (event) {
+          setName(event.target.value);
+        }
+      }),
+      h("label", { className: "field-label", htmlFor: "user-email" }, "Email"),
+      h("input", {
+        className: "field-input",
+        id: "user-email",
+        type: "email",
+        placeholder: "kim@uni.kr",
+        value: email,
+        onChange: function (event) {
+          setEmail(event.target.value);
+        }
+      }),
+      h("label", { className: "field-label", htmlFor: "user-age" }, "Age"),
+      h("input", {
+        className: "field-input",
+        id: "user-age",
+        type: "number",
+        min: 1,
+        max: 120,
+        placeholder: "21",
+        value: age,
+        onChange: function (event) {
+          setAge(event.target.value);
+        }
+      }),
+      h(
+        "button",
+        { className: "btn btn-primary", type: "submit", disabled: !name.trim() },
+        "Submit"
+      )
+    );
+  }
+
+  /* 04 — one object, updated with the spread operator */
+  function ProfileForm() {
+    var userState = useState({ name: "", email: "", bio: "" });
+    var user = userState[0];
+    var setUser = userState[1];
+
+    function handleChange(field, value) {
+      setUser(function (prev) {
+        var next = { name: prev.name, email: prev.email, bio: prev.bio };
+        next[field] = value;
+        return next;
+      });
+    }
+
+    return h(
+      "div",
+      { className: "field-stack" },
+      h("label", { className: "field-label", htmlFor: "profile-name" }, "Name"),
+      h("input", {
+        className: "field-input",
+        id: "profile-name",
+        type: "text",
+        placeholder: "Kim Minho",
+        value: user.name,
+        onChange: function (event) {
+          handleChange("name", event.target.value);
+        }
+      }),
+      h("label", { className: "field-label", htmlFor: "profile-email" }, "Email"),
+      h("input", {
+        className: "field-input",
+        id: "profile-email",
+        type: "email",
+        placeholder: "kim@uni.kr",
+        value: user.email,
+        onChange: function (event) {
+          handleChange("email", event.target.value);
+        }
+      }),
+      h("label", { className: "field-label", htmlFor: "profile-bio" }, "Bio"),
+      h("textarea", {
+        className: "field-area",
+        id: "profile-bio",
+        rows: 3,
+        placeholder: "A short bio",
+        value: user.bio,
+        onChange: function (event) {
+          handleChange("bio", event.target.value);
+        }
+      }),
+      h(
+        "p",
+        { className: "preview", "aria-live": "polite" },
+        h("strong", null, user.name.trim() || "No name yet"),
+        user.email.trim() ? " \u00b7 " + user.email.trim() : "",
+        user.bio.trim() ? " \u00b7 " + user.bio.trim() : ""
+      )
+    );
+  }
+
+  /* 05 — arrays: add with spread, remove with filter, toggle with map */
+  function TodoList() {
+    var todosState = useState([]);
+    var todos = todosState[0];
+    var setTodos = todosState[1];
+
+    var inputState = useState("");
+    var input = inputState[0];
+    var setInput = inputState[1];
+
+    function addTodo(event) {
+      event.preventDefault();
+      var text = input.trim();
+      if (!text) {
+        return;
+      }
+
+      setTodos(function (prev) {
+        return prev.concat({
+          id: Date.now(),
+          text: text,
+          done: false
+        });
+      });
+      setInput("");
+    }
+
+    function removeTodo(id) {
+      setTodos(function (prev) {
+        return prev.filter(function (todo) {
+          return todo.id !== id;
+        });
+      });
+    }
+
+    function toggleTodo(id) {
+      setTodos(function (prev) {
+        return prev.map(function (todo) {
+          return todo.id === id
+            ? { id: todo.id, text: todo.text, done: !todo.done }
+            : todo;
+        });
+      });
+    }
+
+    return h(
+      "div",
+      null,
+      h(
+        "form",
+        { className: "task-form", onSubmit: addTodo },
+        h(
+          "label",
+          { className: "visually-hidden", htmlFor: "todo-input" },
+          "New to-do"
+        ),
+        h("input", {
+          className: "field-input",
+          id: "todo-input",
+          type: "text",
+          placeholder: "Add a to-do",
+          value: input,
+          onChange: function (event) {
+            setInput(event.target.value);
+          }
+        }),
+        h(
+          "button",
+          {
+            className: "btn btn-primary",
+            type: "submit",
+            disabled: !input.trim()
+          },
+          "Add"
+        )
+      ),
+      todos.length === 0
+        ? h("p", { className: "empty" }, "No to-dos yet. Add one above.")
+        : h(
+            "ul",
+            { className: "todo-list" },
+            todos.map(function (todo) {
+              return h(
+                "li",
+                { key: todo.id, className: "todo-row" },
+                h(
+                  "label",
+                  { className: "todo-check" },
+                  h("input", {
+                    type: "checkbox",
+                    checked: todo.done,
+                    onChange: function () {
+                      toggleTodo(todo.id);
+                    }
+                  }),
+                  h(
+                    "span",
+                    { className: todo.done ? "task-done" : "" },
+                    todo.text
+                  )
+                ),
+                h(
+                  "button",
+                  {
+                    type: "button",
+                    className: "remove-btn",
+                    "aria-label": "Remove " + todo.text,
+                    onClick: function () {
+                      removeTodo(todo.id);
+                    }
+                  },
+                  "Remove"
+                )
+              );
+            })
+          )
+    );
+  }
+
+  /* 06 — lifting state up to the nearest common parent */
+  var fruits = [
+    "Apple",
+    "Apricot",
+    "Banana",
+    "Blueberry",
+    "Cherry",
+    "Grape",
+    "Kiwi",
+    "Lemon",
+    "Mango",
+    "Orange",
+    "Peach",
+    "Pear",
+    "Plum",
+    "Strawberry"
+  ];
+
+  function SearchBar(props) {
+    var inputState = useState("");
+    var input = inputState[0];
+    var setInput = inputState[1];
+
+    return h(
+      "div",
+      { className: "field-stack" },
+      h("label", { className: "field-label", htmlFor: "search-input" }, "Search fruit"),
+      h("input", {
+        className: "field-input",
+        id: "search-input",
+        type: "search",
+        placeholder: "Try \u201cberry\u201d",
+        value: input,
+        onChange: function (event) {
+          setInput(event.target.value);
+          props.onSearch(event.target.value);
+        }
+      })
+    );
+  }
+
+  function ResultList(props) {
+    var query = props.query.trim().toLowerCase();
+    var results = fruits.filter(function (fruit) {
+      return fruit.toLowerCase().indexOf(query) !== -1;
+    });
+
+    return h(
+      "div",
+      null,
+      h(
+        "p",
+        { className: "result-count", "aria-live": "polite" },
+        results.length,
+        results.length === 1 ? " result" : " results",
+        query ? ' for "' + props.query.trim() + '"' : ""
+      ),
+      results.length
+        ? h(
+            "ul",
+            { className: "fruit-list" },
+            results.map(function (fruit) {
+              return h("li", { key: fruit }, fruit);
+            })
+          )
+        : h("p", { className: "empty" }, "No fruit matches that search.")
+    );
+  }
+
+  function SearchPage() {
+    var queryState = useState("");
+    var query = queryState[0];
+    var setQuery = queryState[1];
+
+    return h(
+      "div",
+      { className: "search-demo" },
+      h(SearchBar, { onSearch: setQuery }),
+      h(ResultList, { query: query })
+    );
+  }
+
+  /* 07 — code challenge: counter with history */
+  function CounterWithHistory() {
+    var statePair = useState({ count: 0, history: [0] });
+    var state = statePair[0];
+    var setState = statePair[1];
+
+    var count = state.count;
+    var history = state.history;
+
+    function change(delta) {
+      setState(function (prev) {
+        var next = prev.count + delta;
+        return {
+          count: next,
+          history: prev.history.concat(next).slice(-5)
+        };
+      });
+    }
+
+    function reset() {
+      setState(function (prev) {
+        return {
+          count: 0,
+          history: prev.history.concat(0).slice(-5)
+        };
+      });
+    }
+
+    function undo() {
+      setState(function (prev) {
+        if (prev.history.length < 2) {
+          return prev;
+        }
+        var history = prev.history.slice(0, -1);
+        return {
+          count: history[history.length - 1],
+          history: history
+        };
+      });
+    }
+
+    return h(
+      "div",
+      { className: "counter" },
+      h("output", { className: "counter-value", "aria-live": "polite" }, count),
+      h(
+        "div",
+        { className: "btn-row" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            onClick: function () {
+              change(-1);
+            }
+          },
+          "\u22121"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn btn-primary",
+            onClick: function () {
+              change(1);
+            }
+          },
+          "+1"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            onClick: reset
+          },
+          "Reset"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            disabled: history.length < 2,
+            onClick: undo
+          },
+          "Undo"
+        )
+      ),
+      h(
+        "div",
+        { className: "history-block" },
+        h("p", { className: "field-label" }, "History (last five)"),
+        h(
+          "ul",
+          { className: "history", "aria-label": "Count history" },
+          history.map(function (value, index) {
+            return h("li", { key: index }, value);
+          })
+        )
+      )
+    );
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Homework — interactive shopping cart                                   */
+  /* ---------------------------------------------------------------------- */
 
   var MAX_QTY = 9;
 
@@ -454,5 +1028,12 @@
     );
   }
 
-  ReactDOM.createRoot(root).render(h(ShoppingCart));
+  mount("counter-bug", CounterBug);
+  mount("counter-state", CounterState);
+  mount("user-form", UserForm);
+  mount("profile-form", ProfileForm);
+  mount("todo-list", TodoList);
+  mount("search-page", SearchPage);
+  mount("counter-history", CounterWithHistory);
+  mount("shop", ShoppingCart);
 })();
