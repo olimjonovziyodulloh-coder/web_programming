@@ -592,80 +592,48 @@
 
   var MAX_QTY = 9;
 
-  /* Line-art product images, drawn inline so the page needs no image files. */
-  function icon(inner) {
-    var svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
-      '<g fill="none" stroke="#b8924f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">' +
-      inner +
-      "</g></svg>";
-    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-  }
-
   var products = [
     {
       id: 1,
       name: "Field Tote",
       price: 26,
       category: "Accessories",
-      image: icon(
-        '<path d="M120 120H280L266 270H134Z"/>' +
-          '<path d="M165 120V96a35 35 0 0 1 70 0v24"/>'
-      )
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 2,
       name: "Studio Headphones",
       price: 89,
       category: "Audio",
-      image: icon(
-        '<path d="M118 190v-18a82 82 0 0 1 164 0v18"/>' +
-          '<rect x="100" y="182" width="38" height="68" rx="12"/>' +
-          '<rect x="262" y="182" width="38" height="68" rx="12"/>'
-      )
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 3,
       name: "Ceramic Mug",
       price: 19,
       category: "Home",
-      image: icon(
-        '<path d="M128 128h124v108a34 34 0 0 1-34 34h-56a34 34 0 0 1-34-34Z"/>' +
-          '<path d="M252 158h22a28 28 0 0 1 0 56h-22"/>' +
-          '<path d="M172 96q10-14 0-28M206 96q10-14 0-28"/>'
-      )
+      image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 4,
       name: "Field Watch",
       price: 124,
       category: "Wearables",
-      image: icon(
-        '<circle cx="200" cy="150" r="54"/>' +
-          '<path d="M178 102l6-36h32l6 36M178 198l6 36h32l6-36"/>' +
-          '<path d="M200 150v-30M200 150l22 14"/>'
-      )
+      image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 5,
       name: "Task Lamp",
       price: 52,
       category: "Workspace",
-      image: icon(
-        '<path d="M148 128h104l34 72H114Z"/>' +
-          '<path d="M200 200v52M156 252h88"/>'
-      )
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 6,
       name: "Desk Notebook",
       price: 16,
       category: "Stationery",
-      image: icon(
-        '<rect x="128" y="96" width="144" height="168" rx="10"/>' +
-          '<path d="M160 96v168"/>' +
-          '<path d="M186 140h56M186 170h56M186 200h40"/>'
-      )
+      image: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=700&q=85"
     }
   ];
 
@@ -1028,6 +996,195 @@
     );
   }
 
+  /* ---------------------------------------------------------------------- */
+  /* Quizzes from the lecture (interactive demos)                          */
+  /* ---------------------------------------------------------------------- */
+
+  var quizzes = [
+    {
+      id: "quiz-01",
+      title: "Quiz 1 · State vs Props",
+      question: "Which statement most accurately distinguishes state from props in React?",
+      options: [
+        "A. Props are mutable by the child; state is immutable and passed down.",
+        "B. State is received from a parent; props are a component's private memory.",
+        "C. Props are read-only inputs from a parent; state is component-owned data whose setter schedules a re-render.",
+        "D. A local variable declared with let persists across renders like state.",
+        "E. State can only hold numbers and strings."
+      ],
+      answer: 2,
+      reason: "Ownership is the decisive criterion: a parent supplies props, while the component itself owns state and updates it only through the setter, which triggers a re-render."
+    },
+    {
+      id: "quiz-02",
+      title: "Quiz 2 · The useState Return Value",
+      question: "What does the call useState(0) return?",
+      options: [
+        "A. The number 0",
+        "B. An object { value, setValue }",
+        "C. An array: [currentValue, setterFunction]",
+        "D. Only a setter function",
+        "E. A Promise that resolves to the state"
+      ],
+      answer: 2,
+      reason: "React returns an array, not an object. Position gives each element its meaning: first the current state value, second the function that schedules an update."
+    },
+    {
+      id: "quiz-03",
+      title: "Quiz 3 · Rules of Hooks",
+      question: "Which of the following violates the Rules of Hooks?",
+      options: [
+        "A. const [n, setN] = useState(0); // top of component",
+        'B. if (open) { const [t, setT] = useState(""); }',
+        "C. function useCounter() { useState(0); ... }",
+        "D. Two useState calls, one after the other, at the top",
+        "E. An arrow-function component calling useState at its top"
+      ],
+      answer: 1,
+      reason: "React matches Hook calls by their order on each render. A conditional call alters that order, so later Hooks receive the wrong state."
+    },
+    {
+      id: "quiz-04",
+      title: "Quiz 4 · Stale State and Batching",
+      question: "A handler runs setCount(count + 1) three times in a row, and count is 0 in the current render. What is count after the update?",
+      options: [
+        "A. 0",
+        "B. 1",
+        "C. 2",
+        "D. 3",
+        "E. It depends on timing (a race condition)"
+      ],
+      answer: 1,
+      reason: "Within one render, count is a constant snapshot (0). All three calls enqueue the value 1 and React batches them, so the final state is 1. Use setCount(prev => prev + 1) to get 3."
+    },
+    {
+      id: "quiz-05",
+      title: "Quiz 5 · Designing State Variables",
+      question: "A form has three independent fields: name, email and subscribed (a boolean). Which design best follows the guidance of this lecture?",
+      options: [
+        "A. Three separate useState calls, one per field",
+        "B. One useState holding all fields, always, for performance",
+        "C. A module-level variable shared by the component",
+        "D. useState called inside a loop over the field names",
+        "E. Props, because the user can edit them by typing"
+      ],
+      answer: 0,
+      reason: "Independent values with independent update logic are clearest as separate state variables; each setter changes only its own piece, with no spread needed."
+    },
+    {
+      id: "quiz-06",
+      title: "Quiz 6 · Immutable Updates to Arrays",
+      question: "Which statement adds an item x to the array state todos without mutating it, so that React re-renders?",
+      options: [
+        "A. todos.push(x); setTodos(todos);",
+        "B. setTodos(todos.push(x));",
+        "C. setTodos(prev => [...prev, x]);",
+        "D. todos.unshift(x); setTodos(todos);",
+        "E. setTodos(prev => { prev.push(x); return prev; });"
+      ],
+      answer: 2,
+      reason: "The spread creates a new array holding the old items plus x. The new reference triggers a re-render, and the updater reads the latest state."
+    },
+    {
+      id: "quiz-07",
+      title: "Quiz 7 · Sharing State Between Siblings",
+      question: "Sibling components A and B must display and edit the same value. Which design is idiomatic in React?",
+      options: [
+        "A. Keep a copy in each sibling and synchronise them manually",
+        "B. Lift the state to the nearest common parent; pass the value down as props and the setter as a callback",
+        "C. Let A call B's internal state setter directly",
+        "D. Store the value in a global mutable variable",
+        "E. Pass the value as a prop and let A modify its own props"
+      ],
+      answer: 1,
+      reason: "One owner holds the state (single source of truth); data flows down through props and events flow up through callbacks."
+    }
+  ];
+
+  function Quiz(props) {
+    var quiz = props.quiz;
+    var selectedState = useState(null);
+    var selected = selectedState[0];
+    var setSelected = selectedState[1];
+
+    var revealedState = useState(false);
+    var revealed = revealedState[0];
+    var setRevealed = revealedState[1];
+
+    function choose(index) {
+      if (revealed) return;
+      setSelected(index);
+      setRevealed(true);
+    }
+
+    function reset() {
+      setSelected(null);
+      setRevealed(false);
+    }
+
+    return h(
+      "div",
+      { className: "quiz" },
+      h("p", { className: "quiz-q" }, quiz.question),
+      h(
+        "ul",
+        { className: "quiz-options", role: "list" },
+        quiz.options.map(function (option, index) {
+          var isCorrect = index === quiz.answer;
+          var isSelected = index === selected;
+          var className = "quiz-option";
+          if (revealed) {
+            if (isCorrect) className += " quiz-option--correct";
+            else if (isSelected) className += " quiz-option--wrong";
+          }
+          return h(
+            "li",
+            { key: index },
+            h(
+              "button",
+              {
+                type: "button",
+                className: className,
+                disabled: revealed,
+                onClick: function () {
+                  choose(index);
+                }
+              },
+              option
+            )
+          );
+        })
+      ),
+      revealed
+        ? h(
+            "div",
+            { className: "quiz-feedback", role: "status" },
+            h(
+              "p",
+              { className: selected === quiz.answer ? "quiz-ok" : "quiz-bad" },
+              selected === quiz.answer ? "Correct." : "Incorrect."
+            ),
+            h("p", { className: "quiz-reason" }, quiz.reason),
+            h(
+              "button",
+              { type: "button", className: "btn btn-text", onClick: reset },
+              "Try again"
+            )
+          )
+        : h("p", { className: "quiz-hint" }, "Pick an option to check your answer.")
+    );
+  }
+
+  function QuizList() {
+    return h(
+      "div",
+      { className: "quiz-grid" },
+      quizzes.map(function (quiz) {
+        return h(Quiz, { key: quiz.id, quiz: quiz });
+      })
+    );
+  }
+
   mount("counter-bug", CounterBug);
   mount("counter-state", CounterState);
   mount("user-form", UserForm);
@@ -1036,4 +1193,5 @@
   mount("search-page", SearchPage);
   mount("counter-history", CounterWithHistory);
   mount("shop", ShoppingCart);
+  mount("quizzes", QuizList);
 })();

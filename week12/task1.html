@@ -205,6 +205,22 @@
     @media (max-width:380px){
       .product-grid{grid-template-columns:1fr}
     }
+
+    /* Week 12 — quizzes */
+    .quiz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+    .quiz{display:grid;gap:10px}
+    .quiz-q{color:#d8d2ca;font-size:0.92rem;font-weight:500}
+    .quiz-options{list-style:none;display:grid;gap:6px}
+    .quiz-option{width:100%;text-align:left;padding:9px 12px;background:#121011;border:1px solid #2a2426;color:#d8d2ca;font:0.86rem/1.4 "Inter",Arial,Helvetica,sans-serif;cursor:pointer;transition:border-color 0.2s,background 0.2s,color 0.2s}
+    .quiz-option:hover:not(:disabled){border-color:var(--gold);color:var(--gold-light)}
+    .quiz-option:disabled{cursor:default}
+    .quiz-option--correct{border-color:#4a8f5a;background:rgba(74,143,90,0.12);color:#cfe8d4}
+    .quiz-option--wrong{border-color:var(--crimson);background:rgba(156,43,43,0.12);color:#ecd9c6}
+    .quiz-feedback{padding:10px 12px;border-left:2px solid var(--gold);background:rgba(184,146,79,0.06)}
+    .quiz-ok{color:#cfe8d4;font-weight:600;font-size:0.88rem}
+    .quiz-bad{color:#ecd9c6;font-weight:600;font-size:0.88rem}
+    .quiz-reason{color:#d8d2ca;font-size:0.84rem;margin-top:4px}
+    .quiz-hint{color:#a8a29b;font-size:0.8rem}
   </style>
 </head>
 <body>
@@ -263,11 +279,6 @@
       <h2>Lecture demos</h2>
       <p>React state &amp; useState</p>
     </div>
-
-    <p class="note">
-      Six exercises from Monday's lecture, each running on this page. Open
-      <strong>View React code</strong> under a demo to read the component behind it.
-    </p>
 
     <div class="exercise-grid">
       <article class="exercise-card" id="lecture-01">
@@ -489,6 +500,20 @@ function undo() {
 }</code></pre>
         </details>
       </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Quizzes — state &amp; useState</h2>
+      <p>Seven multiple-choice</p>
+    </div>
+
+    <p class="note">
+      Seven quiz questions from Monday's lecture. Pick an option to check your
+      answer and read the reasoning.
+    </p>
+
+    <div id="quiz-root" data-demo="quizzes">
+      <noscript><p class="demo-fallback">These quizzes need JavaScript.</p></noscript>
     </div>
 
     <div class="section-heading section-heading-spaced">
