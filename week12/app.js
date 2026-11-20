@@ -595,45 +595,45 @@
   var products = [
     {
       id: 1,
-      name: "Field Tote",
-      price: 26,
-      category: "Accessories",
-      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85"
+      name: "Mechanical Keyboard",
+      price: 129,
+      category: "Peripherals",
+      image: "https://images.unsplash.com/photo-1743862558369-5dcea79ccbff?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 2,
-      name: "Studio Headphones",
-      price: 89,
-      category: "Audio",
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85"
+      name: "Espresso Machine",
+      price: 199,
+      category: "Kitchen",
+      image: "https://images.unsplash.com/photo-1649882453801-d5f84502c3f0?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 3,
-      name: "Ceramic Mug",
-      price: 19,
-      category: "Home",
-      image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=85"
+      name: "Trail Running Shoes",
+      price: 110,
+      category: "Footwear",
+      image: "https://images.unsplash.com/photo-1637437757614-6491c8e915b5?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 4,
-      name: "Field Watch",
-      price: 124,
-      category: "Wearables",
-      image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=85"
+      name: "Leather Backpack",
+      price: 89,
+      category: "Bags",
+      image: "https://images.unsplash.com/photo-1551677399-f38a96cd1bc7?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 5,
-      name: "Task Lamp",
-      price: 52,
-      category: "Workspace",
-      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=85"
+      name: "Bluetooth Speaker",
+      price: 59,
+      category: "Audio",
+      image: "https://images.unsplash.com/photo-1668451126472-8a2ee4767fa1?auto=format&fit=crop&w=700&q=85"
     },
     {
       id: 6,
-      name: "Desk Notebook",
-      price: 16,
-      category: "Stationery",
-      image: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=700&q=85"
+      name: "Insulated Bottle",
+      price: 32,
+      category: "Drinkware",
+      image: "https://images.unsplash.com/photo-1649867219867-3faeab653df9?auto=format&fit=crop&w=700&q=85"
     }
   ];
 
@@ -979,7 +979,7 @@
             "div",
             null,
             h("p", { className: "eyebrow" }, "Week 12 \u00b7 React state"),
-            h("h3", { id: "catalog-title" }, "Six pieces for the desk")
+            h("h3", { id: "catalog-title" }, "Six picks for the desk")
           ),
           h("p", { className: "catalog-count" }, products.length + " products")
         ),
