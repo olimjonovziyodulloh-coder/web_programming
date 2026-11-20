@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0d0f">
+  <meta name="description" content="Week 12 homework: an interactive React shopping cart — six-product catalogue, cart state, derived totals, quantity controls and a composite ShoppingCart component.">
+  <title>Week 12: Interactive Shopping Cart</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap"></noscript>
+
+  <style>
+    :root{
+      --bg:#0e0d0f; --panel:#161416; --panel-hi:#1d1a1c; --line:#2e2729;
+      --crimson:#9c2b2b; --crimson-deep:#5e1c1f;
+      --gold:#b8924f; --gold-soft:#8d7240; --gold-light:#d9b877;
+      --text:#e6e1db; --muted:#8f8a86;
+      --reactor:#6fa8b8; --blue:#2c4a86; --blue-deep:#17284a; --web:#8fa0c4;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:"Inter",Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;position:relative}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse at 80% 0%,rgba(156,43,43,0.16),transparent 50%),radial-gradient(ellipse at 10% 100%,rgba(44,74,134,0.20),transparent 50%)}
+    a{color:var(--gold)} a:hover{color:var(--gold-light)}
+    a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .skip-link{position:absolute;left:-9999px;top:0.5rem;z-index:9999;background:#1a2744;color:#fff;padding:0.55rem 1rem;text-decoration:none;font-size:14px;border:2px solid var(--gold)}
+    .skip-link:focus{left:0.5rem}
+    body > header{position:relative;overflow:hidden;border-bottom:1px solid var(--line);padding:22px 24px 56px}
+    .header-top{max-width:1000px;margin:0 auto 40px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:13px;color:var(--muted);position:relative;z-index:1}
+    .header-top strong{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:0.6px;color:#c7c0b8}
+    .header-top a{color:#c7c0b8} .header-top a:hover{color:var(--gold)}
+    .web{position:absolute;top:0;left:0;width:300px;height:300px;opacity:0.16;pointer-events:none;z-index:0}
+    .reactor{position:absolute;top:50%;right:max(-120px,calc(50% - 640px));width:420px;height:420px;transform:translateY(-50%);opacity:0.22;pointer-events:none;z-index:0}
+    .reactor .ring-slow{transform-origin:200px 200px;animation:spin 120s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .header-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+    .kicker{color:var(--gold);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:2px;text-transform:uppercase}
+    h1{margin-top:10px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:clamp(40px,8vw,78px);line-height:1;font-weight:700;letter-spacing:1px;color:#efe9e1}
+    .subtitle{margin-top:18px;max-width:620px;color:var(--muted);font-size:15px}
+    .student{display:inline-block;margin-top:26px;padding:12px 18px 12px 16px;border-style:solid;border-width:0 0 0 3px;border-image:linear-gradient(var(--crimson),var(--blue)) 1;background:linear-gradient(90deg,rgba(156,43,43,0.18),transparent)}
+    .student-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.5px;color:#f0e6d6;line-height:1.2}
+    .student-id{margin-top:2px;font-size:13px;color:var(--muted)}
+    .student-id strong{color:var(--gold);font-weight:500;letter-spacing:1px}
+    .topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;list-style:none}
+    .topics li{border:1px solid var(--line);border-left:2px solid var(--crimson);padding:5px 12px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:0.5px;color:#c7c0b8;background:rgba(255,255,255,0.02)}
+    .topics li:nth-child(even){border-left-color:var(--blue)}
+    main{max-width:1000px;margin:0 auto;padding:44px 24px 64px}
+    .section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .section-heading h2{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:0.5px}
+    .section-heading p{color:var(--muted);font-size:13px}
+    .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:20px;color:#c7c0b8;font-size:0.94rem}
+    code{background:#241c1e;color:#e6e1db;padding:1px 5px;border-radius:3px;font-size:0.88em}
+    .exercise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;align-items:stretch}
+    .exercise-card{position:relative;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--crimson);padding:18px 20px 18px}
+    .exercise-card:nth-child(even){border-left-color:var(--blue)}
+    .exercise-card::after{content:"";position:absolute;right:-1px;bottom:-1px;width:14px;height:14px;border-right:2px solid var(--gold-soft);border-bottom:2px solid var(--gold-soft);pointer-events:none;transition:border-color 0.2s}
+    .exercise-card:nth-child(even)::after{border-color:var(--blue)}
+    .exercise-card:hover::after{border-color:var(--gold)}
+    .exercise-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .exercise-tag{display:inline-flex;align-items:center;justify-content:center;min-width:38px;padding:3px 8px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em}
+    .exercise-card:nth-child(even) .exercise-tag{background:var(--blue-deep);border-color:var(--blue)}
+    .exercise-head h3{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:18px;line-height:1.2;letter-spacing:0.3px;color:#f0e6d6}
+    .exercise-desc{color:#a8a29b;font-size:0.88rem}
+    .demo{margin:14px 0 4px;padding:14px;background:#121011;border:1px solid #2a2426;border-radius:4px;display:grid;gap:10px;align-content:start}
+    .demo-fallback{color:#a8a29b;font-size:0.85rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 16px;background:#241c1e;border:1px solid var(--line);color:var(--text);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px;cursor:pointer;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);transition:background 0.2s,border-color 0.2s,color 0.2s}
+    .btn:hover{border-color:var(--gold);color:var(--gold-light)}
+    .btn-primary{background:var(--crimson-deep);border-color:var(--crimson);color:#f2e4d6}
+    .btn-primary:hover{background:var(--crimson);border-color:var(--gold-soft);color:#fff}
+    .btn:disabled{opacity:0.45;cursor:not-allowed}
+    .btn:disabled:hover{border-color:var(--line);color:var(--text)}
+    .btn-text{background:none;border:0;padding:6px 2px;color:var(--gold);font-family:"Inter",Arial,Helvetica,sans-serif;font-size:13px;text-decoration:underline;cursor:pointer}
+    .btn-text:hover{color:var(--gold-light)}
+    .btn-text:disabled{opacity:0.45;cursor:not-allowed;text-decoration:none}
+    .btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+    .counter{display:grid;gap:12px;justify-items:start}
+    .counter-value{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:44px;font-weight:700;line-height:1;letter-spacing:1px;color:var(--gold-light)}
+    .field-stack{display:grid;gap:8px}
+    .field-label{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#c7c0b8}
+    .field-input,.field-area{width:100%;padding:9px 12px;background:#0f0d0f;border:1px solid var(--line);border-radius:3px;color:var(--text);font:0.9rem/1.5 "Inter",Arial,Helvetica,sans-serif}
+    .field-input::placeholder,.field-area::placeholder{color:#8f8a86;opacity:1}
+    .field-area{resize:vertical;min-height:96px}
+    .preview{color:#d8d2ca;font-size:0.92rem}
+    .preview strong{color:var(--gold-light);font-weight:600}
+    .task-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .task-form .field-input{flex:1 1 160px;min-width:140px}
+    .task-list{list-style:none;display:grid;gap:6px}
+    .task-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:var(--panel-hi);border:1px solid #2a2426}
+    .task-item span{color:#d8d2ca;font-size:0.88rem}
+    .remove-btn{background:none;border:0;padding:2px 0;color:var(--gold);font-size:0.78rem;text-decoration:underline;cursor:pointer}
+    .remove-btn:hover{color:var(--gold-light)}
+    .empty{color:#a8a29b;font-size:0.85rem}
+    .details-panel{padding:11px 13px;border-left:2px solid var(--gold-soft);background:var(--panel-hi);color:#d8d2ca;font-size:0.88rem}
+    .chip-row{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:6px 13px;background:#241c1e;border:1px solid var(--line);border-radius:999px;color:var(--text);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,border-color 0.2s,color 0.2s}
+    .chip:hover{border-color:var(--gold);color:var(--gold-light)}
+    .chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17120a}
+    .check-list{list-style:none;display:grid;gap:6px}
+    .check-list label{display:flex;align-items:center;gap:10px;color:#d8d2ca;font-size:0.9rem;cursor:pointer}
+    .check-list input{width:16px;height:16px;accent-color:#b8924f;cursor:pointer}
+    .task-done{text-decoration:line-through;color:#8f8a86}
+    .form-message{padding:8px 10px;border-left:2px solid var(--gold);background:rgba(184,146,79,0.08);color:#d8d2ca;font-size:0.86rem}
+    .note-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+    .note-status{color:#a8a29b;font-size:0.82rem}
+    .code-disclosure{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line)}
+    .code-disclosure summary{cursor:pointer;color:var(--gold);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+    .code-disclosure summary:hover{color:var(--gold-light)}
+    pre{margin:10px 0 0;padding:14px 16px;background:#09080a;border:1px solid var(--line);color:#ddd6cc;border-radius:4px;overflow-x:auto;font:0.76rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}
+    pre code{background:none;color:inherit;padding:0;font-size:inherit}
+    .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+    footer{text-align:center;padding:28px 20px;border-top:1px solid var(--line);background:rgba(10,9,10,0.7)}
+    footer p{color:var(--muted);font-size:13px}
+    @media (max-width:600px){
+      body > header{padding:18px 18px 40px}
+      .header-top{margin-bottom:28px;flex-direction:column;align-items:flex-start;gap:4px}
+      .web{width:200px;height:200px} .reactor{width:280px;height:280px;right:-90px;opacity:0.16}
+      main{padding:28px 14px 40px} .section-heading{flex-direction:column;align-items:flex-start;gap:2px}
+      .exercise-grid{grid-template-columns:1fr}
+      .exercise-card{padding:16px 14px}
+      pre{font-size:0.72rem;padding:12px}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reactor .ring-slow{animation:none}*,*::before,*::after{transition:none !important}}
+
+    /* Week 12 — interactive shopping cart */
+    .shop{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:36px}
+    .catalog{display:grid;gap:14px;min-width:0}
+    .catalog-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+    .eyebrow{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold)}
+    .catalog-head h3{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:24px;font-weight:700;line-height:1.15;letter-spacing:0.4px;color:#f0e6d6;margin-top:4px}
+    .catalog-count{font-size:12px;color:#a8a29b;white-space:nowrap}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .product-card{display:flex;flex-direction:column;min-width:0;background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--crimson)}
+    .product-card:nth-child(even){border-top-color:var(--blue)}
+    .product-media{aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 45%,#1e1b1d,#121011 70%);border-bottom:1px solid var(--line)}
+    .product-media img{width:100%;height:100%;object-fit:contain;padding:8px}
+    .product-body{display:grid;gap:2px;padding:12px 14px 14px}
+    .product-cat{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#a8a29b}
+    .product-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:18px;font-weight:700;line-height:1.2;color:#f0e6d6}
+    .product-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+    .product-price{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:0.3px;color:var(--gold-light)}
+    .btn-sm{min-height:32px;padding:0 12px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase}
+    .cart{position:sticky;top:16px;min-width:0;padding:16px 16px 18px;background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--gold-soft)}
+    .cart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .cart-head h3{display:flex;align-items:center;gap:8px;margin-top:4px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:24px;font-weight:700;line-height:1.1;color:#f0e6d6}
+    .cart-count{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:24px;padding:0 7px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-size:14px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
+    .cart-empty{display:grid;justify-items:center;gap:2px;padding:26px 10px;text-align:center;color:#a8a29b}
+    .cart-empty-mark{font-size:26px;line-height:1;color:var(--gold-soft)}
+    .cart-empty p{font-size:0.92rem;color:#c7c0b8}
+    .cart-empty small{font-size:0.78rem;color:#a8a29b}
+    .cart-items{list-style:none;display:grid;gap:8px;margin:12px 0}
+    .cart-item{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px;background:var(--panel-hi);border:1px solid #2a2426}
+    .cart-thumb{width:44px;height:44px;object-fit:contain;padding:3px;background:#121011;border:1px solid var(--line)}
+    .cart-item-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:#ece5db}
+    .cart-item-price{font-size:0.78rem;color:#a8a29b}
+    .qty{display:inline-flex;align-items:center;gap:6px;margin-top:4px}
+    .qty-btn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;background:#241c1e;border:1px solid var(--line);color:var(--text);font-size:15px;line-height:1;cursor:pointer;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+    .qty-btn:hover{border-color:var(--gold);color:var(--gold-light)}
+    .qty-btn:disabled{opacity:0.4;cursor:not-allowed}
+    .qty output{min-width:18px;text-align:center;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:14px;font-weight:700;color:var(--gold-light)}
+    .cart-remove{padding:2px 4px;background:none;border:0;color:var(--gold);font-size:20px;line-height:1;cursor:pointer}
+    .cart-remove:hover{color:var(--gold-light)}
+    .cart-summary{display:grid;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+    .subtotal-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;letter-spacing:0.4px;text-transform:uppercase;color:#c7c0b8}
+    .subtotal-row strong{font-size:22px;letter-spacing:0.5px;color:var(--gold-light)}
+    .cart-hint{font-size:0.78rem;color:#a8a29b}
+    .checkout{width:100%}
+    .order-note{margin-top:12px;padding:9px 11px;background:rgba(184,146,79,0.08);border-left:2px solid var(--gold);color:#d8d2ca;font-size:0.84rem}
+    .section-heading-spaced{margin-top:36px}
+    @media (max-width:900px){
+      .shop{grid-template-columns:1fr}
+      .cart{position:static}
+    }
+    @media (max-width:600px){
+      .product-grid{grid-template-columns:1fr 1fr}
+      .product-name{font-size:16px}
+      .product-body{padding:10px}
+      .catalog-head h3{font-size:21px}
+      .cart-head h3{font-size:21px}
+    }
+    @media (max-width:380px){
+      .product-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header>
+    <svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+      <path d="M0 0L300 0M0 0L290 78M0 0L260 150M0 0L212 212M0 0L150 260M0 0L78 290M0 0L0 300M55 0 Q47 6 53 14M53 14 Q44 18 48 27M48 27 Q38 29 39 39M39 39 Q29 38 28 48M28 48 Q18 44 14 53M14 53 Q6 47 0 55M110 0 Q94 12 106 28M106 28 Q87 36 95 55M95 55 Q75 58 78 78M78 78 Q58 75 55 95M55 95 Q36 87 28 106M28 106 Q12 94 0 110M165 0 Q141 19 159 43M159 43 Q131 54 143 82M143 82 Q113 86 117 117M117 117 Q86 113 83 143M83 143 Q54 131 43 159M43 159 Q19 141 0 165M220 0 Q188 25 213 57M213 57 Q175 72 191 110M191 110 Q150 115 156 156M156 156 Q115 150 110 191M110 191 Q72 175 57 213M57 213 Q25 188 0 220M275 0 Q234 31 266 71M266 71 Q218 91 238 137M238 137 Q188 144 194 194M194 194 Q144 188 138 238M138 238 Q91 218 71 266M71 266 Q31 234 0 275" fill="none" stroke="var(--web)" stroke-width="1.2"/>
+    </svg>
+    <svg class="reactor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="var(--reactor)" stroke-width="2">
+        <circle cx="200" cy="200" r="190" stroke-width="1"/>
+        <circle cx="200" cy="200" r="150"/>
+        <circle cx="200" cy="200" r="70"/>
+        <circle cx="200" cy="200" r="30" stroke-width="3"/>
+        <g class="ring-slow" stroke-width="14" stroke-dasharray="38 22"><circle cx="200" cy="200" r="110"/></g>
+        <g stroke-width="1">
+          <line x1="200" y1="10" x2="200" y2="50"/><line x1="200" y1="350" x2="200" y2="390"/>
+          <line x1="10" y1="200" x2="50" y2="200"/><line x1="350" y1="200" x2="390" y2="200"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="header-top">
+      <strong>Olimjonov Ziyodulloh</strong>
+      <span>Week 12 · <a href="../index.html">Course archive</a></span>
+    </div>
+
+    <div class="header-content">
+      <p class="kicker">Web Programming · K0126002</p>
+      <h1>Week 12 Tasks</h1>
+      <p class="subtitle">
+        One shopping cart, built in five parts: a six-product catalogue, cart
+        state, totals derived from that state, quantity controls and a composite
+        component that owns it all. The cart on this page is live.
+      </p>
+
+      <div class="student">
+        <p class="student-name">Olimjonov Ziyodulloh</p>
+        <p class="student-id">Student ID <strong>202537557</strong></p>
+      </div>
+
+      <ul class="topics">
+        <li>useState</li>
+        <li>Array state</li>
+        <li>Derived totals</li>
+        <li>Events</li>
+        <li>Component composition</li>
+        <li>Accessibility</li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="section-heading">
+      <h2>Live shopping cart</h2>
+      <p>React state &amp; derived totals</p>
+    </div>
+
+    <p class="note">
+      Six products, one cart array. Quantities and the subtotal are calculated
+      from that array, so the numbers always match the items in the cart.
+    </p>
+
+    <div id="shop-root" data-demo="shop">
+      <noscript><p class="demo-fallback">This shop needs JavaScript. The component code is under the five tasks below.</p></noscript>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Five tasks</h2>
+      <p>How the cart is built</p>
+    </div>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="task-01">
+        <header class="exercise-head">
+          <span class="exercise-tag">01</span>
+          <h3>Product catalogue</h3>
+        </header>
+        <p class="exercise-desc">Six products live in one array — name, price, category and an image for each. ProductCard renders one item; ProductList maps the array and keys every card by id.</p>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const products = [
+  { id: 1, name: 'Field Tote', price: 26, category: 'Accessories', image: toteIcon },
+  { id: 2, name: 'Studio Headphones', price: 89, category: 'Audio', image: headphonesIcon },
+  // four more products...
+];
+
+function ProductList({ products, onAdd }) {
+  return (
+    &lt;div className="product-grid"&gt;
+      {products.map((product) =&gt; (
+        &lt;ProductCard key={product.id} product={product} onAdd={onAdd} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="task-02">
+        <header class="exercise-head">
+          <span class="exercise-tag">02</span>
+          <h3>Cart state — add and remove</h3>
+        </header>
+        <p class="exercise-desc">The cart is a single array in useState, starting empty. Adding a product already in the cart copies it with a higher quantity; removing filters it out by id.</p>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [cart, setCart] = useState([]);
+
+function addToCart(product) {
+  setCart((current) =&gt; {
+    const existing = current.find((item) =&gt; item.id === product.id);
+
+    if (existing) {
+      return current.map((item) =&gt;
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    }
+
+    return [...current, { ...product, quantity: 1 }];
+  });
+}
+
+function removeFromCart(id) {
+  setCart((current) =&gt; current.filter((item) =&gt; item.id !== id));
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="task-03">
+        <header class="exercise-head">
+          <span class="exercise-tag">03</span>
+          <h3>Cart sidebar — derived totals</h3>
+        </header>
+        <p class="exercise-desc">The item count and subtotal are calculated from the cart on every render. Nothing extra is stored, so the totals cannot fall out of sync with the items.</p>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>function CartSidebar({ items, onQuantity, onRemove, onClear, onCheckout }) {
+  const count = useMemo(
+    () =&gt; items.reduce((sum, item) =&gt; sum + item.quantity, 0),
+    [items]
+  );
+
+  const subtotal = useMemo(
+    () =&gt; items.reduce((sum, item) =&gt; sum + item.price * item.quantity, 0),
+    [items]
+  );
+
+  return (
+    &lt;aside className="cart"&gt;
+      &lt;h3&gt;Cart &lt;span aria-live="polite"&gt;{count}&lt;/span&gt;&lt;/h3&gt;
+      &lt;p&gt;Subtotal &lt;strong&gt;{formatPrice(subtotal)}&lt;/strong&gt;&lt;/p&gt;
+    &lt;/aside&gt;
+  );
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="task-04">
+        <header class="exercise-head">
+          <span class="exercise-tag">04</span>
+          <h3>Quantity controls</h3>
+        </header>
+        <p class="exercise-desc">Every cart row has − and + buttons. Stepping below one removes the item, and the plus button stops at nine per product so the cap is visible before it is hit.</p>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const MAX_QTY = 9;
+
+function changeQuantity(id, amount) {
+  setCart((current) =&gt;
+    current
+      .map((item) =&gt;
+        item.id === id
+          ? { ...item, quantity: Math.min(item.quantity + amount, MAX_QTY) }
+          : item
+      )
+      .filter((item) =&gt; item.quantity &gt; 0)
+  );
+}
+
+&lt;button
+  onClick={() =&gt; changeQuantity(item.id, -1)}
+  aria-label={`Decrease ${item.name} quantity`}
+&gt;
+  −
+&lt;/button&gt;
+&lt;output aria-live="polite"&gt;{item.quantity}&lt;/output&gt;
+&lt;button
+  disabled={item.quantity &gt;= MAX_QTY}
+  onClick={() =&gt; changeQuantity(item.id, 1)}
+  aria-label={`Increase ${item.name} quantity`}
+&gt;
+  +
+&lt;/button&gt;</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="task-05">
+        <header class="exercise-head">
+          <span class="exercise-tag">05</span>
+          <h3>ShoppingCart composite</h3>
+        </header>
+        <p class="exercise-desc">ShoppingCart owns the cart state and passes values and callbacks down. The catalogue and the sidebar stay presentational, so there is only one source of truth.</p>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>function ShoppingCart() {
+  const [cart, setCart] = useState([]);
+  const [lastOrder, setLastOrder] = useState(null);
+
+  return (
+    &lt;div className="shop"&gt;
+      &lt;ProductList products={products} onAdd={addToCart} /&gt;
+      &lt;CartSidebar
+        items={cart}
+        lastOrder={lastOrder}
+        onQuantity={changeQuantity}
+        onRemove={removeFromCart}
+        onClear={clearCart}
+        onCheckout={checkout}
+      /&gt;
+    &lt;/div&gt;
+  );
+}
+
+createRoot(document.getElementById('shop-root')).render(&lt;ShoppingCart /&gt;);</code></pre>
+        </details>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Olimjonov Ziyodulloh · Student ID 202537557 · Web Programming course</p>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script defer src="app.js"></script>
+</body>
+</html>
