@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Olimjonov Ziyodulloh — web programming student at Gachon University. Portfolio of accessible, responsive web projects.">
+  <meta name="theme-color" content="#0e0d0f">
+  <title>Olimjonov Ziyodulloh | Developer Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap"></noscript>
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("portfolio-theme");
+        document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+      } catch (error) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#home">OZ<span>.</span></a>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#about">ABOUT</a>
+        <a href="#skills">TOOLKIT</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#contact">CONTACT</a>
+        <a class="nav-cta" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+      </div>
+
+      <div class="nav-right">
+        <div class="theme-toggle-root" id="theme-toggle-root"></div>
+        <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div class="hero-info">
+          <p class="eyebrow">Web Programming Student · Gachon University</p>
+          <h1>Olimjonov <span class="highlight">Ziyodulloh.</span></h1>
+          <p class="hero-copy">
+            I'm a Web Programming student at Gachon University. Over the last
+            few months I went from plain HTML pages to React components, REST
+            APIs and Lighthouse audits. This site is the running record of
+            that: every project links to its live demo and its source.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
+            <a class="btn btn-secondary" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GitHub profile <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-meta">
+            <span><i class="dot" aria-hidden="true"></i> Currently: React effects &amp; useEffect (Week 12.2)</span>
+            <span>Student ID 202537557</span>
+            <span>Gachon University, South Korea</span>
+          </div>
+        </div>
+
+        <div class="portrait-shell">
+          <div class="portrait-frame">
+            <img src="assets/profile.jpg" alt="Portrait of Olimjonov Ziyodulloh" width="800" height="1000">
+          </div>
+          <div class="portrait-note">WEEK 01 → WEEK 12.2</div>
+          <div class="portrait-index">PORTFOLIO / 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="currently">
+      <div class="wrap currently-inner">
+        <span class="currently-label">Currently</span>
+        <span>React effects &amp; the useEffect hook</span>
+        <span class="currently-sep" aria-hidden="true">·</span>
+        <span>Refining the MEBEL group project</span>
+        <span class="currently-sep" aria-hidden="true">·</span>
+        <span>Reading up on testing libraries</span>
+      </div>
+    </div>
+
+    <section class="content-section" id="about">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">01 / About</p>
+            <h2 class="section-title">How I got<br>here.</h2>
+          </div>
+          <p class="section-desc">
+            Not a summary of skills. The actual path from a blank HTML file to
+            a React storefront, with the parts that went wrong along the way.
+          </p>
+        </div>
+
+        <div class="about-grid reveal">
+          <div class="about-text">
+            <p>
+              I started the Web Programming course knowing only basic HTML. By
+              Week 3 I was writing semantic markup by hand; by Week 6 I was
+              calling live APIs from the browser and handling loading and error
+              states myself.
+            </p>
+            <p>
+              The part that changed how I think about code was the
+              <strong>accessibility audit</strong>: I had to take a deliberately
+              broken page, find every WCAG failure by keyboard and with a
+              screen reader, fix them, and re-measure until Accessibility, Best
+              Practices and SEO all reached 100. After that I stopped treating
+              accessibility as a final check.
+            </p>
+            <p>
+              The <strong>performance task</strong> was similar — measure first,
+              change one thing, measure again. Deferring scripts and shrinking
+              images did more than I expected. I still use that habit on every
+              page I ship.
+            </p>
+            <p>
+              These days I'm most interested in <strong>React</strong> (props,
+              hooks, effects) and in pages that stay fast and usable on a phone.
+              The group project, MEBEL, is where I'm applying all of it at once.
+            </p>
+          </div>
+
+          <div class="facts">
+            <div class="fact">
+              <small>Education</small>
+              <strong>Web Programming</strong>
+            </div>
+            <div class="fact">
+              <small>University</small>
+              <strong>Gachon University</strong>
+            </div>
+            <div class="fact">
+              <small>Main focus</small>
+              <strong>Front-end &amp; Accessibility</strong>
+            </div>
+            <div class="fact">
+              <small>Student ID</small>
+              <strong>202537557</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="skills">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">02 / Toolkit</p>
+            <h2 class="section-title">Technologies &amp;<br>tools.</h2>
+          </div>
+          <p class="section-desc">
+            A growing toolkit from the course: from document structure to
+            client-side APIs, accessibility and deployment.
+          </p>
+        </div>
+
+        <div class="skills-grid reveal">
+          <article class="skill">
+            <span class="num">01 / MARKUP</span>
+            <h3>Semantic HTML</h3>
+            <p>Landmarks, forms, metadata</p>
+          </article>
+          <article class="skill">
+            <span class="num">02 / STYLING</span>
+            <h3>Responsive CSS</h3>
+            <p>Grid, flexbox, variables</p>
+          </article>
+          <article class="skill">
+            <span class="num">03 / SCRIPTING</span>
+            <h3>JavaScript</h3>
+            <p>DOM, events, validation</p>
+          </article>
+          <article class="skill">
+            <span class="num">04 / DATA</span>
+            <h3>REST APIs</h3>
+            <p>Fetch, JSON, error states</p>
+          </article>
+          <article class="skill">
+            <span class="num">05 / QUALITY</span>
+            <h3>Accessibility</h3>
+            <p>WCAG, ARIA, focus order</p>
+          </article>
+          <article class="skill">
+            <span class="num">06 / SPEED</span>
+            <h3>Performance</h3>
+            <p>Lighthouse, image weight</p>
+          </article>
+          <article class="skill">
+            <span class="num">07 / VERSIONING</span>
+            <h3>Git</h3>
+            <p>Branches, commits, merges</p>
+          </article>
+          <article class="skill">
+            <span class="num">08 / DEPLOYMENT</span>
+            <h3>GitHub Pages</h3>
+            <p>Static hosting, custom 404</p>
+          </article>
+          <article class="skill">
+            <span class="num">09 / UI</span>
+            <h3>React</h3>
+            <p>Components, props, hooks</p>
+          </article>
+          <article class="skill">
+            <span class="num">10 / BUILD</span>
+            <h3>Vite</h3>
+            <p>Dev server, production build</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="timeline">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">03 / Timeline</p>
+            <h2 class="section-title">Week by<br>week.</h2>
+          </div>
+          <p class="section-desc">
+            The course ran twelve weeks. Each row is a real deliverable that is
+            still live on GitHub Pages.
+          </p>
+        </div>
+
+        <ol class="timeline reveal">
+          <li class="timeline-item">
+            <span class="timeline-week">W01–02</span>
+            <div class="timeline-body">
+              <h3>HTML structure &amp; semantics</h3>
+              <p>Headings, lists, figures, forms and ARIA basics. The first pages I ever shipped.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-week">W03–04</span>
+            <div class="timeline-body">
+              <h3>CSS layout</h3>
+              <p>Flexbox, grid, responsive breakpoints and the Iron Man / Spider-Man theme I still reuse.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-week">W05–06</span>
+            <div class="timeline-body">
+              <h3>JavaScript &amp; the DOM</h3>
+              <p>Events, validation, and the first API calls. Book Search came out of this block.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-week">W09</span>
+            <div class="timeline-body">
+              <h3>Accessibility &amp; performance audits</h3>
+              <p>WCAG fixes, focus styles, Lighthouse scores to 100. The week that changed my habits.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-week">W10–11</span>
+            <div class="timeline-body">
+              <h3>React &amp; components</h3>
+              <p>Props, lists with keys, hooks, localStorage. Student Directory, Portfolio Gallery and React Lab.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-week">W12</span>
+            <div class="timeline-body">
+              <h3>State &amp; effects</h3>
+              <p>useState, derived values, useEffect with cleanup and AbortController. Shopping cart and the group project.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="content-section" id="projects">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">04 / Selected work</p>
+            <h2 class="section-title">Projects &amp;<br>experiments.</h2>
+          </div>
+          <p class="section-desc">
+            The first card is the group project, MEBEL, which I led the
+            catalogue and cart for. The rest are course deliverables, all
+            live on GitHub Pages with public source. The grid is a React
+            component: search, filters and the details dialog run on state,
+            and the chosen filter is saved in localStorage.
+          </p>
+        </div>
+
+        <div class="projects reveal" id="projects-root">
+          <noscript>
+            <p class="projects-fallback">
+              The interactive project grid needs JavaScript. Direct links:
+              <a href="https://olimjonovziyodulloh-coder.github.io/webpro-book-search/">Book Search</a>,
+              <a href="https://olimjonovziyodulloh-coder.github.io/task11/">Student Directory</a>,
+              <a href="https://olimjonovziyodulloh-coder.github.io/portfolio-gallery/">Portfolio Gallery</a>,
+              <a href="https://olimjonovziyodulloh-coder.github.io/react-lab/">React Lab</a>,
+              <a href="../index.html">Course archive</a>,
+              <a href="../group-project/">MEBEL group project</a>.
+            </p>
+          </noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="learning">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">05 / Lessons</p>
+            <h2 class="section-title">Things I got<br>wrong first.</h2>
+          </div>
+          <p class="section-desc">
+            Not a skill list. The mistakes that cost me an afternoon, and what
+            I do differently now.
+          </p>
+        </div>
+
+        <div class="learning-box reveal">
+          <div>
+            <p class="section-kicker">Current focus</p>
+            <h3>React effects, done carefully.</h3>
+            <p>
+              useEffect looks simple and isn't. I'm spending extra time on
+              dependency arrays, cleanup functions and AbortController so I
+              stop leaking timers and stale requests.
+            </p>
+          </div>
+          <div class="learning-list">
+            <div class="learning-item">A missing form label breaks the whole form for a screen-reader user — not a polish issue.</div>
+            <div class="learning-item">Measure before optimizing. The accessibility and performance audits both started with Lighthouse, not guesses.</div>
+            <div class="learning-item">Derived values belong in the render. Storing them in state just creates a second source of truth.</div>
+            <div class="learning-item">Effects need cleanup. An interval without clearInterval keeps running after unmount.</div>
+            <div class="learning-item">Ship early, fix live. GitHub Pages makes a broken link visible to everyone, which is motivating.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="contact">
+      <div class="wrap">
+        <div class="contact-panel reveal">
+          <div>
+            <p class="section-kicker">06 / Get in touch</p>
+            <h2>Have an idea or an opportunity?</h2>
+            <p>
+              I'm a student, so I'm not taking paid work yet — but I'm happy
+              to talk about the course, a project, or a study group. GitHub is
+              the fastest way to reach me.
+            </p>
+          </div>
+          <a class="contact-btn" href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">Find me on GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Olimjonov Ziyodulloh</span>
+      <div class="footer-links">
+        <a href="https://github.com/olimjonovziyodulloh-coder" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+        <a href="../index.html">ARCHIVE ↗</a>
+        <a href="../week10/task1.html">WEEK 10 TASKS ↗</a>
+        <a href="https://olimjonovziyodulloh-coder.github.io/react-lab/">REACT LAB ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var menu = document.getElementById("menu-btn");
+      var links = document.getElementById("nav-links");
+
+      menu.addEventListener("click", function () {
+        var open = links.classList.toggle("open");
+        menu.setAttribute("aria-expanded", String(open));
+      });
+
+      links.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          links.classList.remove("open");
+          menu.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          links.classList.remove("open");
+          menu.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll(".reveal").forEach(function (element) {
+          observer.observe(element);
+        });
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (element) {
+          element.classList.add("visible");
+        });
+      }
+    })();
+  </script>
+
+  <!-- React 18 (UMD) powers the project grid and the theme switch. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script defer src="app.js"></script>
+</body>
+</html>
