@@ -221,6 +221,20 @@
     .quiz-bad{color:#ecd9c6;font-weight:600;font-size:0.88rem}
     .quiz-reason{color:#d8d2ca;font-size:0.84rem;margin-top:4px}
     .quiz-hint{color:#a8a29b;font-size:0.8rem}
+
+    /* Week 12 — study-guide practice */
+    .toggle-demo{display:grid;gap:10px;justify-items:start}
+    .scoreboard{display:grid;gap:12px}
+    .scoreboard-players{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+    .player-score{display:grid;gap:6px;justify-items:start;padding:10px 12px;background:var(--panel-hi);border:1px solid #2a2426}
+    .player-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#c7c0b8}
+    .player-score .counter-value{font-size:30px}
+    .score-total{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;letter-spacing:0.5px;text-transform:uppercase;color:#c7c0b8}
+    .score-total strong{font-size:20px;color:var(--gold-light)}
+    .word-count{display:grid;gap:8px}
+    @media (max-width:600px){
+      .scoreboard-players{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -498,6 +512,105 @@ function undo() {
     return { count: history[history.length - 1], history };
   });
 }</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Practice exercises</h2>
+      <p>Study guide</p>
+    </div>
+
+    <p class="note">
+      Four more exercises from the study guide and the lecture's practice
+      slide. Each one runs on this page.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="practice-01">
+        <header class="exercise-head">
+          <span class="exercise-tag">E1</span>
+          <h3>Show &amp; hide details</h3>
+        </header>
+        <p class="exercise-desc">A boolean state variable switches a paragraph on and off. The button's label and <code>aria-expanded</code> both follow the same flag.</p>
+        <div class="demo" data-demo="toggle-detail">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [isVisible, setIsVisible] = useState(false);
+
+&lt;button onClick={() =&gt; setIsVisible((prev) =&gt; !prev)}&gt;
+  {isVisible ? 'Hide details' : 'Show details'}
+&lt;/button&gt;
+{isVisible &amp;&amp; &lt;p&gt;React state enables dynamic UIs.&lt;/p&gt;}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="practice-02">
+        <header class="exercise-head">
+          <span class="exercise-tag">E2</span>
+          <h3>Add &amp; remove tasks</h3>
+        </header>
+        <p class="exercise-desc">The input adds an object to an array in state; each row's ✕ button removes it with <code>filter</code>. Nothing is mutated in place.</p>
+        <div class="demo" data-demo="task-list">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [tasks, setTasks] = useState([]);
+
+setTasks((prev) =&gt; [...prev, { id: Date.now(), text }]);
+setTasks((prev) =&gt; prev.filter((t) =&gt; t.id !== id));</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="practice-03">
+        <header class="exercise-head">
+          <span class="exercise-tag">E3</span>
+          <h3>Lift state to a scoreboard</h3>
+        </header>
+        <p class="exercise-desc">The parent <code>ScoreBoard</code> owns both scores and passes values and callbacks to two <code>PlayerScore</code> children. The total is derived from the two state values.</p>
+        <div class="demo" data-demo="score-board">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>function ScoreBoard() {
+  const [p1, setP1] = useState(0);
+  const [p2, setP2] = useState(0);
+
+  return (
+    &lt;&gt;
+      &lt;PlayerScore name="Player 1" score={p1}
+        onIncrement={() =&gt; setP1((p) =&gt; p + 1)}
+        onDecrement={() =&gt; setP1((p) =&gt; p - 1)} /&gt;
+      &lt;PlayerScore name="Player 2" score={p2}
+        onIncrement={() =&gt; setP2((p) =&gt; p + 1)}
+        onDecrement={() =&gt; setP2((p) =&gt; p - 1)} /&gt;
+      &lt;h2&gt;Total: {p1 + p2}&lt;/h2&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="practice-04">
+        <header class="exercise-head">
+          <span class="exercise-tag">E4</span>
+          <h3>Live word count</h3>
+        </header>
+        <p class="exercise-desc">The lecture's practice slide: a textarea stores its text in state, and the word and character counts are computed from that text on every keystroke.</p>
+        <div class="demo" data-demo="word-count">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const [text, setText] = useState('');
+const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+&lt;textarea value={text} onChange={(e) =&gt; setText(e.target.value)} /&gt;
+&lt;p&gt;{words} words · {text.length} characters&lt;/p&gt;</code></pre>
         </details>
       </article>
     </div>

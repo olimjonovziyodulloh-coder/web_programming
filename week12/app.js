@@ -997,6 +997,273 @@
   }
 
   /* ---------------------------------------------------------------------- */
+  /* Study-guide practice exercises                                        */
+  /* ---------------------------------------------------------------------- */
+
+  /* E1 — toggle visibility with boolean state */
+  function ToggleDetail() {
+    var visibleState = useState(false);
+    var isVisible = visibleState[0];
+    var setIsVisible = visibleState[1];
+
+    return h(
+      "div",
+      { className: "toggle-demo" },
+      h(
+        "button",
+        {
+          type: "button",
+          className: "btn btn-primary",
+          "aria-expanded": isVisible,
+          "aria-controls": "toggle-detail-panel",
+          onClick: function () {
+            setIsVisible(function (prev) {
+              return !prev;
+            });
+          }
+        },
+        isVisible ? "Hide details" : "Show details"
+      ),
+      isVisible
+        ? h(
+            "p",
+            { className: "details-panel", id: "toggle-detail-panel" },
+            "React state enables dynamic UIs without page reloads."
+          )
+        : null
+    );
+  }
+
+  /* E2 — add and remove tasks from an array */
+  function TaskList() {
+    var tasksState = useState([]);
+    var tasks = tasksState[0];
+    var setTasks = tasksState[1];
+
+    var inputState = useState("");
+    var input = inputState[0];
+    var setInput = inputState[1];
+
+    function addTask(event) {
+      event.preventDefault();
+      var text = input.trim();
+      if (!text) {
+        return;
+      }
+      setTasks(function (prev) {
+        return prev.concat({ id: Date.now(), text: text });
+      });
+      setInput("");
+    }
+
+    function removeTask(id) {
+      setTasks(function (prev) {
+        return prev.filter(function (task) {
+          return task.id !== id;
+        });
+      });
+    }
+
+    return h(
+      "div",
+      null,
+      h(
+        "form",
+        { className: "task-form", onSubmit: addTask },
+        h(
+          "label",
+          { className: "visually-hidden", htmlFor: "practice-task-input" },
+          "New task"
+        ),
+        h("input", {
+          className: "field-input",
+          id: "practice-task-input",
+          type: "text",
+          placeholder: "New task",
+          value: input,
+          onChange: function (event) {
+            setInput(event.target.value);
+          }
+        }),
+        h(
+          "button",
+          {
+            className: "btn btn-primary",
+            type: "submit",
+            disabled: !input.trim()
+          },
+          "Add"
+        )
+      ),
+      tasks.length === 0
+        ? h("p", { className: "empty" }, "No tasks yet. Add one above.")
+        : h(
+            "ul",
+            { className: "task-list" },
+            tasks.map(function (task) {
+              return h(
+                "li",
+                { key: task.id, className: "task-item" },
+                h("span", null, task.text),
+                h(
+                  "button",
+                  {
+                    type: "button",
+                    className: "remove-btn",
+                    "aria-label": "Remove " + task.text,
+                    onClick: function () {
+                      removeTask(task.id);
+                    }
+                  },
+                  "\u2715"
+                )
+              );
+            })
+          )
+    );
+  }
+
+  /* E3 — lift state up to a parent score board */
+  function PlayerScore(props) {
+    return h(
+      "div",
+      { className: "player-score" },
+      h("h4", { className: "player-name" }, props.name),
+      h(
+        "output",
+        { className: "counter-value", "aria-live": "polite" },
+        props.score
+      ),
+      h(
+        "div",
+        { className: "btn-row" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn",
+            "aria-label": "Decrease " + props.name,
+            onClick: props.onDecrement
+          },
+          "\u2212"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: "btn btn-primary",
+            "aria-label": "Increase " + props.name,
+            onClick: props.onIncrement
+          },
+          "+"
+        )
+      )
+    );
+  }
+
+  function ScoreBoard() {
+    var firstState = useState(0);
+    var first = firstState[0];
+    var setFirst = firstState[1];
+
+    var secondState = useState(0);
+    var second = secondState[0];
+    var setSecond = secondState[1];
+
+    return h(
+      "div",
+      { className: "scoreboard" },
+      h(
+        "div",
+        { className: "scoreboard-players" },
+        h(PlayerScore, {
+          name: "Player 1",
+          score: first,
+          onIncrement: function () {
+            setFirst(function (prev) {
+              return prev + 1;
+            });
+          },
+          onDecrement: function () {
+            setFirst(function (prev) {
+              return prev - 1;
+            });
+          }
+        }),
+        h(PlayerScore, {
+          name: "Player 2",
+          score: second,
+          onIncrement: function () {
+            setSecond(function (prev) {
+              return prev + 1;
+            });
+          },
+          onDecrement: function () {
+            setSecond(function (prev) {
+              return prev - 1;
+            });
+          }
+        })
+      ),
+      h(
+        "p",
+        { className: "score-total", role: "status" },
+        "Total: ",
+        h("strong", null, first + second)
+      )
+    );
+  }
+
+  /* Practice — live word count from the lecture's next-session slide */
+  function WordCount() {
+    var textState = useState("");
+    var text = textState[0];
+    var setText = textState[1];
+
+    var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+    return h(
+      "div",
+      { className: "word-count" },
+      h(
+        "label",
+        { className: "field-label", htmlFor: "word-count-input" },
+        "Practice notes"
+      ),
+      h("textarea", {
+        className: "field-area",
+        id: "word-count-input",
+        rows: 4,
+        placeholder: "Type or paste your notes\u2026",
+        value: text,
+        onChange: function (event) {
+          setText(event.target.value);
+        }
+      }),
+      h(
+        "p",
+        { className: "result-count", role: "status" },
+        words,
+        words === 1 ? " word \u00b7 " : " words \u00b7 ",
+        text.length,
+        text.length === 1 ? " character" : " characters"
+      ),
+      h(
+        "button",
+        {
+          type: "button",
+          className: "btn btn-text",
+          disabled: !text,
+          onClick: function () {
+            setText("");
+          }
+        },
+        "Clear notes"
+      )
+    );
+  }
+
+  /* ---------------------------------------------------------------------- */
   /* Quizzes from the lecture (interactive demos)                          */
   /* ---------------------------------------------------------------------- */
 
@@ -1193,5 +1460,9 @@
   mount("search-page", SearchPage);
   mount("counter-history", CounterWithHistory);
   mount("shop", ShoppingCart);
+  mount("toggle-detail", ToggleDetail);
+  mount("task-list", TaskList);
+  mount("score-board", ScoreBoard);
+  mount("word-count", WordCount);
   mount("quizzes", QuizList);
 })();
