@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0e0d0f">
-  <meta name="description" content="Week 12.2: React effects and the useEffect hook — four live samples (mount, dependency, timer cleanup, localStorage) plus three exercises: syncing the tab title, an abortable GitHub fetch and a derived value.">
+  <meta name="description" content="Week 12.2: React effects and the useEffect hook — four live samples (mount, dependency, timer cleanup, localStorage) plus three exercises: syncing the tab title, an abortable Pokédex lookup and a calculated area.">
   <title>Week 12.2: React Effects &amp; useEffect</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,20 +144,24 @@
     .pref-line{font-size:0.9rem;color:#d8d2ca}
     .pref-demo--compact .pref-line{font-size:0.82rem}
     .pref-line strong{color:var(--gold-light);font-weight:600}
-    .profile{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:start}
-    .profile-avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold-soft);background:#121011;object-fit:cover}
-    .profile-body{display:grid;gap:2px;min-width:0}
-    .profile-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.15;color:#f0e6d6}
-    .profile-login{font-size:0.82rem;color:var(--gold)}
-    .profile-bio{font-size:0.84rem;color:#a8a29b;overflow-wrap:anywhere}
-    .profile-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;font-size:0.8rem;color:#c7c0b8}
-    .profile-stats strong{color:var(--gold-light);font-weight:600}
     .status-line{font-size:0.86rem;color:#d8d2ca;padding:9px 11px;border-left:2px solid var(--gold-soft);background:var(--panel-hi)}
     .status-line--error{border-left-color:var(--crimson);background:rgba(156,43,43,0.1);color:#ecd9c6}
-    .derived{display:grid;gap:12px}
-    .derived-out{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-hi);border:1px solid #2a2426}
-    .derived-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:26px;font-weight:700;line-height:1.1;letter-spacing:0.4px;color:var(--gold-light);overflow-wrap:anywhere}
-    .derived-badge{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;padding:0 8px;background:var(--blue-deep);border:1px solid var(--blue);color:#cfe0f7;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+    .poke{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start}
+    .poke-sprite{width:96px;height:96px;object-fit:contain;background:radial-gradient(circle at 50% 45%,#1e1b1d,#121011 70%);border:1px solid var(--line)}
+    .poke-body{display:grid;gap:4px;min-width:0}
+    .poke-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;line-height:1.15;color:#f0e6d6;text-transform:capitalize}
+    .poke-dex{font-size:0.78rem;color:#a8a29b;letter-spacing:0.04em}
+    .poke-types{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:2px 0}
+    .poke-type{padding:2px 9px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+    .poke-type:nth-child(even){background:var(--blue-deep);border-color:var(--blue);color:#cfe0f7}
+    .poke-stats{display:flex;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:#c7c0b8}
+    .poke-stats strong{color:var(--gold-light);font-weight:600}
+    .metrics{display:grid;gap:12px}
+    .metric-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .metric-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;padding:12px 14px;background:var(--panel-hi);border:1px solid #2a2426}
+    .metric{display:grid;gap:2px}
+    .metric-value{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:28px;font-weight:700;line-height:1;letter-spacing:0.5px;color:var(--gold-light)}
+    .metric-label{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#a8a29b}
     .takeaway-grid{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:8px}
     .takeaway{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--crimson)}
     .takeaway:nth-child(even){border-left-color:var(--blue)}
@@ -167,6 +171,9 @@
     @media (max-width:600px){
       .clock-time{font-size:34px}
       .effect-meter{gap:16px}
+      .poke{grid-template-columns:72px minmax(0,1fr)}
+      .poke-sprite{width:72px;height:72px}
+      .metric-inputs{grid-template-columns:1fr}
       .takeaway-grid{grid-template-columns:1fr}
     }
   </style>
@@ -203,8 +210,8 @@
       <p class="subtitle">
         Four <code>useEffect</code> samples and three exercises from Friday's
         lecture — one-time setup, watching a value, cleaning up a timer,
-        saving a preference, syncing the tab title, fetching a profile and
-        computing a value instead of storing it.
+        saving a preference, syncing the tab title, loading a Pokédex
+        entry and calculating an area instead of storing it.
       </p>
 
       <div class="student">
@@ -344,10 +351,10 @@
       <article class="exercise-card" id="exercise-02">
         <header class="exercise-head">
           <span class="exercise-tag">E2</span>
-          <h3>Load a GitHub profile safely</h3>
+          <h3>Look up a Pok&eacute;mon</h3>
         </header>
-        <p class="exercise-desc">The request lives inside the effect. Loading, error and cleanup are all handled, and a new search aborts the previous request with <code>AbortController</code>.</p>
-        <div class="demo" data-demo="github-profile">
+        <p class="exercise-desc">The request lives inside the effect. Waiting, failure and cleanup are all handled, and a new search aborts the request that is still in flight.</p>
+        <div class="demo" data-demo="pokemon-lookup">
           <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
         </div>
         <details class="code-disclosure">
@@ -355,29 +362,39 @@
           <pre><code>useEffect(() =&gt; {
   const controller = new AbortController();
   setStatus("loading");
-  fetch(url, { signal: controller.signal })
-    .then((res) =&gt; res.json())
-    .then(setProfile)
-    .catch((err) =&gt; { if (err.name !== "AbortError") setError(err); });
+  fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
+    signal: controller.signal
+  })
+    .then((res) =&gt; {
+      if (!res.ok) throw new Error("Not found");
+      return res.json();
+    })
+    .then(setPokemon)
+    .catch((err) =&gt; {
+      if (err.name !== "AbortError") setError(err);
+    });
   return () =&gt; controller.abort();
-}, [query]);</code></pre>
+}, [name]);</code></pre>
         </details>
       </article>
 
       <article class="exercise-card" id="exercise-03">
         <header class="exercise-head">
           <span class="exercise-tag">E3</span>
-          <h3>Compute it, don't store it</h3>
+          <h3>Calculate the area, don't store it</h3>
         </header>
-        <p class="exercise-desc">The display name and its initials come straight from the two inputs during rendering. No third state variable and no effect are needed.</p>
-        <div class="demo" data-demo="derived-name">
+        <p class="exercise-desc">Area, perimeter and the square check all come from the width and height during rendering. No extra state variable and no effect are needed.</p>
+        <div class="demo" data-demo="rectangle-metrics">
           <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
         </div>
         <details class="code-disclosure">
           <summary>View React code</summary>
-          <pre><code>const fullName = `${first} ${last}`.trim();
-const initials = (first[0] + last[0]).toUpperCase();
-// calculated on every render — nothing to keep in sync</code></pre>
+          <pre><code>const w = Number(width);
+const h = Number(height);
+
+const area = w * h;
+const perimeter = 2 * (w + h);
+// recalculated on every render — nothing to keep in sync</code></pre>
         </details>
       </article>
     </div>

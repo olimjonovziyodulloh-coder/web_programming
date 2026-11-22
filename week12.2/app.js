@@ -317,18 +317,18 @@
   /* ---------------------------------------------------------------------- */
   /* E2 — async fetch with loading, error and abort cleanup               */
   /* ---------------------------------------------------------------------- */
-  function GithubProfile() {
-    var inputState = useState("octocat");
+  function PokemonLookup() {
+    var inputState = useState("pikachu");
     var input = inputState[0];
     var setInput = inputState[1];
 
-    var queryState = useState("octocat");
+    var queryState = useState("pikachu");
     var query = queryState[0];
     var setQuery = queryState[1];
 
-    var profileState = useState(null);
-    var profile = profileState[0];
-    var setProfile = profileState[1];
+    var pokemonState = useState(null);
+    var pokemon = pokemonState[0];
+    var setPokemon = pokemonState[1];
 
     var statusState = useState("loading");
     var status = statusState[0];
@@ -341,7 +341,7 @@
     useEffect(
       function () {
         if (!query) {
-          setProfile(null);
+          setPokemon(null);
           setError("");
           setStatus("idle");
           return undefined;
@@ -353,16 +353,18 @@
         setStatus("loading");
         setError("");
 
-        fetch("https://api.github.com/users/" + encodeURIComponent(query), {
+        fetch("https://pokeapi.co/api/v2/pokemon/" + encodeURIComponent(query), {
           signal: controller.signal,
-          headers: { Accept: "application/vnd.github+json" }
+          headers: { Accept: "application/json" }
         })
           .then(function (response) {
             if (!response.ok) {
               if (response.status === 404) {
-                throw new Error("No GitHub account called @" + query + ".");
+                throw new Error('No Pok\u00e9mon is called "' + query + '".');
               }
-              throw new Error("GitHub answered with status " + response.status + ".");
+              throw new Error(
+                "The Pok\u00e9dex answered with status " + response.status + "."
+              );
             }
             return response.json();
           })
@@ -370,7 +372,7 @@
             if (!active) {
               return;
             }
-            setProfile(data);
+            setPokemon(data);
             setStatus("success");
           })
           .catch(function (problem) {
@@ -391,9 +393,9 @@
 
     function submit(event) {
       event.preventDefault();
-      var next = input.trim();
+      var next = input.trim().toLowerCase();
       if (next && next === query) {
-        /* search the same handle again: reset the effect by clearing first */
+        /* look the same name up again: reset the effect, then refetch */
         setQuery("");
         window.setTimeout(function () {
           setQuery(next);
@@ -403,13 +405,17 @@
       setQuery(next);
     }
 
+    function titleCase(value) {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
     var body;
 
     if (status === "loading") {
       body = h(
         "p",
         { className: "status-line", role: "status" },
-        "Looking up @" + query + "\u2026"
+        "Searching the Pok\u00e9dex for " + query + "\u2026"
       );
     } else if (status === "error") {
       body = h(
@@ -417,40 +423,61 @@
         { className: "status-line status-line--error", role: "alert" },
         error
       );
-    } else if (status === "success" && profile) {
+    } else if (status === "success" && pokemon) {
+      var sprites = pokemon.sprites || {};
+      var artwork = sprites.other && sprites.other["official-artwork"];
+      var image = (artwork && artwork.front_default) || sprites.front_default;
+      var types = (pokemon.types || []).map(function (slot) {
+        return slot.type.name;
+      });
+
       body = h(
         "div",
-        { className: "profile" },
-        h("img", {
-          className: "profile-avatar",
-          src: profile.avatar_url,
-          alt: "Avatar of " + profile.login,
-          width: 64,
-          height: 64
-        }),
+        { className: "poke" },
+        image
+          ? h("img", {
+              className: "poke-sprite",
+              src: image,
+              alt: "Official artwork of " + pokemon.name,
+              width: 96,
+              height: 96,
+              loading: "lazy"
+            })
+          : null,
         h(
           "div",
-          { className: "profile-body" },
+          { className: "poke-body" },
+          h("p", { className: "poke-name" }, titleCase(pokemon.name)),
           h(
             "p",
-            { className: "profile-name" },
-            profile.name || profile.login
-          ),
-          h("p", { className: "profile-login" }, "@" + profile.login),
-          h(
-            "p",
-            { className: "profile-bio" },
-            profile.bio || "This account has no bio."
+            { className: "poke-dex" },
+            "National Dex #" + String(pokemon.id).padStart(3, "0")
           ),
           h(
+            "ul",
+            { className: "poke-types" },
+            types.map(function (type) {
+              return h(
+                "li",
+                { key: type, className: "poke-type" },
+                type
+              );
+            })
+          ),
+          h(
             "p",
-            { className: "profile-stats" },
-            h("span", null, h("strong", null, profile.followers), " followers"),
+            { className: "poke-stats" },
             h(
               "span",
               null,
-              h("strong", null, profile.public_repos),
-              " public repositories"
+              h("strong", null, (pokemon.height / 10).toFixed(1)),
+              " m tall"
+            ),
+            h(
+              "span",
+              null,
+              h("strong", null, (pokemon.weight / 10).toFixed(1)),
+              " kg"
             )
           )
         )
@@ -459,7 +486,7 @@
       body = h(
         "p",
         { className: "status-line" },
-        "Type a GitHub handle and press Search."
+        "Type a Pok\u00e9mon name and press Search."
       );
     }
 
@@ -471,14 +498,14 @@
         { className: "task-form", onSubmit: submit },
         h(
           "label",
-          { className: "visually-hidden", htmlFor: "github-handle" },
-          "GitHub username"
+          { className: "visually-hidden", htmlFor: "pokemon-name" },
+          "Pok\u00e9mon name"
         ),
         h("input", {
           className: "field-input",
-          id: "github-handle",
+          id: "pokemon-name",
           type: "text",
-          placeholder: "octocat",
+          placeholder: "pikachu",
           autoComplete: "off",
           spellCheck: "false",
           value: input,
@@ -497,74 +524,116 @@
   }
 
   /* ---------------------------------------------------------------------- */
-  /* E3 — derived value, calculated during render                         */
+  /* E3 — derived values, calculated during render                        */
   /* ---------------------------------------------------------------------- */
-  function DerivedName() {
-    var firstState = useState("Ada");
-    var first = firstState[0];
-    var setFirst = firstState[1];
+  function RectangleMetrics() {
+    var widthState = useState("6");
+    var width = widthState[0];
+    var setWidth = widthState[1];
 
-    var lastState = useState("Lovelace");
-    var last = lastState[0];
-    var setLast = lastState[1];
+    var heightState = useState("4");
+    var height = heightState[0];
+    var setHeight = heightState[1];
 
-    var fullName = (first + " " + last).trim();
-    var initials =
-      (first.charAt(0) + last.charAt(0)).toUpperCase() || "\u2014";
+    var w = parseFloat(width);
+    var hgt = parseFloat(height);
+    var valid = isFinite(w) && isFinite(hgt) && w >= 0 && hgt >= 0;
+
+    var area = valid ? w * hgt : 0;
+    var perimeter = valid ? 2 * (w + hgt) : 0;
+    var square = valid && w > 0 && w === hgt;
+
+    function tidy(value) {
+      return String(Math.round(value * 100) / 100);
+    }
 
     return h(
       "div",
-      { className: "derived" },
+      { className: "metrics" },
       h(
         "div",
-        { className: "field-stack" },
+        { className: "metric-inputs" },
         h(
-          "label",
-          { className: "field-label", htmlFor: "derived-first" },
-          "First name"
+          "div",
+          { className: "field-stack" },
+          h(
+            "label",
+            { className: "field-label", htmlFor: "metric-width" },
+            "Width (m)"
+          ),
+          h("input", {
+            className: "field-input",
+            id: "metric-width",
+            type: "number",
+            min: "0",
+            step: "any",
+            inputMode: "decimal",
+            value: width,
+            onChange: function (event) {
+              setWidth(event.target.value);
+            }
+          })
         ),
-        h("input", {
-          className: "field-input",
-          id: "derived-first",
-          type: "text",
-          value: first,
-          onChange: function (event) {
-            setFirst(event.target.value);
-          }
-        })
+        h(
+          "div",
+          { className: "field-stack" },
+          h(
+            "label",
+            { className: "field-label", htmlFor: "metric-height" },
+            "Height (m)"
+          ),
+          h("input", {
+            className: "field-input",
+            id: "metric-height",
+            type: "number",
+            min: "0",
+            step: "any",
+            inputMode: "decimal",
+            value: height,
+            onChange: function (event) {
+              setHeight(event.target.value);
+            }
+          })
+        )
       ),
       h(
         "div",
-        { className: "field-stack" },
-        h(
-          "label",
-          { className: "field-label", htmlFor: "derived-last" },
-          "Last name"
-        ),
-        h("input", {
-          className: "field-input",
-          id: "derived-last",
-          type: "text",
-          value: last,
-          onChange: function (event) {
-            setLast(event.target.value);
-          }
-        })
-      ),
-      h(
-        "div",
-        { className: "derived-out" },
-        h("span", { className: "derived-badge", "aria-hidden": "true" }, initials),
+        { className: "metric-out" },
         h(
           "p",
-          { className: "derived-name", role: "status" },
-          fullName || "Enter a name"
+          { className: "metric" },
+          h(
+            "span",
+            { className: "metric-value", role: "status" },
+            valid ? tidy(area) : "\u2014"
+          ),
+          h("span", { className: "metric-label" }, "area (m\u00b2)")
+        ),
+        h(
+          "p",
+          { className: "metric" },
+          h(
+            "span",
+            { className: "metric-value" },
+            valid ? tidy(perimeter) : "\u2014"
+          ),
+          h("span", { className: "metric-label" }, "perimeter (m)")
+        ),
+        h(
+          "p",
+          { className: "metric" },
+          h(
+            "span",
+            { className: "metric-value" },
+            valid ? (square ? "Yes" : "No") : "\u2014"
+          ),
+          h("span", { className: "metric-label" }, "square?")
         )
       ),
       h(
         "p",
         { className: "demo-hint" },
-        "Two state variables, zero effects: the full name and initials are rebuilt on every render."
+        "Two state variables, zero effects: the area, the perimeter and the square check are recalculated on every render."
       )
     );
   }
@@ -574,6 +643,6 @@
   mount("clock-cleanup", ClockCleanup);
   mount("stored-preference", StoredPreference);
   mount("title-sync", TitleSync);
-  mount("github-profile", GithubProfile);
-  mount("derived-name", DerivedName);
+  mount("pokemon-lookup", PokemonLookup);
+  mount("rectangle-metrics", RectangleMetrics);
 })();
