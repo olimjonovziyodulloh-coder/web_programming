@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0d0f">
+  <meta name="description" content="Week 12.2: React effects and the useEffect hook — four live samples (mount, dependency, timer cleanup, localStorage) plus three exercises: syncing the tab title, an abortable GitHub fetch and a derived value.">
+  <title>Week 12.2: React Effects &amp; useEffect</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500&display=swap"></noscript>
+
+  <style>
+    :root{
+      --bg:#0e0d0f; --panel:#161416; --panel-hi:#1d1a1c; --line:#2e2729;
+      --crimson:#9c2b2b; --crimson-deep:#5e1c1f;
+      --gold:#b8924f; --gold-soft:#8d7240; --gold-light:#d9b877;
+      --text:#e6e1db; --muted:#8f8a86;
+      --reactor:#6fa8b8; --blue:#2c4a86; --blue-deep:#17284a; --web:#8fa0c4;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:"Inter",Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;position:relative}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse at 80% 0%,rgba(156,43,43,0.16),transparent 50%),radial-gradient(ellipse at 10% 100%,rgba(44,74,134,0.20),transparent 50%)}
+    a{color:var(--gold)} a:hover{color:var(--gold-light)}
+    a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .skip-link{position:absolute;left:-9999px;top:0.5rem;z-index:9999;background:#1a2744;color:#fff;padding:0.55rem 1rem;text-decoration:none;font-size:14px;border:2px solid var(--gold)}
+    .skip-link:focus{left:0.5rem}
+    body > header{position:relative;overflow:hidden;border-bottom:1px solid var(--line);padding:22px 24px 56px}
+    .header-top{max-width:1000px;margin:0 auto 40px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:13px;color:var(--muted);position:relative;z-index:1}
+    .header-top strong{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:0.6px;color:#c7c0b8}
+    .header-top a{color:#c7c0b8} .header-top a:hover{color:var(--gold)}
+    .web{position:absolute;top:0;left:0;width:300px;height:300px;opacity:0.16;pointer-events:none;z-index:0}
+    .reactor{position:absolute;top:50%;right:max(-120px,calc(50% - 640px));width:420px;height:420px;transform:translateY(-50%);opacity:0.22;pointer-events:none;z-index:0}
+    .reactor .ring-slow{transform-origin:200px 200px;animation:spin 120s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .header-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+    .kicker{color:var(--gold);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:2px;text-transform:uppercase}
+    h1{margin-top:10px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:clamp(40px,8vw,78px);line-height:1;font-weight:700;letter-spacing:1px;color:#efe9e1}
+    .subtitle{margin-top:18px;max-width:620px;color:var(--muted);font-size:15px}
+    .student{display:inline-block;margin-top:26px;padding:12px 18px 12px 16px;border-style:solid;border-width:0 0 0 3px;border-image:linear-gradient(var(--crimson),var(--blue)) 1;background:linear-gradient(90deg,rgba(156,43,43,0.18),transparent)}
+    .student-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.5px;color:#f0e6d6;line-height:1.2}
+    .student-id{margin-top:2px;font-size:13px;color:var(--muted)}
+    .student-id strong{color:var(--gold);font-weight:500;letter-spacing:1px}
+    .topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;list-style:none}
+    .topics li{border:1px solid var(--line);border-left:2px solid var(--crimson);padding:5px 12px;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-weight:600;font-size:14px;letter-spacing:0.5px;color:#c7c0b8;background:rgba(255,255,255,0.02)}
+    .topics li:nth-child(even){border-left-color:var(--blue)}
+    main{max-width:1000px;margin:0 auto;padding:44px 24px 64px}
+    .section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .section-heading h2{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:0.5px}
+    .section-heading p{color:var(--muted);font-size:13px}
+    .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:20px;color:#c7c0b8;font-size:0.94rem}
+    code{background:#241c1e;color:#e6e1db;padding:1px 5px;border-radius:3px;font-size:0.88em}
+    .exercise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;align-items:stretch}
+    .exercise-card{position:relative;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--crimson);padding:18px 20px 18px}
+    .exercise-card:nth-child(even){border-left-color:var(--blue)}
+    .exercise-card::after{content:"";position:absolute;right:-1px;bottom:-1px;width:14px;height:14px;border-right:2px solid var(--gold-soft);border-bottom:2px solid var(--gold-soft);pointer-events:none;transition:border-color 0.2s}
+    .exercise-card:nth-child(even)::after{border-color:var(--blue)}
+    .exercise-card:hover::after{border-color:var(--gold)}
+    .exercise-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .exercise-tag{display:inline-flex;align-items:center;justify-content:center;min-width:38px;padding:3px 8px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em}
+    .exercise-card:nth-child(even) .exercise-tag{background:var(--blue-deep);border-color:var(--blue)}
+    .exercise-head h3{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:18px;line-height:1.2;letter-spacing:0.3px;color:#f0e6d6}
+    .exercise-desc{color:#a8a29b;font-size:0.88rem}
+    .demo{margin:14px 0 4px;padding:14px;background:#121011;border:1px solid #2a2426;border-radius:4px;display:grid;gap:10px;align-content:start}
+    .demo-fallback{color:#a8a29b;font-size:0.85rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 16px;background:#241c1e;border:1px solid var(--line);color:var(--text);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px;cursor:pointer;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);transition:background 0.2s,border-color 0.2s,color 0.2s}
+    .btn:hover{border-color:var(--gold);color:var(--gold-light)}
+    .btn-primary{background:var(--crimson-deep);border-color:var(--crimson);color:#f2e4d6}
+    .btn-primary:hover{background:var(--crimson);border-color:var(--gold-soft);color:#fff}
+    .btn:disabled{opacity:0.45;cursor:not-allowed}
+    .btn:disabled:hover{border-color:var(--line);color:var(--text)}
+    .btn-text{background:none;border:0;padding:6px 2px;color:var(--gold);font-family:"Inter",Arial,Helvetica,sans-serif;font-size:13px;text-decoration:underline;cursor:pointer}
+    .btn-text:hover{color:var(--gold-light)}
+    .btn-text:disabled{opacity:0.45;cursor:not-allowed;text-decoration:none}
+    .btn-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+    .counter{display:grid;gap:12px;justify-items:start}
+    .counter-value{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:44px;font-weight:700;line-height:1;letter-spacing:1px;color:var(--gold-light)}
+    .field-stack{display:grid;gap:8px}
+    .field-label{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#c7c0b8}
+    .field-input,.field-area{width:100%;padding:9px 12px;background:#0f0d0f;border:1px solid var(--line);border-radius:3px;color:var(--text);font:0.9rem/1.5 "Inter",Arial,Helvetica,sans-serif}
+    .field-input::placeholder,.field-area::placeholder{color:#8f8a86;opacity:1}
+    .field-area{resize:vertical;min-height:96px}
+    .preview{color:#d8d2ca;font-size:0.92rem}
+    .preview strong{color:var(--gold-light);font-weight:600}
+    .task-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .task-form .field-input{flex:1 1 160px;min-width:140px}
+    .task-list{list-style:none;display:grid;gap:6px}
+    .task-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:var(--panel-hi);border:1px solid #2a2426}
+    .task-item span{color:#d8d2ca;font-size:0.88rem}
+    .remove-btn{background:none;border:0;padding:2px 0;color:var(--gold);font-size:0.78rem;text-decoration:underline;cursor:pointer}
+    .remove-btn:hover{color:var(--gold-light)}
+    .empty{color:#a8a29b;font-size:0.85rem}
+    .details-panel{padding:11px 13px;border-left:2px solid var(--gold-soft);background:var(--panel-hi);color:#d8d2ca;font-size:0.88rem}
+    .chip-row{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:6px 13px;background:#241c1e;border:1px solid var(--line);border-radius:999px;color:var(--text);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,border-color 0.2s,color 0.2s}
+    .chip:hover{border-color:var(--gold);color:var(--gold-light)}
+    .chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17120a}
+    .check-list{list-style:none;display:grid;gap:6px}
+    .check-list label{display:flex;align-items:center;gap:10px;color:#d8d2ca;font-size:0.9rem;cursor:pointer}
+    .check-list input{width:16px;height:16px;accent-color:#b8924f;cursor:pointer}
+    .task-done{text-decoration:line-through;color:#8f8a86}
+    .form-message{padding:8px 10px;border-left:2px solid var(--gold);background:rgba(184,146,79,0.08);color:#d8d2ca;font-size:0.86rem}
+    .note-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+    .note-status{color:#a8a29b;font-size:0.82rem}
+    .code-disclosure{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line)}
+    .code-disclosure summary{cursor:pointer;color:var(--gold);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+    .code-disclosure summary:hover{color:var(--gold-light)}
+    pre{margin:10px 0 0;padding:14px 16px;background:#09080a;border:1px solid var(--line);color:#ddd6cc;border-radius:4px;overflow-x:auto;font:0.76rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}
+    pre code{background:none;color:inherit;padding:0;font-size:inherit}
+    .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+    footer{text-align:center;padding:28px 20px;border-top:1px solid var(--line);background:rgba(10,9,10,0.7)}
+    footer p{color:var(--muted);font-size:13px}
+    @media (max-width:600px){
+      body > header{padding:18px 18px 40px}
+      .header-top{margin-bottom:28px;flex-direction:column;align-items:flex-start;gap:4px}
+      .web{width:200px;height:200px} .reactor{width:280px;height:280px;right:-90px;opacity:0.16}
+      main{padding:28px 14px 40px} .section-heading{flex-direction:column;align-items:flex-start;gap:2px}
+      .exercise-grid{grid-template-columns:1fr}
+      .exercise-card{padding:16px 14px}
+      pre{font-size:0.72rem;padding:12px}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reactor .ring-slow{animation:none}*,*::before,*::after{transition:none !important}}
+    /* Week 12.2 — effects */
+    .lifecycle{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+    .lifecycle li{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;background:var(--panel);border:1px solid var(--line);font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#c7c0b8}
+    .lifecycle li span{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-size:11px}
+    .lifecycle li:nth-child(2) span{background:var(--blue-deep);border-color:var(--blue);color:#cfe0f7}
+    .lifecycle li:nth-child(3) span{background:rgba(184,146,79,0.16);border-color:var(--gold-soft);color:var(--gold-light)}
+    .effect-demo{display:grid;gap:12px}
+    .effect-meter{display:flex;flex-wrap:wrap;gap:22px}
+    .meter{display:grid;gap:2px}
+    .meter-value{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:36px;font-weight:700;line-height:1;letter-spacing:1px;color:var(--gold-light)}
+    .meter-label{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#a8a29b}
+    .demo-hint{color:#a8a29b;font-size:0.82rem}
+    .demo-hint strong{color:#d8d2ca;font-weight:600}
+    .clock{display:grid;gap:2px}
+    .clock-time{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:42px;font-weight:700;line-height:1;letter-spacing:2px;color:var(--gold-light);font-variant-numeric:tabular-nums}
+    .clock-label{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#a8a29b}
+    .pref-demo{display:grid;gap:12px;padding:12px;border:1px dashed var(--line);transition:padding 0.2s,gap 0.2s}
+    .pref-demo--compact{padding:4px 8px;gap:6px}
+    .pref-line{font-size:0.9rem;color:#d8d2ca}
+    .pref-demo--compact .pref-line{font-size:0.82rem}
+    .pref-line strong{color:var(--gold-light);font-weight:600}
+    .profile{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:start}
+    .profile-avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--gold-soft);background:#121011;object-fit:cover}
+    .profile-body{display:grid;gap:2px;min-width:0}
+    .profile-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.15;color:#f0e6d6}
+    .profile-login{font-size:0.82rem;color:var(--gold)}
+    .profile-bio{font-size:0.84rem;color:#a8a29b;overflow-wrap:anywhere}
+    .profile-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;font-size:0.8rem;color:#c7c0b8}
+    .profile-stats strong{color:var(--gold-light);font-weight:600}
+    .status-line{font-size:0.86rem;color:#d8d2ca;padding:9px 11px;border-left:2px solid var(--gold-soft);background:var(--panel-hi)}
+    .status-line--error{border-left-color:var(--crimson);background:rgba(156,43,43,0.1);color:#ecd9c6}
+    .derived{display:grid;gap:12px}
+    .derived-out{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px;background:var(--panel-hi);border:1px solid #2a2426}
+    .derived-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:26px;font-weight:700;line-height:1.1;letter-spacing:0.4px;color:var(--gold-light);overflow-wrap:anywhere}
+    .derived-badge{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;padding:0 8px;background:var(--blue-deep);border:1px solid var(--blue);color:#cfe0f7;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+    .takeaway-grid{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:8px}
+    .takeaway{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--crimson)}
+    .takeaway:nth-child(even){border-left-color:var(--blue)}
+    .takeaway-num{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;line-height:1;color:var(--gold-soft)}
+    .takeaway p{color:#c7c0b8;font-size:0.88rem}
+    .page-nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}
+    @media (max-width:600px){
+      .clock-time{font-size:34px}
+      .effect-meter{gap:16px}
+      .takeaway-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header>
+    <svg class="web" viewBox="0 0 300 300" aria-hidden="true" focusable="false">
+      <path d="M0 0L300 0M0 0L290 78M0 0L260 150M0 0L212 212M0 0L150 260M0 0L78 290M0 0L0 300M55 0 Q47 6 53 14M53 14 Q44 18 48 27M48 27 Q38 29 39 39M39 39 Q29 38 28 48M28 48 Q18 44 14 53M14 53 Q6 47 0 55M110 0 Q94 12 106 28M106 28 Q87 36 95 55M95 55 Q75 58 78 78M78 78 Q58 75 55 95M55 95 Q36 87 28 106M28 106 Q12 94 0 110M165 0 Q141 19 159 43M159 43 Q131 54 143 82M143 82 Q113 86 117 117M117 117 Q86 113 83 143M83 143 Q54 131 43 159M43 159 Q19 141 0 165M220 0 Q188 25 213 57M213 57 Q175 72 191 110M191 110 Q150 115 156 156M156 156 Q115 150 110 191M110 191 Q72 175 57 213M57 213 Q25 188 0 220M275 0 Q234 31 266 71M266 71 Q218 91 238 137M238 137 Q188 144 194 194M194 194 Q144 188 138 238M138 238 Q91 218 71 266M71 266 Q31 234 0 275" fill="none" stroke="var(--web)" stroke-width="1.2"/>
+    </svg>
+    <svg class="reactor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="var(--reactor)" stroke-width="2">
+        <circle cx="200" cy="200" r="190" stroke-width="1"/>
+        <circle cx="200" cy="200" r="150"/>
+        <circle cx="200" cy="200" r="70"/>
+        <circle cx="200" cy="200" r="30" stroke-width="3"/>
+        <g class="ring-slow" stroke-width="14" stroke-dasharray="38 22"><circle cx="200" cy="200" r="110"/></g>
+        <g stroke-width="1">
+          <line x1="200" y1="10" x2="200" y2="50"/><line x1="200" y1="350" x2="200" y2="390"/>
+          <line x1="10" y1="200" x2="50" y2="200"/><line x1="350" y1="200" x2="390" y2="200"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="header-top">
+      <strong>Olimjonov Ziyodulloh</strong>
+      <span>Week 12.2 · <a href="../index.html">Course archive</a></span>
+    </div>
+
+    <div class="header-content">
+      <p class="kicker">Web Programming · K0126002 · Friday</p>
+      <h1>Week 12.2 Tasks</h1>
+      <p class="subtitle">
+        Four <code>useEffect</code> samples and three exercises from Friday's
+        lecture — one-time setup, watching a value, cleaning up a timer,
+        saving a preference, syncing the tab title, fetching a profile and
+        computing a value instead of storing it.
+      </p>
+
+      <div class="student">
+        <p class="student-name">Olimjonov Ziyodulloh</p>
+        <p class="student-id">Student ID <strong>202537557</strong></p>
+      </div>
+
+      <ul class="topics">
+        <li>useEffect</li>
+        <li>Dependency array</li>
+        <li>Cleanup</li>
+        <li>Async &amp; AbortController</li>
+        <li>localStorage</li>
+        <li>Derived values</li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="section-heading">
+      <h2>Effect samples</h2>
+      <p>Four ways to use useEffect</p>
+    </div>
+
+    <ol class="lifecycle">
+      <li><span>1</span> Render</li>
+      <li><span>2</span> Paint</li>
+      <li><span>3</span> Effects run</li>
+    </ol>
+
+    <p class="note">
+      Effects run after the browser has painted the screen, which makes them
+      the right place for timers, storage and network calls. Open
+      &ldquo;View React code&rdquo; on any card to compare the dependency array
+      with what the demo does.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="sample-01">
+        <header class="exercise-head">
+          <span class="exercise-tag">01</span>
+          <h3>Set up once — empty dependencies</h3>
+        </header>
+        <p class="exercise-desc">An empty array tells React the effect has nothing to watch. It runs after the first paint and stays quiet, even when the component re-renders.</p>
+        <div class="demo" data-demo="mount-effect">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  setRuns((n) =&gt; n + 1);
+}, []); // nothing to watch: once, after mount</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="sample-02">
+        <header class="exercise-head">
+          <span class="exercise-tag">02</span>
+          <h3>Watch a value — [dependency]</h3>
+        </header>
+        <p class="exercise-desc">List a value in the array and the effect re-runs only when that value changes. Every other re-render leaves it alone.</p>
+        <div class="demo" data-demo="watch-value">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  setRuns((n) =&gt; n + 1);
+}, [callsign]); // runs again only when callsign changes</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="sample-03">
+        <header class="exercise-head">
+          <span class="exercise-tag">03</span>
+          <h3>Clean up an interval</h3>
+        </header>
+        <p class="exercise-desc">An interval keeps firing after the component is gone unless the effect returns a cleanup function. React calls that function before the next run and on unmount.</p>
+        <div class="demo" data-demo="clock-cleanup">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  const id = setInterval(() =&gt; setNow(new Date()), 1000);
+  return () =&gt; clearInterval(id); // stop when unmounted
+}, []);</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="sample-04">
+        <header class="exercise-head">
+          <span class="exercise-tag">04</span>
+          <h3>Save a preference to localStorage</h3>
+        </header>
+        <p class="exercise-desc">The effect mirrors state into browser storage whenever the setting changes, so the choice survives a reload.</p>
+        <div class="demo" data-demo="stored-preference">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  localStorage.setItem("week12_2_density", density);
+}, [density]);</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Exercises</h2>
+      <p>Practice on a working page</p>
+    </div>
+
+    <p class="note">
+      Three exercises from Friday's lecture. Try each demo, then read the
+      effect code underneath it.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="exercise-01">
+        <header class="exercise-head">
+          <span class="exercise-tag">E1</span>
+          <h3>Keep the tab title in sync</h3>
+        </header>
+        <p class="exercise-desc">A value outside React — the browser tab title — follows the unread count. Look at the tab after each click.</p>
+        <div class="demo" data-demo="title-sync">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  document.title = `Alerts — ${unread} unread`;
+}, [unread]);</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="exercise-02">
+        <header class="exercise-head">
+          <span class="exercise-tag">E2</span>
+          <h3>Load a GitHub profile safely</h3>
+        </header>
+        <p class="exercise-desc">The request lives inside the effect. Loading, error and cleanup are all handled, and a new search aborts the previous request with <code>AbortController</code>.</p>
+        <div class="demo" data-demo="github-profile">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>useEffect(() =&gt; {
+  const controller = new AbortController();
+  setStatus("loading");
+  fetch(url, { signal: controller.signal })
+    .then((res) =&gt; res.json())
+    .then(setProfile)
+    .catch((err) =&gt; { if (err.name !== "AbortError") setError(err); });
+  return () =&gt; controller.abort();
+}, [query]);</code></pre>
+        </details>
+      </article>
+
+      <article class="exercise-card" id="exercise-03">
+        <header class="exercise-head">
+          <span class="exercise-tag">E3</span>
+          <h3>Compute it, don't store it</h3>
+        </header>
+        <p class="exercise-desc">The display name and its initials come straight from the two inputs during rendering. No third state variable and no effect are needed.</p>
+        <div class="demo" data-demo="derived-name">
+          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
+        </div>
+        <details class="code-disclosure">
+          <summary>View React code</summary>
+          <pre><code>const fullName = `${first} ${last}`.trim();
+const initials = (first[0] + last[0]).toUpperCase();
+// calculated on every render — nothing to keep in sync</code></pre>
+        </details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Key takeaways</h2>
+      <p>Five rules for useEffect</p>
+    </div>
+
+    <ol class="takeaway-grid">
+      <li class="takeaway"><span class="takeaway-num">01</span><p>Effects handle work outside rendering: timers, storage, subscriptions and requests. They run after the paint.</p></li>
+      <li class="takeaway"><span class="takeaway-num">02</span><p>The dependency array is the schedule. Change the list, change when the effect runs.</p></li>
+      <li class="takeaway"><span class="takeaway-num">03</span><p><code>[]</code> means once after mount; a value in the array means &ldquo;run again when this changes&rdquo;.</p></li>
+      <li class="takeaway"><span class="takeaway-num">04</span><p>If an effect starts something, return a function that stops it — clear the interval, abort the request.</p></li>
+      <li class="takeaway"><span class="takeaway-num">05</span><p>If a value can be calculated from state, calculate it during render instead of adding state or an effect.</p></li>
+    </ol>
+
+    <nav class="page-nav" aria-label="Related pages">
+      <a class="btn" href="../week12/task1.html">Week 12 · Shopping cart</a>
+      <a class="btn" href="../week12/task2.html">Week 12 · State exercises</a>
+      <a class="btn" href="../index.html">Course archive</a>
+    </nav>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Olimjonov Ziyodulloh · Student ID 202537557 · Web Programming course</p>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script defer src="app.js?v=1"></script>
+</body>
+</html>
