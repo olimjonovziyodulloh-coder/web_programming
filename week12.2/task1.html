@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0e0d0f">
-  <meta name="description" content="Week 12.2: React effects and the useEffect hook — four live samples (mount, dependency, timer cleanup, localStorage) plus three exercises: syncing the tab title, an abortable Pokédex lookup and a calculated area.">
+  <meta name="description" content="Week 12.2: React effects and the useEffect hook — weather dashboard, GitHub user lookup, document title sync, JSONPlaceholder fetch, stopwatch, lifecycle lab, sprint quiz and key takeaways.">
   <title>Week 12.2: React Effects &amp; useEffect</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,18 +144,26 @@
     .pref-line{font-size:0.9rem;color:#d8d2ca}
     .pref-demo--compact .pref-line{font-size:0.82rem}
     .pref-line strong{color:var(--gold-light);font-weight:600}
-    .status-line{font-size:0.86rem;color:#d8d2ca;padding:9px 11px;border-left:2px solid var(--gold-soft);background:var(--panel-hi)}
-    .status-line--error{border-left-color:var(--crimson);background:rgba(156,43,43,0.1);color:#ecd9c6}
     .poke{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start}
-    .poke-sprite{width:96px;height:96px;object-fit:contain;background:radial-gradient(circle at 50% 45%,#1e1b1d,#121011 70%);border:1px solid var(--line)}
+    .poke-sprite{width:96px;height:96px;object-fit:cover;background:#121011;border:1px solid var(--line)}
     .poke-body{display:grid;gap:4px;min-width:0}
-    .poke-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;line-height:1.15;color:#f0e6d6;text-transform:capitalize}
+    .poke-name{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;line-height:1.15;color:#f0e6d6}
     .poke-dex{font-size:0.78rem;color:#a8a29b;letter-spacing:0.04em}
     .poke-types{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:2px 0}
     .poke-type{padding:2px 9px;background:var(--crimson-deep);border:1px solid var(--crimson);color:#ecd9c6;font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
     .poke-type:nth-child(even){background:var(--blue-deep);border-color:var(--blue);color:#cfe0f7}
-    .poke-stats{display:flex;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:#c7c0b8}
-    .poke-stats strong{color:var(--gold-light);font-weight:600}
+    .profile-bio{font-size:0.84rem;color:#a8a29b;overflow-wrap:anywhere}
+    .profile-stats{display:flex;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:#c7c0b8}
+    .profile-stats strong{color:var(--gold-light);font-weight:600}
+    .status-line{font-size:0.86rem;color:#d8d2ca;padding:9px 11px;border-left:2px solid var(--gold-soft);background:var(--panel-hi)}
+    .status-line--error{border-left-color:var(--crimson);background:rgba(156,43,43,0.1);color:#ecd9c6}
+    .weather{display:grid;gap:4px;padding:12px 14px;background:var(--panel-hi);border:1px solid #2a2426}
+    .weather-place{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:16px;font-weight:700;color:#f0e6d6}
+    .weather-temp{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:44px;font-weight:700;line-height:1;color:var(--gold-light)}
+    .weather-unit{font-size:22px;color:var(--gold-soft)}
+    .weather-desc{font-size:0.9rem;color:#d8d2ca;text-transform:capitalize}
+    .weather-stats{display:flex;flex-wrap:wrap;gap:12px;font-size:0.8rem;color:#c7c0b8}
+    .weather-stats strong{color:var(--gold-light);font-weight:600}
     .metrics{display:grid;gap:12px}
     .metric-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .metric-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;padding:12px 14px;background:var(--panel-hi);border:1px solid #2a2426}
@@ -168,6 +176,7 @@
     .takeaway-num{font-family:"Rajdhani","Arial Narrow",Arial,sans-serif;font-size:22px;font-weight:700;line-height:1;color:var(--gold-soft)}
     .takeaway p{color:#c7c0b8;font-size:0.88rem}
     .page-nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}
+    .exercise-card--wide{grid-column:1/-1}    .lab-note{color:#a8a29b;font-size:0.84rem;margin-top:6px}
     @media (max-width:600px){
       .clock-time{font-size:34px}
       .effect-meter{gap:16px}
@@ -175,6 +184,7 @@
       .poke-sprite{width:72px;height:72px}
       .metric-inputs{grid-template-columns:1fr}
       .takeaway-grid{grid-template-columns:1fr}
+      .weather-temp{font-size:36px}
     }
   </style>
 </head>
@@ -208,10 +218,9 @@
       <p class="kicker">Web Programming · K0126002 · Friday</p>
       <h1>Week 12.2 Tasks</h1>
       <p class="subtitle">
-        Four <code>useEffect</code> samples and three exercises from Friday's
-        lecture — one-time setup, watching a value, cleaning up a timer,
-        saving a preference, syncing the tab title, loading a Pokédex
-        entry and calculating an area instead of storing it.
+        React effects from Friday's lecture: a weather dashboard, a GitHub
+        user lookup, document-title sync, a JSONPlaceholder fetch, a stopwatch,
+        a lifecycle lab and a sprint quiz.
       </p>
 
       <div class="student">
@@ -223,9 +232,9 @@
         <li>useEffect</li>
         <li>Dependency array</li>
         <li>Cleanup</li>
-        <li>Async &amp; AbortController</li>
-        <li>localStorage</li>
-        <li>Derived values</li>
+        <li>AbortController</li>
+        <li>Open-Meteo API</li>
+        <li>Sprint quiz</li>
       </ul>
     </div>
   </header>
@@ -243,160 +252,170 @@
     </ol>
 
     <p class="note">
-      Effects run after the browser has painted the screen, which makes them
-      the right place for timers, storage and network calls. Open
-      &ldquo;View React code&rdquo; on any card to compare the dependency array
-      with what the demo does.
+      Effects run after the browser has painted the screen. Each sample below
+      runs on this page; open "View React code" to compare the dependency
+      array with what the demo does.
     </p>
 
     <div class="exercise-grid">
       <article class="exercise-card" id="sample-01">
-        <header class="exercise-head">
-          <span class="exercise-tag">01</span>
-          <h3>Set up once — empty dependencies</h3>
-        </header>
+        <header class="exercise-head"><span class="exercise-tag">01</span><h3>Set up once — empty dependencies</h3></header>
         <p class="exercise-desc">An empty array tells React the effect has nothing to watch. It runs after the first paint and stays quiet, even when the component re-renders.</p>
-        <div class="demo" data-demo="mount-effect">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
-  setRuns((n) =&gt; n + 1);
-}, []); // nothing to watch: once, after mount</code></pre>
-        </details>
+        <div class="demo" data-demo="mount-effect"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; { setRuns((n) =&gt; n + 1); }, []);</code></pre></details>
       </article>
 
       <article class="exercise-card" id="sample-02">
-        <header class="exercise-head">
-          <span class="exercise-tag">02</span>
-          <h3>Watch a value — [dependency]</h3>
-        </header>
+        <header class="exercise-head"><span class="exercise-tag">02</span><h3>Watch a value — [dependency]</h3></header>
         <p class="exercise-desc">List a value in the array and the effect re-runs only when that value changes. Every other re-render leaves it alone.</p>
-        <div class="demo" data-demo="watch-value">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
-  setRuns((n) =&gt; n + 1);
-}, [callsign]); // runs again only when callsign changes</code></pre>
-        </details>
+        <div class="demo" data-demo="watch-value"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; { setRuns((n) =&gt; n + 1); }, [callsign]);</code></pre></details>
       </article>
 
       <article class="exercise-card" id="sample-03">
-        <header class="exercise-head">
-          <span class="exercise-tag">03</span>
-          <h3>Clean up an interval</h3>
-        </header>
-        <p class="exercise-desc">An interval keeps firing after the component is gone unless the effect returns a cleanup function. React calls that function before the next run and on unmount.</p>
-        <div class="demo" data-demo="clock-cleanup">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
-  const id = setInterval(() =&gt; setNow(new Date()), 1000);
-  return () =&gt; clearInterval(id); // stop when unmounted
-}, []);</code></pre>
-        </details>
+        <header class="exercise-head"><span class="exercise-tag">03</span><h3>Clean up an interval</h3></header>
+        <p class="exercise-desc">An interval keeps firing after the component is gone unless the effect returns a cleanup function. React calls it before the next run and on unmount.</p>
+        <div class="demo" data-demo="clock-cleanup"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; { const id = setInterval(tick, 1000); return () =&gt; clearInterval(id); }, []);</code></pre></details>
       </article>
 
       <article class="exercise-card" id="sample-04">
-        <header class="exercise-head">
-          <span class="exercise-tag">04</span>
-          <h3>Save a preference to localStorage</h3>
-        </header>
+        <header class="exercise-head"><span class="exercise-tag">04</span><h3>Save a preference to localStorage</h3></header>
         <p class="exercise-desc">The effect mirrors state into browser storage whenever the setting changes, so the choice survives a reload.</p>
-        <div class="demo" data-demo="stored-preference">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
-  localStorage.setItem("week12_2_density", density);
-}, [density]);</code></pre>
-        </details>
+        <div class="demo" data-demo="stored-preference"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; { localStorage.setItem("week12_2_density", density); }, [density]);</code></pre></details>
       </article>
     </div>
 
     <div class="section-heading section-heading-spaced">
-      <h2>Exercises</h2>
-      <p>Practice on a working page</p>
+      <h2>Homework — Weather Dashboard</h2>
+      <p>Open-Meteo API</p>
     </div>
 
     <p class="note">
-      Three exercises from Friday's lecture. Try each demo, then read the
-      effect code underneath it.
+      Search by city name (geocoded) or enter latitude / longitude. A
+      <code>useEffect</code> refetches whenever the coordinates change, with
+      loading and error states and a cancellable request.
     </p>
 
     <div class="exercise-grid">
-      <article class="exercise-card" id="exercise-01">
-        <header class="exercise-head">
-          <span class="exercise-tag">E1</span>
-          <h3>Keep the tab title in sync</h3>
-        </header>
-        <p class="exercise-desc">A value outside React — the browser tab title — follows the unread count. Look at the tab after each click.</p>
-        <div class="demo" data-demo="title-sync">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
-  document.title = `Alerts — ${unread} unread`;
-}, [unread]);</code></pre>
-        </details>
-      </article>
-
-      <article class="exercise-card" id="exercise-02">
-        <header class="exercise-head">
-          <span class="exercise-tag">E2</span>
-          <h3>Look up a Pok&eacute;mon</h3>
-        </header>
-        <p class="exercise-desc">The request lives inside the effect. Waiting, failure and cleanup are all handled, and a new search aborts the request that is still in flight.</p>
-        <div class="demo" data-demo="pokemon-lookup">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>useEffect(() =&gt; {
+      <article class="exercise-card exercise-card--wide" id="homework-weather">
+        <header class="exercise-head"><span class="exercise-tag">HW</span><h3>Weather Dashboard</h3></header>
+        <p class="exercise-desc">Real-time weather from the Open-Meteo API: city geocoding search, manual lat/lon inputs, current temperature, wind speed, humidity and condition, plus a "use my location" button.</p>
+        <div class="demo" data-demo="weather-dashboard"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; {
   const controller = new AbortController();
-  setStatus("loading");
-  fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
-    signal: controller.signal
-  })
-    .then((res) =&gt; {
-      if (!res.ok) throw new Error("Not found");
-      return res.json();
-    })
-    .then(setPokemon)
-    .catch((err) =&gt; {
-      if (err.name !== "AbortError") setError(err);
-    });
+  fetch(url, { signal: controller.signal })
+    .then((r) =&gt; r.json())
+    .then(setWeather)
+    .catch((e) =&gt; { if (e.name !== "AbortError") setError(e); });
   return () =&gt; controller.abort();
-}, [name]);</code></pre>
-        </details>
+}, [lat, lon]);</code></pre></details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Code Challenge — GitHub User Lookup</h2>
+      <p>AbortController &amp; debounce</p>
+    </div>
+
+    <p class="note">
+      Type a username and the lookup runs after a 500 ms debounce, or
+      immediately on Search. Shows avatar, name, bio, followers and public
+      repos, with loading, 404 handling and request cancellation.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="challenge-github">
+        <header class="exercise-head"><span class="exercise-tag">CC</span><h3>GitHub User Lookup</h3></header>
+        <p class="exercise-desc">Asynchronous profile search using AbortController to eliminate race conditions.</p>
+        <div class="demo" data-demo="github-lookup"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; { const id = setTimeout(() =&gt; setQuery(input), 500); return () =&gt; clearTimeout(id); }, [input]);
+useEffect(() =&gt; { fetch(url, { signal: controller.signal })...; return () =&gt; controller.abort(); }, [query]);</code></pre></details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Study Guide Practice</h2>
+      <p>Exercises 1 to 3</p>
+    </div>
+
+    <p class="note">
+      Three exercises from the study guide: document title sync with cleanup
+      on unmount, a JSONPlaceholder user fetch, and a stopwatch with
+      clearInterval cleanup.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card" id="practice-title">
+        <header class="exercise-head"><span class="exercise-tag">E1</span><h3>Document title sync (with unmount cleanup)</h3></header>
+        <p class="exercise-desc">A text input sets <code>document.title</code> in a <code>useEffect</code>, and the cleanup restores the original title when the component unmounts.</p>
+        <div class="demo" data-demo="title-sync-unmount"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; {
+  document.title = text;
+  return () =&gt; { document.title = "WebPro"; };
+}, [text]);</code></pre></details>
       </article>
 
-      <article class="exercise-card" id="exercise-03">
-        <header class="exercise-head">
-          <span class="exercise-tag">E3</span>
-          <h3>Calculate the area, don't store it</h3>
-        </header>
-        <p class="exercise-desc">Area, perimeter and the square check all come from the width and height during rendering. No extra state variable and no effect are needed.</p>
-        <div class="demo" data-demo="rectangle-metrics">
-          <noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript>
-        </div>
-        <details class="code-disclosure">
-          <summary>View React code</summary>
-          <pre><code>const w = Number(width);
-const h = Number(height);
-
-const area = w * h;
-const perimeter = 2 * (w + h);
-// recalculated on every render — nothing to keep in sync</code></pre>
-        </details>
+      <article class="exercise-card" id="practice-json">
+        <header class="exercise-head"><span class="exercise-tag">E2</span><h3>Fetch a user from an API</h3></header>
+        <p class="exercise-desc">Fetches JSONPlaceholder user 1 once on mount and shows the name and email, with loading and error states.</p>
+        <div class="demo" data-demo="json-user"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; {
+  fetch("https://jsonplaceholder.typicode.com/users/1")
+    .then((r) =&gt; r.json())
+    .then(setUser)
+    .catch(setError);
+}, []);</code></pre></details>
       </article>
+
+      <article class="exercise-card" id="practice-stopwatch">
+        <header class="exercise-head"><span class="exercise-tag">E3</span><h3>Stopwatch with cleanup</h3></header>
+        <p class="exercise-desc">Start, Stop and Reset drive a <code>setInterval</code> inside <code>useEffect</code>, cleared with <code>clearInterval</code> to avoid leaks.</p>
+        <div class="demo" data-demo="stopwatch"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>useEffect(() =&gt; {
+  if (!running) return;
+  const id = setInterval(() =&gt; setElapsed((n) =&gt; n + 10), 10);
+  return () =&gt; clearInterval(id);
+}, [running]);</code></pre></details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Lab — Lifecycle &amp; Patterns</h2>
+      <p>Dependencies, leaks, races, derived values</p>
+    </div>
+
+    <p class="note">
+      A single lab comparing the three dependency patterns, plus notes on
+      memory leaks, race conditions, derived values and infinite loops.
+    </p>
+
+    <div class="exercise-grid">
+      <article class="exercise-card exercise-card--wide" id="lab-lifecycle">
+        <header class="exercise-head"><span class="exercise-tag">LAB</span><h3>Effects lifecycle &amp; patterns</h3></header>
+        <p class="exercise-desc">Compare <code>[]</code>, <code>[value]</code> and no array side by side, see a derived value computed during render, and read the rules for leaks, races and loops.</p>
+        <div class="demo" data-demo="lifecycle-lab"><noscript><p class="demo-fallback">This interactive demo needs JavaScript. The code is below.</p></noscript></div>
+        <details class="code-disclosure"><summary>View React code</summary><pre><code>// []        - runs once after mount
+// [value]   - runs when value changes
+// (none)    - runs after every render
+// cleanup   - clears timers and aborts requests
+// derived   - computed during render, no effect</code></pre></details>
+      </article>
+    </div>
+
+    <div class="section-heading section-heading-spaced">
+      <h2>Sprint Quiz</h2>
+      <p>12 questions · useEffect</p>
+    </div>
+
+    <p class="note">
+      Twelve multiple-choice questions on effects, with instant scoring and
+      explanations.
+    </p>
+
+    <div id="sprint-quiz-root" data-demo="sprint-quiz">
+      <noscript><p class="demo-fallback">This quiz needs JavaScript.</p></noscript>
     </div>
 
     <div class="section-heading section-heading-spaced">
@@ -407,7 +426,7 @@ const perimeter = 2 * (w + h);
     <ol class="takeaway-grid">
       <li class="takeaway"><span class="takeaway-num">01</span><p>Effects handle work outside rendering: timers, storage, subscriptions and requests. They run after the paint.</p></li>
       <li class="takeaway"><span class="takeaway-num">02</span><p>The dependency array is the schedule. Change the list, change when the effect runs.</p></li>
-      <li class="takeaway"><span class="takeaway-num">03</span><p><code>[]</code> means once after mount; a value in the array means &ldquo;run again when this changes&rdquo;.</p></li>
+      <li class="takeaway"><span class="takeaway-num">03</span><p><code>[]</code> means once after mount; a value in the array means "run again when this changes".</p></li>
       <li class="takeaway"><span class="takeaway-num">04</span><p>If an effect starts something, return a function that stops it — clear the interval, abort the request.</p></li>
       <li class="takeaway"><span class="takeaway-num">05</span><p>If a value can be calculated from state, calculate it during render instead of adding state or an effect.</p></li>
     </ol>
@@ -425,6 +444,6 @@ const perimeter = 2 * (w + h);
 
   <script defer src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin></script>
   <script defer src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
-  <script defer src="app.js?v=1"></script>
+  <script defer src="app.js?v=3"></script>
 </body>
 </html>
